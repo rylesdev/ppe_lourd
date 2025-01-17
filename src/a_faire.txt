@@ -1,0 +1,3 @@
+PHPMyAdmin :
+    - Mettre une primary key à "ligneCommande" qui n'est pas foreign key
+    - Créer une nouvelle table (stockage ?)
