@@ -11,14 +11,14 @@ import javax.swing.*;
 public class VueConnexion extends JFrame implements ActionListener {
     private JButton btAnnuler = new JButton("Annuler");
     private JButton btSeConnecter = new JButton("Se Connecter");
-    private JTextField txtEmail = new JTextField("b@gmail.com");
+    private JTextField txtEmail = new JTextField("ryles@gmail.com");
     private JPasswordField txtMdp = new JPasswordField("123");
 
     private JPanel panelForm = new JPanel();
 
     public VueConnexion() {
         // Changer le titre de la fenetre
-        this.setTitle("Application Client Lourd Gestion de Orange 2025");
+        this.setTitle("Application Book'In");
 
         // Définir des dimensions de la fenetre $
         this.setBounds(100, 100, 600, 300);
@@ -36,7 +36,7 @@ public class VueConnexion extends JFrame implements ActionListener {
         this.setResizable(false);
 
         // Installation du logo
-        ImageIcon uneImage = new ImageIcon("src/images/logo.png");
+        ImageIcon uneImage = new ImageIcon("src/images/livre.png");
         JLabel leLogo = new JLabel(uneImage);
         leLogo.setBounds(20, 20, 250, 250);
         this.add(leLogo);
@@ -76,7 +76,7 @@ public class VueConnexion extends JFrame implements ActionListener {
             if (unUser == null) {
                 JOptionPane.showMessageDialog(this, "Veuillez vérifier vos identifiants.");
             } else {
-                JOptionPane.showMessageDialog(this, "Bienvenue " + unUser.getNom());
+                JOptionPane.showMessageDialog(this, "Bienvenue " + unUser.getNomUser());
             }
         }
     }

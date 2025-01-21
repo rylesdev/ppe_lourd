@@ -120,9 +120,9 @@ public class Modele {
     }
 
     public static User selectWhereUser(String emailUser, String mdpUser) {
-        String requete = "select * from user where " +
-                "emailUser = '" + emailUser +
-                "'and mdpUser = " + mdpUser + ";";
+        String requete =    "select * from user where " +
+                            "emailUser = '" + emailUser +
+                            "'and mdpUser = " + mdpUser + ";";
         User unUser = null;
         try {
             uneConnexion.seConnecter();
