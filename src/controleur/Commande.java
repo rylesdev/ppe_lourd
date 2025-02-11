@@ -24,7 +24,6 @@ public class Commande {
         this.idUser = idUser;
     }
 
-    // Getters et setters
     public int getIdCommande() {
         return idCommande;
     }

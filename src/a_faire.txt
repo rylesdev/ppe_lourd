@@ -1,3 +1,26 @@
-PHPMyAdmin :
-    - Mettre une primary key à "ligneCommande" qui n'est pas foreign key
-    - Créer une nouvelle table (stockage ?)
+Régler le problème du controleur "Commande".
+
+Controleur :
+    // - User
+    // - Livre
+    // - Commande
+    // - LigneCommande
+    - Abonnement
+    - Admin
+    - Avis
+    - Categorie
+    - Entreprise
+    - MaisonEdition
+    - Particulier
+    - Promotion
+    - Statistiques
+
+    - Faire fonctionner toutes les tables dans le controleur
+
+
+Modele :
+    - Faire toutes les requêtes dans le modèle pour chaque table
+
+
+Vue  :
+    - Faire toutes les vues
