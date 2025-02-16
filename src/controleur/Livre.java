@@ -26,7 +26,6 @@ public class Livre {
         this.prixLivre = prixLivre;
     }
 
-    // Getters et setters
     public int getIdLivre() {
         return idLivre;
     }

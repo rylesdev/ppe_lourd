@@ -5,115 +5,135 @@ import modele.Modele;
 import java.util.ArrayList;
 
 public class Controleur {
+    private static Particulier particulierConnecte;
 
-    /**************** GESTION DES USERS ***************/
-    public static void insertUser(User unUser) {
-        //Cote securite : on verifie les données avant insertion dans la bdd
-
-        //appel du modele pour inserer le user
-        Modele.insertUser(unUser);
+    /**************** GESTION DES PARTICULIERS ***************/
+    public static void insertParticulier(Particulier unParticulier) {
+        // Côté sécurité : on vérifie les données avant insertion dans la BDD
+        if (verifDonnees(unParticulier)) {
+            // Appel du modèle pour insérer le particulier
+            Modele.insertParticulier(unParticulier);
+        } else {
+            System.out.println("Erreur : Données invalides pour l'insertion du particulier.");
+        }
     }
 
-    public static ArrayList<User> selectAllUsers (){
-        return Modele.selectAllUsers();
+    public static ArrayList<Particulier> selectParticulier() {
+        return Modele.selectParticulier();
     }
 
-    public static void deleteUser(int idUser) {
-        Modele.deleteUser(idUser);
+    public static void deleteParticulier(int idUser) {
+        Modele.deleteParticulier(idUser);
     }
 
-    public static void updateUser(User unUser) {
-        Modele.updateUser(unUser);
+    public static void updateParticulier(Particulier unParticulier) {
+        if (verifDonnees(unParticulier)) {
+            Modele.updateParticulier(unParticulier);
+        } else {
+            System.out.println("Erreur : Données invalides pour la mise à jour du particulier.");
+        }
     }
 
-    public static ArrayList<User> selectLikeUsers (String filtre){
-        return Modele.selectLikeUsers(filtre);
+    public static ArrayList<Particulier> selectLikeParticulier(String filtre) {
+        return Modele.selectLikeParticulier(filtre);
     }
 
-    public static User selectWhereUser (int idUser) {
-        return Modele.selectWhereUser(idUser);
+    public static Particulier selectWhereParticulier(String email, String mdp) {
+        return Modele.selectWhereParticulier(email, mdp);
     }
 
-    public static User selectWhereUser(String emailUser, String mdpUser) {
-        return Modele.selectWhereUser(emailUser, mdpUser);
+    public static Particulier getParticulierConnecte() {
+        return particulierConnecte;
     }
 
-
-    /**************** GESTION DES LIVRES ***************/
-    public static void insertLivre(Livre unLivre) {
-        Modele.insertLivre(unLivre);
-    }
-
-    public static ArrayList<Livre> selectAllLivres (){
-        return Modele.selectAllLivres();
-    }
-
-    public static void deleteLivre(int idLivre) {
-        Modele.deleteLivre(idLivre);
-    }
-
-    public static void updateLivre(Livre unLivre) {
-        Modele.updateLivre(unLivre);
-    }
-
-    public static ArrayList<Livre> selectLikeLivres (String filtre){
-        return Modele.selectLikeLivres(filtre);
-    }
-
-    public static Livre selectWhereLivre (int idLivre) {
-        return Modele.selectWhereLivre(idLivre);
+    public static void setParticulierConnecte(Particulier particulier) {
+        particulierConnecte = particulier;
     }
 
 
-    /**************** GESTION DES COMMANDES ***************/
+    /**************** GESTION DES LIVRES ****************/
+    public static ArrayList<Livre> selectLivre() {
+        return Modele.selectLivre();
+    }
+
+    public static ArrayList<Livre> selectLikeLivre(String filtre) {
+        return Modele.selectLikeLivre(filtre);
+    }
+
+
+    /**************** GESTION DES COMMANDES ****************/
+    public static ArrayList<Commande> selectCommande(int idUser) {
+        return Modele.selectCommande(idUser);
+    }
+
     public static void insertCommande(Commande uneCommande) {
         Modele.insertCommande(uneCommande);
-    }
-
-    public static ArrayList<Commande> selectAllCommandes (){
-        return Modele.selectAllCommandes();
     }
 
     public static void deleteCommande(int idCommande) {
         Modele.deleteCommande(idCommande);
     }
 
+    /*public static ArrayList<Commande> selectCommandesByUser(int idUser) {
+        return Modele.selectCommandesByUser(idUser);
+    }
+
     public static void updateCommande(Commande uneCommande) {
         Modele.updateCommande(uneCommande);
     }
+    */
 
-    public static ArrayList<Commande> selectLikeCommandes (String filtre){
-        return Modele.selectLikeCommandes(filtre);
+
+    /**************** GESTION DES ABONNEMENTS ****************/
+    public static void insertAbonnement(Abonnement unAbonnement) {
+        Modele.insertAbonnement(unAbonnement);
     }
 
-    public static Commande selectWhereCommande (int idCommande) {
-        return Modele.selectWhereCommande(idCommande);
+
+    /**************** VÉRIFICATION DES DONNÉES ***************/
+    public static boolean verifDonnees(Particulier unParticulier) {
+        // Vérification des champs obligatoires
+        if (unParticulier.getNomUser() == null || unParticulier.getNomUser().trim().isEmpty()) {
+            return false;
+        }
+        if (unParticulier.getPrenomUser() == null || unParticulier.getPrenomUser().trim().isEmpty()) {
+            return false;
+        }
+        if (unParticulier.getEmailUser() == null || unParticulier.getEmailUser().trim().isEmpty()) {
+            return false;
+        }
+        if (unParticulier.getMdpUser() == null || unParticulier.getMdpUser().trim().isEmpty()) {
+            return false;
+        }
+        if (unParticulier.getAdresseUser() == null || unParticulier.getAdresseUser().trim().isEmpty()) {
+            return false;
+        }
+        if (unParticulier.getDateNaissanceUser() == null) {
+            return false;
+        }
+        if (unParticulier.getSexeUser() == null || unParticulier.getSexeUser().trim().isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean verifDonnees(ArrayList<String> lesChamps) {
+        // Vérification des champs obligatoires
+        for (String champ : lesChamps) {
+            if (champ == null || champ.trim().isEmpty()) {
+                return false;
+            }
+        }
+        return true;
     }
 
 
-    /**************** GESTION DES LIGNESCOMMANDE ***************/
-    public static void insertLigneCommande(LigneCommande uneLigneCommande) {
-        Modele.insertLigneCommande(uneLigneCommande);
+    /************************ AUTRES MÉTHODES ************************/
+    public static int count(String table) {
+        return Modele.count(table);
     }
 
-    public static ArrayList<LigneCommande> selectAllLignesCommande (){
-        return Modele.selectAllLignesCommande();
-    }
-
-    public static void deleteLigneCommande(int idCommande) {
-        Modele.deleteLigneCommande(idCommande);
-    }
-
-    public static void updateLigneCommande(LigneCommande uneLigneCommande) {
-        Modele.updateLigneCommande(uneLigneCommande);
-    }
-
-    public static ArrayList<LigneCommande> selectLikeLignesCommande (String filtre){
-        return Modele.selectLikeLignesCommande(filtre);
-    }
-
-    public static LigneCommande selectWhereLigneCommande (int idCommande) {
-        return Modele.selectWhereLigneCommande(idCommande);
+    public static ArrayList<Listing> selectListing(){
+        return Modele.selectListing();
     }
 }
-

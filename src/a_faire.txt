@@ -1,26 +1,47 @@
-Régler le problème du controleur "Commande".
+Problème :
+
+Régler le problème de la vérification des données avec la table User.
+
+
 
 Controleur :
     // - User
     // - Livre
     // - Commande
     // - LigneCommande
-    - Abonnement
-    - Admin
-    - Avis
-    - Categorie
-    - Entreprise
-    - MaisonEdition
-    - Particulier
-    - Promotion
-    - Statistiques
+    // - Abonnement
+    // - Admin
+    // - Avis
+    // - Categorie
+    // - Entreprise
+    // - MaisonEdition
+    // - Particulier
+    // - Promotion
 
-    - Faire fonctionner toutes les tables dans le controleur
+    - Faire les requêtes dans le controleur pour chaque table
+
+        - Particulier
+        - Livre
+        - Commande
+        - Abonnement
 
 
 Modele :
-    - Faire toutes les requêtes dans le modèle pour chaque table
+    - Faire les requêtes dans le modèle pour chaque table
+
+        - Particulier
+        - Livre
+        - Commande
+        - Abonnement
 
 
 Vue  :
-    - Faire toutes les vues
+    // - PanelAbonnement
+    // - PanelCommande
+    // - PanelLivre
+    // - PanelParticulier
+    // - PanelPrincipal
+    // - PanelProfil
+    // - PanelStats
+    // - VueConnexion
+    // - VueGenerale

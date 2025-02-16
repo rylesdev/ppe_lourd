@@ -1,17 +1,16 @@
-import controleur.User;
+package controleur;
 
 import java.util.Date;
 
-class Particulier extends User {
-    private String nomUser, prenomUser, adresseUser;
+public class Particulier extends User {
+    private String nomUser, prenomUser, sexeUser;
     private Date dateNaissanceUser;
-    private char sexeUser;
 
-    public Particulier(int idUser, String emailUser, String mdpUser, String nomUser, String prenomUser, String adresseUser, Date dateNaissanceUser, char sexeUser) {
-        super(idUser, nomUser, prenomUser, emailUser, mdpUser, adresseUser, roleUser, dateInscriptionUser);
+    public Particulier(int idUser, String nomUser, String prenomUser, Date dateNaissanceUser, String sexeUser,
+                       String emailUser, String mdpUser, String adresseUser, String roleUser) {
+        super(idUser, emailUser, mdpUser, adresseUser, roleUser);
         this.nomUser = nomUser;
         this.prenomUser = prenomUser;
-        this.adresseUser = adresseUser;
         this.dateNaissanceUser = dateNaissanceUser;
         this.sexeUser = sexeUser;
     }
@@ -32,14 +31,6 @@ class Particulier extends User {
         this.prenomUser = prenomUser;
     }
 
-    public String getAdresseUser() {
-        return adresseUser;
-    }
-
-    public void setAdresseUser(String adresseUser) {
-        this.adresseUser = adresseUser;
-    }
-
     public Date getDateNaissanceUser() {
         return dateNaissanceUser;
     }
@@ -48,11 +39,11 @@ class Particulier extends User {
         this.dateNaissanceUser = dateNaissanceUser;
     }
 
-    public char getSexeUser() {
+    public String getSexeUser() {
         return sexeUser;
     }
 
-    public void setSexeUser(char sexeUser) {
+    public void setSexeUser(String sexeUser) {
         this.sexeUser = sexeUser;
     }
 }

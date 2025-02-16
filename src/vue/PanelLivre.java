@@ -1,4 +1,120 @@
 package vue;
 
-public class PanelLivre {
+import java.awt.Color;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.sql.Date;
+import java.util.ArrayList;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+
+import controleur.Livre;
+import controleur.Commande;
+import controleur.Controleur;
+import controleur.Tableau;
+
+public class PanelLivre extends PanelPrincipal implements ActionListener, MouseListener {
+    private JTable tableLivres;
+    private Tableau tableauLivres;
+
+    private JButton btAjouterCommande = new JButton("Ajouter à la commande");
+
+    public PanelLivre() {
+        super("Sélection des Livres");
+
+        // Installation de la JTable pour afficher les livres
+        String entetes[] = {"Id", "Titre", "Auteur", "Catégorie", "Prix"};
+        this.tableauLivres = new Tableau(this.obtenirDonnees(""), entetes);
+        this.tableLivres = new JTable(this.tableauLivres);
+        JScrollPane uneScroll = new JScrollPane(this.tableLivres);
+        uneScroll.setBounds(50, 50, 700, 300);
+        this.add(uneScroll);
+
+        // Installation du bouton "Ajouter à la commande"
+        this.btAjouterCommande.setBounds(300, 370, 200, 30);
+        this.add(this.btAjouterCommande);
+        this.btAjouterCommande.addActionListener(this);
+
+        // Rendre la JTable écoutable sur le clic de la souris
+        this.tableLivres.addMouseListener(this);
+    }
+
+    public Object[][] obtenirDonnees(String filtre) {
+        ArrayList<Livre> lesLivres;
+        if (filtre.equals("")) {
+            lesLivres = Controleur.selectLivre();
+        } else {
+            lesLivres = Controleur.selectLikeLivre(filtre);
+        }
+        Object matrice[][] = new Object[lesLivres.size()][5];
+        int i = 0;
+        for (Livre unLivre : lesLivres) {
+            matrice[i][0] = unLivre.getIdLivre();
+            matrice[i][1] = unLivre.getNomLivre();
+            matrice[i][2] = unLivre.getAuteurLivre();
+            matrice[i][3] = unLivre.getCategorieLivre();
+            matrice[i][4] = unLivre.getPrixLivre();
+            i++;
+        }
+        return matrice;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == this.btAjouterCommande) {
+            // Récupérer les lignes sélectionnées dans la table
+            int[] lignesSelectionnees = this.tableLivres.getSelectedRows();
+            if (lignesSelectionnees.length == 0) {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner au moins un livre.",
+                        "Aucun livre sélectionné", JOptionPane.WARNING_MESSAGE);
+            } else {
+                // Récupérer l'ID du particulier (à adapter selon votre logique)
+                int idUser = 1; // Exemple : remplacer par l'ID du particulier connecté
+
+                // Pour chaque livre sélectionné, créer une commande
+                for (int ligne : lignesSelectionnees) {
+                    int idLivre = (int) this.tableauLivres.getValueAt(ligne, 0); // ID du livre
+                    Date dateCommande = new Date(System.currentTimeMillis()); // Date actuelle
+                    String statutCommande = "en attente"; // Statut par défaut
+                    Date dateLivraisonCommande = null; // Date de livraison non définie initialement
+
+                    // Créer une nouvelle commande
+                    Commande uneCommande = new Commande(0, dateCommande, statutCommande, dateLivraisonCommande, idUser);
+                    Controleur.insertCommande(uneCommande);
+
+                    // Ajouter le livre à la commande (via une table intermédiaire si nécessaire)
+                    // Exemple : Controleur.insertLigneCommande(idCommande, idLivre);
+                }
+
+                // Afficher un message de confirmation
+                JOptionPane.showMessageDialog(this, "Les livres sélectionnés ont été ajoutés à la commande.",
+                        "Commande créée", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        // Gestion des clics sur la table (optionnel)
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {}
+
+    @Override
+    public void mouseReleased(MouseEvent e) {}
+
+    @Override
+    public void mouseEntered(MouseEvent e) {}
+
+    @Override
+    public void mouseExited(MouseEvent e) {}
 }

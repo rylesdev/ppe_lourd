@@ -8,9 +8,9 @@ public class Entreprise extends User {
     private double capitalSocialUser;
 
     // Constructeur pour une entreprise
-    public Entreprise(int idUser, String emailUser, String mdpUser, Date dateInscriptionUser,
-                      String siretUser, String raisonSocialeUser, double capitalSocialUser) {
-        super(idUser, emailUser, mdpUser, "entreprise", dateInscriptionUser);
+    public Entreprise(int idUser, String siretUser, String raisonSocialeUser, float capitalSocialUser,
+                      String emailUser, String mdpUser, String adresseUser, String roleUser) {
+        super(idUser, emailUser, mdpUser, adresseUser, roleUser);
         this.siretUser = siretUser;
         this.raisonSocialeUser = raisonSocialeUser;
         this.capitalSocialUser = capitalSocialUser;
