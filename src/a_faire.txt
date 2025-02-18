@@ -1,6 +1,28 @@
 Problème :
 
-Régler le problème de la vérification des données avec la table User.
+    Gestion du Profil :
+        - Régler le problème de "Aucun utilisateur connecté"
+
+    Gestion des Particuliers :
+        - ...
+
+    Gestion des Livres :
+        - Ajouter un livre (renseigner les informations comme dans Gestion des Particuliers)
+        - Supprimer un livre
+        // - Ajouter une commande
+        - Filtrer les livres
+
+
+    Gestion des Commandes :
+        // - Annuler une commande
+        - Ajouter une commande (avec les informations)
+        - Filtrer les commandes
+
+
+    Gestion des Abonnements :
+        - Gérer la table abonnement avec un insert
+
+
 
 
 
