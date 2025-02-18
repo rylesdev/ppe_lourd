@@ -8,14 +8,12 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.Date;
 import java.util.ArrayList;
-
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-
 import controleur.Livre;
 import controleur.Commande;
 import controleur.Controleur;
@@ -24,7 +22,6 @@ import controleur.Tableau;
 public class PanelLivre extends PanelPrincipal implements ActionListener, MouseListener {
     private JTable tableLivres;
     private Tableau tableauLivres;
-
     private JButton btAjouterCommande = new JButton("Ajouter à la commande");
 
     public PanelLivre() {
@@ -60,9 +57,8 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, MouseL
             matrice[i][0] = unLivre.getIdLivre();
             matrice[i][1] = unLivre.getNomLivre();
             matrice[i][2] = unLivre.getAuteurLivre();
-            matrice[i][3] = unLivre.getAuteurLivre();
-            matrice[i][4] = unLivre.getExemplaireLivre();
-            matrice[i][5] = unLivre.getPrixLivre();
+            matrice[i][3] = unLivre.getNomCategorie(); // Utilisez le nouvel attribut
+            matrice[i][4] = unLivre.getPrixLivre();
             i++;
         }
         return matrice;
@@ -76,7 +72,7 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, MouseL
                 JOptionPane.showMessageDialog(this, "Veuillez sélectionner au moins un livre.",
                         "Aucun livre sélectionné", JOptionPane.WARNING_MESSAGE);
             } else {
-                int idUser = 1;
+                int idUser = 1; // Remplacez par l'ID de l'utilisateur connecté
 
                 for (int ligne : lignesSelectionnees) {
                     int idLivre = (int) this.tableauLivres.getValueAt(ligne, 0);
@@ -97,7 +93,7 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, MouseL
 
     @Override
     public void mouseClicked(MouseEvent e) {
-
+        // Vous pouvez ajouter ici le comportement souhaité lors du clic sur la table
     }
 
     @Override

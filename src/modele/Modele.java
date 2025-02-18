@@ -158,8 +158,8 @@ public class Modele {
     public static ArrayList<Particulier> selectParticulier() {
         ArrayList<Particulier> lesParticuliers = new ArrayList<Particulier>();
         String requete =    "select * from particulier p " +
-                            "inner join user u " +
-                            "on p.idUser=u.idUser;";
+                "inner join user u " +
+                "on p.idUser=u.idUser;";
         try {
             uneConnexion.seConnecter();
             Statement unStat = uneConnexion.getMaConnexion().createStatement();
@@ -273,10 +273,10 @@ public class Modele {
 
     public static Particulier selectWhereParticulier(String email, String mdp) {
         String requete ="select u.idUser, u.emailUser, u.mdpUser, u.adresseUser, u.roleUser, p.nomUser, p.prenomUser, p.dateNaissanceUser, p.sexeUser " +
-                        "from user u " +
-                        "left join particulier p " +
-                        "on u.idUser = p.idUser " +
-                        "where u.emailUser = '" + email + "' and u.mdpUser = '" + mdp + "';";
+                "from user u " +
+                "left join particulier p " +
+                "on u.idUser = p.idUser " +
+                "where u.emailUser = '" + email + "' and u.mdpUser = '" + mdp + "';";
         Particulier unParticulier = null;
         try {
             uneConnexion.seConnecter();
@@ -308,7 +308,9 @@ public class Modele {
     /************************ GESTION DES LIVRES ************************/
     public static ArrayList<Livre> selectLivre() {
         ArrayList<Livre> lesLivres = new ArrayList<>();
-        String requete = "select * from livre";
+        String requete = "SELECT l.idLivre, l.nomLivre, l.auteurLivre, l.imageLivre, l.exemplaireLivre, l.prixLivre, l.idCategorie, l.idMaisonEdition, c.nomCategorie "
+                + "FROM livre l "
+                + "INNER JOIN categorie c ON l.idCategorie = c.idCategorie;";
         try {
             uneConnexion.seConnecter();
             Statement unStat = uneConnexion.getMaConnexion().createStatement();
@@ -317,11 +319,13 @@ public class Modele {
                 Livre unLivre = new Livre(
                         lesResultats.getInt("idLivre"),
                         lesResultats.getString("nomLivre"),
-                        lesResultats.getString("categorieLivre"),
                         lesResultats.getString("auteurLivre"),
                         lesResultats.getString("imageLivre"),
                         lesResultats.getInt("exemplaireLivre"),
-                        lesResultats.getFloat("prixLivre")
+                        lesResultats.getFloat("prixLivre"),
+                        lesResultats.getInt("idCategorie"),
+                        lesResultats.getInt("idMaisonEdition"),
+                        lesResultats.getString("nomCategorie")
                 );
                 lesLivres.add(unLivre);
             }
@@ -329,13 +333,14 @@ public class Modele {
             uneConnexion.seDeConnecter();
         } catch (SQLException exp) {
             System.out.println("Erreur d'exécution de la requête : " + requete);
+            exp.printStackTrace();
         }
         return lesLivres;
     }
 
     public static ArrayList<Livre> selectLikeLivre(String filtre) {
         ArrayList<Livre> lesLivres = new ArrayList<>();
-        String requete = "SELECT * FROM livre WHERE nomLivre LIKE '%" + filtre + "%' OR auteurLivre LIKE '%" + filtre + "%';";
+        String requete = "select * from livre where nomLivre LIKE '%" + filtre + "%' OR auteurLivre LIKE '%" + filtre + "%';";
         try {
             uneConnexion.seConnecter();
             Statement unStat = uneConnexion.getMaConnexion().createStatement();
@@ -344,11 +349,13 @@ public class Modele {
                 Livre unLivre = new Livre(
                         lesResultats.getInt("idLivre"),
                         lesResultats.getString("nomLivre"),
-                        lesResultats.getString("categorieLivre"),
                         lesResultats.getString("auteurLivre"),
                         lesResultats.getString("imageLivre"),
                         lesResultats.getInt("exemplaireLivre"),
-                        lesResultats.getFloat("prixLivre")
+                        lesResultats.getFloat("prixLivre"),
+                        lesResultats.getInt("idCategorie"),
+                        lesResultats.getInt("idMaisonEdition"),
+                        lesResultats.getString("nomCategorie")
                 );
                 lesLivres.add(unLivre);
             }
