@@ -80,7 +80,7 @@ public class VueConnexion extends JFrame implements ActionListener, KeyListener
     private void traitement () {
         String email = this.txtEmail.getText();
         String mdp = new String(this.txtMdp.getPassword());
-        User unUser = Controleur.selectWhereParticulier(email, mdp);
+        User unUser = Controleur.selectWhereUser(email, mdp);
         if (unUser==null) {
             JOptionPane.showMessageDialog(this, "Veuillez vérifier vos identifiants.");
         }else {

@@ -60,8 +60,9 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, MouseL
             matrice[i][0] = unLivre.getIdLivre();
             matrice[i][1] = unLivre.getNomLivre();
             matrice[i][2] = unLivre.getAuteurLivre();
-            matrice[i][3] = unLivre.getCategorieLivre();
-            matrice[i][4] = unLivre.getPrixLivre();
+            matrice[i][3] = unLivre.getAuteurLivre();
+            matrice[i][4] = unLivre.getExemplaireLivre();
+            matrice[i][5] = unLivre.getPrixLivre();
             i++;
         }
         return matrice;
@@ -70,28 +71,21 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, MouseL
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == this.btAjouterCommande) {
-            // Récupérer les lignes sélectionnées dans la table
             int[] lignesSelectionnees = this.tableLivres.getSelectedRows();
             if (lignesSelectionnees.length == 0) {
                 JOptionPane.showMessageDialog(this, "Veuillez sélectionner au moins un livre.",
                         "Aucun livre sélectionné", JOptionPane.WARNING_MESSAGE);
             } else {
-                // Récupérer l'ID du particulier (à adapter selon votre logique)
-                int idUser = 1; // Exemple : remplacer par l'ID du particulier connecté
+                int idUser = 1;
 
-                // Pour chaque livre sélectionné, créer une commande
                 for (int ligne : lignesSelectionnees) {
-                    int idLivre = (int) this.tableauLivres.getValueAt(ligne, 0); // ID du livre
-                    Date dateCommande = new Date(System.currentTimeMillis()); // Date actuelle
-                    String statutCommande = "en attente"; // Statut par défaut
-                    Date dateLivraisonCommande = null; // Date de livraison non définie initialement
+                    int idLivre = (int) this.tableauLivres.getValueAt(ligne, 0);
+                    Date dateCommande = new Date(System.currentTimeMillis());
+                    String statutCommande = "en attente";
+                    Date dateLivraisonCommande = null;
 
-                    // Créer une nouvelle commande
                     Commande uneCommande = new Commande(0, dateCommande, statutCommande, dateLivraisonCommande, idUser);
                     Controleur.insertCommande(uneCommande);
-
-                    // Ajouter le livre à la commande (via une table intermédiaire si nécessaire)
-                    // Exemple : Controleur.insertLigneCommande(idCommande, idLivre);
                 }
 
                 // Afficher un message de confirmation
@@ -103,7 +97,7 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, MouseL
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        // Gestion des clics sur la table (optionnel)
+
     }
 
     @Override

@@ -12,26 +12,24 @@ public class VueGenerale extends JFrame implements ActionListener {
     private JPanel panelMenu = new JPanel();
 
     private JButton btProfil = new JButton("Profil");
-    private JButton btClients = new JButton("Clients");
-    private JButton btTechniciens = new JButton("Techniciens");
-    private JButton btTelephones = new JButton("Telephones");
-    private JButton btInterventions = new JButton("Interventions");
+    private JButton btParticulier = new JButton("Particulier");
+    private JButton btLivre = new JButton("Livre");
+    private JButton btCommande = new JButton("Commande");
+    private JButton btAbonnement = new JButton("Abonnement");
     private JButton btStats = new JButton("Stats");
     private JButton btQuitter = new JButton("Quitter");
 
-    // Instances des panels :
     private static PanelProfil unPanelProfil = new PanelProfil();
     private static PanelParticulier unPanelParticulier = new PanelParticulier();
     private static PanelLivre unPanelLivre = new PanelLivre();
-    private static PanelCommande unPanelCommande; // Ne pas instancier ici
-    private static PanelAbonnement unPanelAbonnement; // Ne pas instancier ici
+    private static PanelCommande unPanelCommande;
+    private static PanelAbonnement unPanelAbonnement;
     private static PanelStats unPanelStats = new PanelStats();
 
-    private int idUser; // Ajout d'un attribut pour stocker l'idUser
+    private int idUser;
 
-    // Constructeur modifié pour prendre l'idUser en paramètre
     public VueGenerale(int idUser) {
-        this.idUser = idUser; // Initialisation de l'idUser
+        this.idUser = idUser;
 
         // Instanciation des panels dépendants de l'idUser
         unPanelCommande = new PanelCommande(this.idUser);
@@ -49,20 +47,20 @@ public class VueGenerale extends JFrame implements ActionListener {
         this.panelMenu.setBounds(50, 10, 900, 40);
         this.panelMenu.setLayout(new GridLayout(1, 7));
         this.panelMenu.add(this.btProfil);
-        this.panelMenu.add(this.btClients);
-        this.panelMenu.add(this.btTechniciens);
-        this.panelMenu.add(this.btTelephones);
-        this.panelMenu.add(this.btInterventions);
+        this.panelMenu.add(this.btParticulier);
+        this.panelMenu.add(this.btLivre);
+        this.panelMenu.add(this.btCommande);
+        this.panelMenu.add(this.btAbonnement);
         this.panelMenu.add(this.btStats);
         this.panelMenu.add(this.btQuitter);
         this.add(this.panelMenu);
 
         // Rendre les boutons écoutables
         this.btProfil.addActionListener(this);
-        this.btClients.addActionListener(this);
-        this.btTechniciens.addActionListener(this);
-        this.btTelephones.addActionListener(this);
-        this.btInterventions.addActionListener(this);
+        this.btParticulier.addActionListener(this);
+        this.btLivre.addActionListener(this);
+        this.btCommande.addActionListener(this);
+        this.btAbonnement.addActionListener(this);
         this.btStats.addActionListener(this);
         this.btQuitter.addActionListener(this);
 
@@ -74,7 +72,6 @@ public class VueGenerale extends JFrame implements ActionListener {
         this.add(unPanelAbonnement);
         this.add(unPanelStats);
 
-        // Masquer tous les panels sauf celui par défaut
         this.afficherPanel(1); // Afficher le panel Profil par défaut
 
         this.setVisible(true);
@@ -115,25 +112,22 @@ public class VueGenerale extends JFrame implements ActionListener {
         String choix = e.getActionCommand();
         switch (choix) {
             case "Quitter":
-                // Rendre visible la fenêtre VueConnexion
                 Gestion.rendreVisibleVueConnexion(true);
-
-                // Détruire la vue générale
                 Gestion.creerVueGenerale(false);
                 break;
             case "Profil":
                 this.afficherPanel(1);
                 break;
-            case "Clients":
+            case "Particulier":
                 this.afficherPanel(2);
                 break;
-            case "Techniciens":
+            case "Livre":
                 this.afficherPanel(3);
                 break;
-            case "Telephones":
+            case "Commande":
                 this.afficherPanel(4);
                 break;
-            case "Interventions":
+            case "Abonnement":
                 this.afficherPanel(5);
                 break;
             case "Stats":

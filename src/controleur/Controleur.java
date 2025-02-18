@@ -5,13 +5,50 @@ import modele.Modele;
 import java.util.ArrayList;
 
 public class Controleur {
-    private static Particulier particulierConnecte;
+    private static User userConnecte;
+
+
+    /************************ GESTION DES USERS ************************/
+    public static void insertUser(User unUser) {
+        Modele.insertUser(unUser);
+    }
+
+    public static ArrayList<User> selectUser() {
+        return Modele.selectUser();
+    }
+
+    public static void deleteUser(int idUser) {
+        Modele.deleteUser(idUser);
+    }
+
+    public static void updateUser(User unUser) {
+        Modele.updateUser(unUser);
+    }
+
+    public static ArrayList<User> selectLikeUser(String filtre) {
+        return Modele.selectLikeUser(filtre);
+    }
+
+    public static User selectWhereUser(int idUser) {
+        return Modele.selectWhereUser(idUser);
+    }
+
+    public static User selectWhereUser(String email, String mdp) {
+        return Modele.selectWhereUser(email, mdp);
+    }
+
+    public static User getUserConnecte() {
+        return userConnecte;
+    }
+
+    public static void setUserConnecte(User unUser) {
+        userConnecte = unUser;
+    }
+
 
     /**************** GESTION DES PARTICULIERS ***************/
     public static void insertParticulier(Particulier unParticulier) {
-        // Côté sécurité : on vérifie les données avant insertion dans la BDD
         if (verifDonnees(unParticulier)) {
-            // Appel du modèle pour insérer le particulier
             Modele.insertParticulier(unParticulier);
         } else {
             System.out.println("Erreur : Données invalides pour l'insertion du particulier.");
@@ -42,13 +79,13 @@ public class Controleur {
         return Modele.selectWhereParticulier(email, mdp);
     }
 
-    public static Particulier getParticulierConnecte() {
+    /*public static Particulier getParticulierConnecte() {
         return particulierConnecte;
     }
 
     public static void setParticulierConnecte(Particulier particulier) {
         particulierConnecte = particulier;
-    }
+    }*/
 
 
     /**************** GESTION DES LIVRES ****************/
