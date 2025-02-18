@@ -30,15 +30,12 @@ public class PanelProfil extends PanelPrincipal implements ActionListener {
     private JButton btValider = new JButton("Valider");
 
     public PanelProfil() {
-        super("Gestion du Profil"); // Appel du constructeur de PanelPrincipal avec un paramètre
+        super("Gestion du Profil");
 
-        // Configuration du panelForm
         configurerPanelForm();
 
-        // Configuration de txtInfos
         configurerTxtInfos();
 
-        // Ajout des boutons et écouteurs
         ajouterBoutonsEtEcouteurs();
     }
 

@@ -31,7 +31,6 @@ public class VueGenerale extends JFrame implements ActionListener {
     public VueGenerale(int idUser) {
         this.idUser = idUser;
 
-        // Instanciation des panels dépendants de l'idUser
         unPanelCommande = new PanelCommande(this.idUser);
         unPanelAbonnement = new PanelAbonnement(this.idUser);
 
@@ -42,7 +41,6 @@ public class VueGenerale extends JFrame implements ActionListener {
         this.setLayout(null);
         this.setBounds(50, 50, 1000, 600);
 
-        // Installation du panel Menu
         this.panelMenu.setBackground(Color.darkGray);
         this.panelMenu.setBounds(50, 10, 900, 40);
         this.panelMenu.setLayout(new GridLayout(1, 7));
@@ -55,7 +53,6 @@ public class VueGenerale extends JFrame implements ActionListener {
         this.panelMenu.add(this.btQuitter);
         this.add(this.panelMenu);
 
-        // Rendre les boutons écoutables
         this.btProfil.addActionListener(this);
         this.btParticulier.addActionListener(this);
         this.btLivre.addActionListener(this);
@@ -64,7 +61,6 @@ public class VueGenerale extends JFrame implements ActionListener {
         this.btStats.addActionListener(this);
         this.btQuitter.addActionListener(this);
 
-        // Ajout des panels dans la vue générale
         this.add(unPanelProfil);
         this.add(unPanelParticulier);
         this.add(unPanelLivre);
@@ -72,7 +68,7 @@ public class VueGenerale extends JFrame implements ActionListener {
         this.add(unPanelAbonnement);
         this.add(unPanelStats);
 
-        this.afficherPanel(1); // Afficher le panel Profil par défaut
+        this.afficherPanel(1);
 
         this.setVisible(true);
     }

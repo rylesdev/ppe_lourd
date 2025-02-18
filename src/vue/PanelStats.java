@@ -40,7 +40,6 @@ public class PanelStats extends PanelPrincipal
         panelCount.add(lbAbonnement);
 
         this.add(panelCount);
-        //installation de la JTable
         String entetes[] = {"Nom C", "Prénom C", "Designation", "Descritpion","Date Inter"};
         this.tableauStats = new Tableau (this.obtenirDonnees(), entetes);
         this.tableStats = new JTable(this.tableauStats);
@@ -58,7 +57,6 @@ public class PanelStats extends PanelPrincipal
     }
     public Object [][] obtenirDonnees()
     {
-        //convertir une ArrayList d'objets de clients en matrice d'elements
         ArrayList <Listing>  lesListings = Controleur.selectListing();
 
         Object matrice[][] = new Object[lesListings.size()][5];

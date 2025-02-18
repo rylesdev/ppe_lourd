@@ -27,7 +27,6 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, MouseL
     public PanelLivre() {
         super("Sélection des Livres");
 
-        // Installation de la JTable pour afficher les livres
         String entetes[] = {"Id", "Titre", "Auteur", "Catégorie", "Prix"};
         this.tableauLivres = new Tableau(this.obtenirDonnees(""), entetes);
         this.tableLivres = new JTable(this.tableauLivres);
@@ -35,12 +34,10 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, MouseL
         uneScroll.setBounds(50, 50, 700, 300);
         this.add(uneScroll);
 
-        // Installation du bouton "Ajouter à la commande"
         this.btAjouterCommande.setBounds(300, 370, 200, 30);
         this.add(this.btAjouterCommande);
         this.btAjouterCommande.addActionListener(this);
 
-        // Rendre la JTable écoutable sur le clic de la souris
         this.tableLivres.addMouseListener(this);
     }
 
@@ -57,7 +54,7 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, MouseL
             matrice[i][0] = unLivre.getIdLivre();
             matrice[i][1] = unLivre.getNomLivre();
             matrice[i][2] = unLivre.getAuteurLivre();
-            matrice[i][3] = unLivre.getNomCategorie(); // Utilisez le nouvel attribut
+            matrice[i][3] = unLivre.getNomCategorie();
             matrice[i][4] = unLivre.getPrixLivre();
             i++;
         }
@@ -72,7 +69,7 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, MouseL
                 JOptionPane.showMessageDialog(this, "Veuillez sélectionner au moins un livre.",
                         "Aucun livre sélectionné", JOptionPane.WARNING_MESSAGE);
             } else {
-                int idUser = 1; // Remplacez par l'ID de l'utilisateur connecté
+                int idUser = 1;
 
                 for (int ligne : lignesSelectionnees) {
                     int idLivre = (int) this.tableauLivres.getValueAt(ligne, 0);
@@ -84,7 +81,6 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, MouseL
                     Controleur.insertCommande(uneCommande);
                 }
 
-                // Afficher un message de confirmation
                 JOptionPane.showMessageDialog(this, "Les livres sélectionnés ont été ajoutés à la commande.",
                         "Commande créée", JOptionPane.INFORMATION_MESSAGE);
             }
@@ -93,7 +89,7 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, MouseL
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        // Vous pouvez ajouter ici le comportement souhaité lors du clic sur la table
+
     }
 
     @Override
