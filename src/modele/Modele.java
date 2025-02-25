@@ -367,6 +367,100 @@ public class Modele {
         return lesLivres;
     }
 
+    public static void insertLivre(Livre livre) {
+        String requete = "INSERT INTO Livre (nomLivre, auteurLivre, imageLivre, exemplaireLivre, prixLivre, idCategorie, idMaisonEdition) VALUES ('"
+                + livre.getNomLivre() + "', '"
+                + livre.getAuteurLivre() + "', '"
+                + livre.getImageLivre() + "', "
+                + livre.getExemplaireLivre() + ", "
+                + livre.getPrixLivre() + ", "
+                + livre.getIdCategorie() + ", "
+                + livre.getIdMaisonEdition() + ");";
+        try {
+            Connexion uneConnexion = new Connexion("localhost:8889", "ppe-lourd", "root", "root");
+            uneConnexion.seConnecter();
+            Statement unStat = uneConnexion.getMaConnexion().createStatement();
+            unStat.executeUpdate(requete);
+            unStat.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException exp) {
+            System.out.println("Erreur d'exécution de la requête : " + requete);
+        }
+    }
+
+    // Méthode pour supprimer un livre de la base de données
+    public static void deleteLivre(int idLivre) {
+        String requete = "DELETE FROM Livre WHERE idLivre = " + idLivre + ";";
+        try {
+            Connexion uneConnexion = new Connexion("localhost:8889", "ppe-lourd", "root", "root");
+            uneConnexion.seConnecter();
+            Statement unStat = uneConnexion.getMaConnexion().createStatement();
+            unStat.executeUpdate(requete);
+            unStat.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException exp) {
+            System.out.println("Erreur d'exécution de la requête : " + requete);
+        }
+    }
+
+    public static void updateLivre(Livre livre) {
+        String requete = "UPDATE Livre SET nomLivre = '" + livre.getNomLivre() + "', "
+                + "auteurLivre = '" + livre.getAuteurLivre() + "', "
+                + "imageLivre = '" + livre.getImageLivre() + "', "
+                + "exemplaireLivre = " + livre.getExemplaireLivre() + ", "
+                + "prixLivre = " + livre.getPrixLivre() + ", "
+                + "idCategorie = " + livre.getIdCategorie() + ", "
+                + "idMaisonEdition = " + livre.getIdMaisonEdition() + " "
+                + "WHERE idLivre = " + livre.getIdLivre() + ";";
+        try {
+            Connexion uneConnexion = new Connexion("jdbc:mysql://localhost:3306/votre_base_de_donnees", "votre_utilisateur", "votre_mot_de_passe", "com.mysql.cj.jdbc.Driver");
+            uneConnexion.seConnecter();
+            Statement unStat = uneConnexion.getMaConnexion().createStatement();
+            unStat.executeUpdate(requete);
+            unStat.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException exp) {
+            System.out.println("Erreur d'exécution de la requête : " + requete);
+        }
+    }
+
+    public static int selectIdCategorie(String nomCategorie) {
+        String requete = "SELECT idCategorie FROM categorie WHERE nomCategorie = '" + nomCategorie + "';";
+        try {
+            Connexion uneConnexion = new Connexion("jdbc:mysql://localhost:3306/votre_base_de_donnees", "votre_utilisateur", "votre_mot_de_passe", "com.mysql.cj.jdbc.Driver");
+            uneConnexion.seConnecter();
+            Statement unStat = uneConnexion.getMaConnexion().createStatement();
+            ResultSet resultat = unStat.executeQuery(requete);
+            if (resultat.next()) {
+                return resultat.getInt("idCategorie");
+            }
+            unStat.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException exp) {
+            System.out.println("Erreur d'exécution de la requête : " + requete);
+        }
+        return -1; // Retourne -1 si la catégorie n'est pas trouvée
+    }
+
+    // Méthode pour obtenir l'identifiant de la maison d'édition à partir du nom
+    public static int selectIdMaisonEdition(String nomMaisonEdition) {
+        String requete = "SELECT idMaisonEdition FROM maisonEdition WHERE nomMaisonEdition = '" + nomMaisonEdition + "';";
+        try {
+            Connexion uneConnexion = new Connexion("jdbc:mysql://localhost:3306/votre_base_de_donnees", "votre_utilisateur", "votre_mot_de_passe", "com.mysql.cj.jdbc.Driver");
+            uneConnexion.seConnecter();
+            Statement unStat = uneConnexion.getMaConnexion().createStatement();
+            ResultSet resultat = unStat.executeQuery(requete);
+            if (resultat.next()) {
+                return resultat.getInt("idMaisonEdition");
+            }
+            unStat.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException exp) {
+            System.out.println("Erreur d'exécution de la requête : " + requete);
+        }
+        return -1; // Retourne -1 si la maison d'édition n'est pas trouvée
+    }
+
 
     /************************ GESTION DES COMMANDES ************************/
     public static ArrayList<Commande> selectCommande(int idUser) {

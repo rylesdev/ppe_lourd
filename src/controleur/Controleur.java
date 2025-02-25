@@ -97,6 +97,26 @@ public class Controleur {
         return Modele.selectLikeLivre(filtre);
     }
 
+    public static void insertLivre(Livre livre) {
+        Modele.insertLivre(livre);
+    }
+
+    public static void deleteLivre(int idLivre) {
+        Modele.deleteLivre(idLivre);
+    }
+
+    public static void updateLivre(Livre livre) {
+        Modele.updateLivre(livre);
+    }
+
+    public static int selectIdCategorie(String nomCategorie) {
+        return Modele.selectIdCategorie(nomCategorie);
+    }
+
+    public static int selectIdMaisonEdition(String nomMaisonEdition) {
+        return Modele.selectIdMaisonEdition(nomMaisonEdition);
+    }
+
 
     /**************** GESTION DES COMMANDES ****************/
     public static ArrayList<Commande> selectCommande(int idUser) {

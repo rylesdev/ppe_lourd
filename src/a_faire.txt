@@ -8,7 +8,7 @@ Problème :
 
     Gestion des Livres :
         - Ajouter un livre (renseigner les informations comme dans Gestion des Particuliers)
-        - Supprimer un livre
+        // - Supprimer un livre
         // - Ajouter une commande
         - Filtrer les livres
 
@@ -21,49 +21,3 @@ Problème :
 
     Gestion des Abonnements :
         - Gérer la table abonnement avec un insert
-
-
-
-
-
-Controleur :
-    // - User
-    // - Livre
-    // - Commande
-    // - LigneCommande
-    // - Abonnement
-    // - Admin
-    // - Avis
-    // - Categorie
-    // - Entreprise
-    // - MaisonEdition
-    // - Particulier
-    // - Promotion
-
-    - Faire les requêtes dans le controleur pour chaque table
-
-        - Particulier
-        - Livre
-        - Commande
-        - Abonnement
-
-
-Modele :
-    - Faire les requêtes dans le modèle pour chaque table
-
-        - Particulier
-        - Livre
-        - Commande
-        - Abonnement
-
-
-Vue  :
-    // - PanelAbonnement
-    // - PanelCommande
-    // - PanelLivre
-    // - PanelParticulier
-    // - PanelPrincipal
-    // - PanelProfil
-    // - PanelStats
-    // - VueConnexion
-    // - VueGenerale
