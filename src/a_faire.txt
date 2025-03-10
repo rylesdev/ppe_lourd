@@ -1,6 +1,13 @@
 Problème :
 
+Régler le problème du profil qui n'affiche aucun utilisateur.
+
+    Connexion :
+        - Admin : Consulte, supprime, modifie, ajoute, etc...
+        - Gestionnaire : Consulte uniquement
+
     Gestion du Profil :
+        - Afficher une liste d'utilisateurs qu'on peut sélectionner pour avoir plus d'informations.
         - Régler le problème de "Aucun utilisateur connecté"
 
     Gestion des Particuliers :
@@ -17,6 +24,7 @@ Problème :
         // - Annuler une commande
         - Ajouter une commande (avec les informations)
         - Filtrer les commandes
+        - Modifier la table des commandes pour qu'elle concorde avec les champs
 
 
     Gestion des Abonnements :

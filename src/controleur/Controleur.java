@@ -33,8 +33,8 @@ public class Controleur {
         return Modele.selectWhereUser(idUser);
     }
 
-    public static User selectWhereUser(String email, String mdp) {
-        return Modele.selectWhereUser(email, mdp);
+    public static User selectWhereUser(String email, String mdp, String role) {
+        return Modele.selectWhereUser(email, mdp, role);
     }
 
     public static User getUserConnecte() {

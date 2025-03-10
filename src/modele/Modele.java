@@ -115,8 +115,8 @@ public class Modele {
         return unUser;
     }
 
-    public static User selectWhereUser(String email, String mdp) {
-        String requete = "select * from user where emailUser = '" + email + "' and mdpUser = '" + mdp + "';";
+    public static User selectWhereUser(String email, String mdp, String role) {
+        String requete = "select * from user where emailUser = '" + email + "' and mdpUser = '" + mdp + "' and roleUser = '" + role + "';";
         User unUser = null;
         try {
             uneConnexion.seConnecter();
