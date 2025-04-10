@@ -3,58 +3,66 @@ package controleur;
 import java.util.Date;
 
 public class Promotion {
-    private int idPromotion, idLivre;
-    private float prixPromotion;
-    private Date dateDebutPromotion, dateFinpromotion;
+    private int idPromotion;
+    private String nomPromotion;
+    private Date dateDebutPromotion, dateFinPromotion;
+    private double reductionPromotion;
 
-    public Promotion(int idPromotion, int idLivre, Date dateDebutPromotion, Date dateFinpromotion, float prixPromotion) {
+    public Promotion(int idPromotion, String nomPromotion, Date dateDebutPromotion,
+                     Date dateFinPromotion, double reductionPromotion) {
         this.idPromotion = idPromotion;
-        this.idLivre = idLivre;
+        this.nomPromotion = nomPromotion;
         this.dateDebutPromotion = dateDebutPromotion;
-        this.dateFinpromotion = dateFinpromotion;
-        this.prixPromotion = prixPromotion;
+        this.dateFinPromotion = dateFinPromotion;
+        this.reductionPromotion = reductionPromotion;
     }
 
-    public Promotion(int idLivre, Date dateDebutPromotion, Date dateFinpromotion, float prixPromotion) {
+    public Promotion(String nomPromotion, Date dateDebutPromotion,
+                     Date dateFinPromotion, double reductionPromotion) {
         this.idPromotion = 0;
-        this.idLivre = idLivre;
+        this.nomPromotion = nomPromotion;
         this.dateDebutPromotion = dateDebutPromotion;
-        this.dateFinpromotion = dateFinpromotion;
-        this.prixPromotion = prixPromotion;
+        this.dateFinPromotion = dateFinPromotion;
+        this.reductionPromotion = reductionPromotion;
     }
 
     public int getIdPromotion() {
         return idPromotion;
     }
+
     public void setIdPromotion(int idPromotion) {
         this.idPromotion = idPromotion;
     }
 
-    public int getIdLivre() {
-        return idLivre;
-    }
-    public void setIdLivre(int idLivre) {
-        this.idLivre = idLivre;
+    public String getNomPromotion() {
+        return nomPromotion;
     }
 
-    public float getPrixPromotion() {
-        return prixPromotion;
-    }
-    public void setPrixPromotion(float prixPromotion) {
-        this.prixPromotion = prixPromotion;
+    public void setNomPromotion(String nomPromotion) {
+        this.nomPromotion = nomPromotion;
     }
 
     public Date getDateDebutPromotion() {
         return dateDebutPromotion;
     }
+
     public void setDateDebutPromotion(Date dateDebutPromotion) {
         this.dateDebutPromotion = dateDebutPromotion;
     }
 
-    public Date getDateFinpromotion() {
-        return dateFinpromotion;
+    public Date getDateFinPromotion() {
+        return dateFinPromotion;
     }
-    public void setDateFinpromotion(Date dateFinpromotion) {
-        this.dateFinpromotion = dateFinpromotion;
+
+    public void setDateFinPromotion(Date dateFinPromotion) {
+        this.dateFinPromotion = dateFinPromotion;
+    }
+
+    public double getReductionPromotion() {
+        return reductionPromotion;
+    }
+
+    public void setReductionPromotion(double reductionPromotion) {
+        this.reductionPromotion = reductionPromotion;
     }
 }

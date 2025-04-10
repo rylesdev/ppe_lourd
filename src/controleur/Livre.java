@@ -1,12 +1,12 @@
 package controleur;
 
 public class Livre {
-    private int idLivre, idCategorie, idMaisonEdition;
-    private String nomLivre, auteurLivre, imageLivre, nomCategorie;
-    private int exemplaireLivre;
+    private int idLivre, exemplaireLivre, idCategorie, idMaisonEdition, idPromotion;
+    private String nomLivre, auteurLivre, imageLivre;
     private float prixLivre;
 
-    public Livre(int idLivre, String nomLivre, String auteurLivre, String imageLivre, int exemplaireLivre, float prixLivre, int idCategorie, int idMaisonEdition, String nomCategorie) {
+    public Livre(int idLivre, String nomLivre, String auteurLivre, String imageLivre,
+                 int exemplaireLivre, float prixLivre, int idCategorie, int idMaisonEdition, int idPromotion) {
         this.idLivre = idLivre;
         this.nomLivre = nomLivre;
         this.auteurLivre = auteurLivre;
@@ -15,10 +15,11 @@ public class Livre {
         this.prixLivre = prixLivre;
         this.idCategorie = idCategorie;
         this.idMaisonEdition = idMaisonEdition;
-        this.nomCategorie = nomCategorie;
+        this.idPromotion = idPromotion;
     }
 
-    public Livre(String nomLivre, String auteurLivre, String imageLivre, int exemplaireLivre, float prixLivre, int idCategorie, int idMaisonEdition, String nomCategorie) {
+    public Livre(String nomLivre, String auteurLivre, String imageLivre,
+                 int exemplaireLivre, float prixLivre, int idCategorie, int idMaisonEdition, int idPromotion) {
         this.idLivre = 0;
         this.nomLivre = nomLivre;
         this.auteurLivre = auteurLivre;
@@ -27,7 +28,7 @@ public class Livre {
         this.prixLivre = prixLivre;
         this.idCategorie = idCategorie;
         this.idMaisonEdition = idMaisonEdition;
-        this.nomCategorie = nomCategorie;
+        this.idPromotion = idPromotion;
     }
 
     public int getIdLivre() {
@@ -94,11 +95,11 @@ public class Livre {
         this.idMaisonEdition = idMaisonEdition;
     }
 
-    public String getNomCategorie() {
-        return nomCategorie;
+    public int getIdPromotion() {
+        return idPromotion;
     }
 
-    public void setNomCategorie(String nomCategorie) {
-        this.nomCategorie = nomCategorie;
+    public void setIdPromotion(int idPromotion) {
+        this.idPromotion = idPromotion;
     }
 }

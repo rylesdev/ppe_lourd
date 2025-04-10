@@ -1,20 +1,28 @@
 package controleur;
 
 public class LigneCommande {
-    private int idCommande;
-    private int idLivre;
-    private int quantiteLigneCommande;
+    private int idLigneCommande, idCommande, idLivre, quantiteLigneCommande;
 
-    public LigneCommande(int idCommande, int idLivre, int quantiteLigneCommande) {
+    public LigneCommande(int idLigneCommande, int idCommande, int idLivre, int quantiteLigneCommande) {
+        this.idLigneCommande = idLigneCommande;
         this.idCommande = idCommande;
         this.idLivre = idLivre;
         this.quantiteLigneCommande = quantiteLigneCommande;
     }
 
-    public LigneCommande(int idLivre, int quantiteLigneCommande) {
-        this.idCommande = 0;
+    public LigneCommande(int idCommande, int idLivre, int quantiteLigneCommande) {
+        this.idLigneCommande = 0;
+        this.idCommande = idCommande;
         this.idLivre = idLivre;
         this.quantiteLigneCommande = quantiteLigneCommande;
+    }
+
+    public int getIdLigneCommande() {
+        return idLigneCommande;
+    }
+
+    public void setIdLigneCommande(int idLigneCommande) {
+        this.idLigneCommande = idLigneCommande;
     }
 
     public int getIdCommande() {

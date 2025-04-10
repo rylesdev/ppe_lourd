@@ -1,57 +1,54 @@
 package controleur;
 
 public class Listing {
-    private String nom, prenom, designation, description, dateInter ;
+    private int idUser;
+    private String emailUser, mdpUser, adresseUser, roleUser;
 
-    public Listing(String nom, String prenom, String designation, String description, String dateInter) {
-
-        this.nom = nom;
-        this.prenom = prenom;
-        this.designation = designation;
-        this.description = description;
-        this.dateInter = dateInter;
+    public Listing(int idUser, String emailUser, String mdpUser, String adresseUser, String roleUser) {
+        this.idUser = idUser;
+        this.emailUser = emailUser;
+        this.mdpUser = mdpUser;
+        this.adresseUser = adresseUser;
+        this.roleUser = roleUser;
     }
 
-    public String getNom() {
-        return nom;
+    public int getIdUser() {
+        return idUser;
     }
 
-    public void setNom(String nom) {
-        this.nom = nom;
+    public void setIdUser(int idUser) {
+        this.idUser = idUser;
     }
 
-    public String getPrenom() {
-        return prenom;
+    public String getEmailUser() {
+        return emailUser;
     }
 
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
+    public void setEmailUser(String emailUser) {
+        this.emailUser = emailUser;
     }
 
-    public String getDesignation() {
-        return designation;
+    public String getMdpUser() {
+        return mdpUser;
     }
 
-    public void setDesignation(String designation) {
-        this.designation = designation;
+    public void setMdpUser(String mdpUser) {
+        this.mdpUser = mdpUser;
     }
 
-    public String getDescription() {
-        return description;
+    public String getAdresseUser() {
+        return adresseUser;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setAdresseUser(String adresseUser) {
+        this.adresseUser = adresseUser;
     }
 
-    public String getDateInter() {
-        return dateInter;
+    public String getRoleUser() {
+        return roleUser;
     }
 
-    public void setDateInter(String dateInter) {
-        this.dateInter = dateInter;
+    public void setRoleUser(String roleUser) {
+        this.roleUser = roleUser;
     }
-
-
-
 }

@@ -4,9 +4,10 @@ import java.util.Date;
 
 public class Avis {
     private int idAvis, idLivre, idUser;
-    private String nomLivre, commentaireAvis, noteAvis, dateAvis;
+    private String nomLivre, commentaireAvis, noteAvis;
+    private Date dateAvis;
 
-    public Avis(int idAvis, int idLivre, String nomLivre, int idUser, String commentaireAvis, String noteAvis, String dateAvis) {
+    public Avis(int idAvis, int idLivre, String nomLivre, int idUser, String commentaireAvis, String noteAvis, Date dateAvis) {
         this.idAvis = idAvis;
         this.idLivre = idLivre;
         this.nomLivre = nomLivre;
@@ -16,7 +17,7 @@ public class Avis {
         this.dateAvis = dateAvis;
     }
 
-    public Avis(int idLivre, String nomLivre, int idUser, String commentaireAvis, String noteAvis, String dateAvis) {
+    public Avis(int idLivre, String nomLivre, int idUser, String commentaireAvis, String noteAvis, Date dateAvis) {
         this.idAvis = 0;
         this.idLivre = idLivre;
         this.nomLivre = nomLivre;
@@ -68,10 +69,10 @@ public class Avis {
         this.noteAvis = noteAvis;
     }
 
-    public String getDateAvis() {
+    public Date getDateAvis() {
         return dateAvis;
     }
-    public void setDateAvis(String dateAvis) {
+    public void setDateAvis(Date dateAvis) {
         this.dateAvis = dateAvis;
     }
 }

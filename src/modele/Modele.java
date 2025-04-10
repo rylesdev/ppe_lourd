@@ -3,6 +3,7 @@ package modele;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import controleur.*;
@@ -13,7 +14,7 @@ public class Modele {
 
     /************************ GESTION DES USERS ************************/
     public static void insertUser(User unUser) {
-        String requete = "insert into user (emailUser, mdpUser, adresseUser, roleUser) values ("
+        String requete = "insert into user values ("
                 + "'" + unUser.getEmailUser() + "', "
                 + "'" + unUser.getMdpUser() + "', "
                 + "'" + unUser.getAdresseUser() + "', "
@@ -59,7 +60,6 @@ public class Modele {
                 + "adresseUser = '" + unUser.getAdresseUser() + "', "
                 + "roleUser = '" + unUser.getRoleUser() + "' "
                 + "where idUser = " + unUser.getIdUser() + ";";
-
         executerRequete(requete);
     }
 
@@ -157,8 +157,8 @@ public class Modele {
     public static ArrayList<Particulier> selectParticulier() {
         ArrayList<Particulier> lesParticuliers = new ArrayList<Particulier>();
         String requete =    "select * from particulier p " +
-                "inner join user u " +
-                "on p.idUser=u.idUser;";
+                            "inner join user u " +
+                            "on p.idUser=u.idUser;";
         try {
             uneConnexion.seConnecter();
             Statement unStat = uneConnexion.getMaConnexion().createStatement();
@@ -191,29 +191,29 @@ public class Modele {
     }
 
     public static void updateParticulier(Particulier unParticulier) {
-        String requete = "update particulier set "
-                + "nomUser = '" + unParticulier.getNomUser() + "', "
-                + "prenomUser = '" + unParticulier.getPrenomUser() + "', "
-                + "dateNaissanceUser = '" + unParticulier.getDateNaissanceUser() + "', "
-                + "sexeUser = '" + unParticulier.getSexeUser() + "', "
-                + "emailUser = '" + unParticulier.getEmailUser() + "', "
-                + "mdpUser = '" + unParticulier.getMdpUser() + "', "
-                + "adresseUser = '" + unParticulier.getAdresseUser() + "', "
-                + "roleUser = '" + unParticulier.getRoleUser() + "' "
-                + "where idUser = " + unParticulier.getIdUser() + ";";
+        String requete =    "update particulier set "
+                            + "nomUser = '" + unParticulier.getNomUser() + "', "
+                            + "prenomUser = '" + unParticulier.getPrenomUser() + "', "
+                            + "dateNaissanceUser = '" + unParticulier.getDateNaissanceUser() + "', "
+                            + "sexeUser = '" + unParticulier.getSexeUser() + "', "
+                            + "emailUser = '" + unParticulier.getEmailUser() + "', "
+                            + "mdpUser = '" + unParticulier.getMdpUser() + "', "
+                            + "adresseUser = '" + unParticulier.getAdresseUser() + "', "
+                            + "roleUser = '" + unParticulier.getRoleUser() + "' "
+                            + "where idUser = " + unParticulier.getIdUser() + ";";
 
         executerRequete(requete);
     }
 
     public static ArrayList<Particulier> selectLikeParticulier(String filtre) {
         ArrayList<Particulier> lesParticuliers = new ArrayList<Particulier>();
-        String requete = "select * from particulier where "
-                + "nomUser like '%" + filtre + "%' or "
-                + "prenomUser like '%" + filtre + "%' or "
-                + "dateNaissanceUser like '%" + filtre + "%' or "
-                + "sexeUser like '%" + filtre + "%' or "
-                + "emailUser like '%" + filtre + "%' or "
-                + "adresseUser like '%" + filtre + "%';";
+        String requete =    "select * from particulier where "
+                            + "nomUser like '%" + filtre + "%' or "
+                            + "prenomUser like '%" + filtre + "%' or "
+                            + "dateNaissanceUser like '%" + filtre + "%' or "
+                            + "sexeUser like '%" + filtre + "%' or "
+                            + "emailUser like '%" + filtre + "%' or "
+                            + "adresseUser like '%" + filtre + "%';";
         try {
             uneConnexion.seConnecter();
             Statement unStat = uneConnexion.getMaConnexion().createStatement();
@@ -269,11 +269,11 @@ public class Modele {
     }
 
     public static Particulier selectWhereParticulier(String email, String mdp) {
-        String requete ="select u.idUser, u.emailUser, u.mdpUser, u.adresseUser, u.roleUser, p.nomUser, p.prenomUser, p.dateNaissanceUser, p.sexeUser " +
-                "from user u " +
-                "left join particulier p " +
-                "on u.idUser = p.idUser " +
-                "where u.emailUser = '" + email + "' and u.mdpUser = '" + mdp + "';";
+        String requete =    "select u.idUser, u.emailUser, u.mdpUser, u.adresseUser, u.roleUser, p.nomUser, p.prenomUser, p.dateNaissanceUser, p.sexeUser " +
+                            "from user u " +
+                            "left join particulier p " +
+                            "on u.idUser = p.idUser " +
+                            "where u.emailUser = '" + email + "' and u.mdpUser = '" + mdp + "';";
         Particulier unParticulier = null;
         try {
             uneConnexion.seConnecter();
@@ -305,9 +305,10 @@ public class Modele {
     /************************ GESTION DES LIVRES ************************/
     public static ArrayList<Livre> selectLivre() {
         ArrayList<Livre> lesLivres = new ArrayList<>();
-        String requete = "SELECT l.idLivre, l.nomLivre, l.auteurLivre, l.imageLivre, l.exemplaireLivre, l.prixLivre, l.idCategorie, l.idMaisonEdition, c.nomCategorie "
-                + "FROM livre l "
-                + "INNER JOIN categorie c ON l.idCategorie = c.idCategorie;";
+        String requete =    "SELECT l.idLivre, l.nomLivre, l.auteurLivre, l.imageLivre, l.exemplaireLivre, l.prixLivre, l.idCategorie, l.idMaisonEdition, l.idPromotion "
+                            + "FROM livre l "
+                            + "INNER JOIN categorie c "
+                            + "ON l.idCategorie = c.idCategorie;";
         try {
             uneConnexion.seConnecter();
             Statement unStat = uneConnexion.getMaConnexion().createStatement();
@@ -322,7 +323,7 @@ public class Modele {
                         lesResultats.getFloat("prixLivre"),
                         lesResultats.getInt("idCategorie"),
                         lesResultats.getInt("idMaisonEdition"),
-                        lesResultats.getString("nomCategorie")
+                        lesResultats.getInt("idPromotion")
                 );
                 lesLivres.add(unLivre);
             }
@@ -337,7 +338,8 @@ public class Modele {
 
     public static ArrayList<Livre> selectLikeLivre(String filtre) {
         ArrayList<Livre> lesLivres = new ArrayList<>();
-        String requete = "select * from livre where nomLivre LIKE '%" + filtre + "%' OR auteurLivre LIKE '%" + filtre + "%';";
+        String requete =    "select * from livre where nomLivre like '%" + filtre + "%' " +
+                            "or auteurLivre like '%" + filtre + "%';";
         try {
             uneConnexion.seConnecter();
             Statement unStat = uneConnexion.getMaConnexion().createStatement();
@@ -352,7 +354,7 @@ public class Modele {
                         lesResultats.getFloat("prixLivre"),
                         lesResultats.getInt("idCategorie"),
                         lesResultats.getInt("idMaisonEdition"),
-                        lesResultats.getString("nomCategorie")
+                        lesResultats.getInt("idPromotion")
                 );
                 lesLivres.add(unLivre);
             }
@@ -365,65 +367,41 @@ public class Modele {
     }
 
     public static void insertLivre(Livre livre) {
-        String requete = "INSERT INTO Livre (nomLivre, auteurLivre, imageLivre, exemplaireLivre, prixLivre, idCategorie, idMaisonEdition) VALUES ('"
+        String requete = "insert into livre values (null,'"
                 + livre.getNomLivre() + "', '"
                 + livre.getAuteurLivre() + "', '"
                 + livre.getImageLivre() + "', "
                 + livre.getExemplaireLivre() + ", "
                 + livre.getPrixLivre() + ", "
                 + livre.getIdCategorie() + ", "
-                + livre.getIdMaisonEdition() + ");";
-        try {
-            Connexion uneConnexion = new Connexion("localhost:8889", "ppe-lourd", "root", "root");
-            uneConnexion.seConnecter();
-            Statement unStat = uneConnexion.getMaConnexion().createStatement();
-            unStat.executeUpdate(requete);
-            unStat.close();
-            uneConnexion.seDeConnecter();
-        } catch (SQLException exp) {
-            System.out.println("Erreur d'exécution de la requête : " + requete);
-        }
+                + livre.getIdMaisonEdition() + ", "
+                + livre.getIdPromotion() + ");";
+        executerRequete(requete);
     }
 
     public static void deleteLivre(int idLivre) {
-        String requete = "DELETE FROM Livre WHERE idLivre = " + idLivre + ";";
-        try {
-            Connexion uneConnexion = new Connexion("localhost:8889", "ppe-lourd", "root", "root");
-            uneConnexion.seConnecter();
-            Statement unStat = uneConnexion.getMaConnexion().createStatement();
-            unStat.executeUpdate(requete);
-            unStat.close();
-            uneConnexion.seDeConnecter();
-        } catch (SQLException exp) {
-            System.out.println("Erreur d'exécution de la requête : " + requete);
-        }
+        String requete = "delete from livre where idLivre = " + idLivre + ";";
+        executerRequete(requete);
     }
 
-    public static void updateLivre(Livre livre) {
-        String requete = "UPDATE Livre SET nomLivre = '" + livre.getNomLivre() + "', "
-                + "auteurLivre = '" + livre.getAuteurLivre() + "', "
-                + "imageLivre = '" + livre.getImageLivre() + "', "
-                + "exemplaireLivre = " + livre.getExemplaireLivre() + ", "
-                + "prixLivre = " + livre.getPrixLivre() + ", "
-                + "idCategorie = " + livre.getIdCategorie() + ", "
-                + "idMaisonEdition = " + livre.getIdMaisonEdition() + " "
-                + "WHERE idLivre = " + livre.getIdLivre() + ";";
-        try {
-            Connexion uneConnexion = new Connexion("jdbc:mysql://localhost:3306/votre_base_de_donnees", "votre_utilisateur", "votre_mot_de_passe", "com.mysql.cj.jdbc.Driver");
-            uneConnexion.seConnecter();
-            Statement unStat = uneConnexion.getMaConnexion().createStatement();
-            unStat.executeUpdate(requete);
-            unStat.close();
-            uneConnexion.seDeConnecter();
-        } catch (SQLException exp) {
-            System.out.println("Erreur d'exécution de la requête : " + requete);
-        }
+    public static void updateLivre(Livre unLivre) {
+        String requete = "update livre set nomLivre = '" + unLivre.getNomLivre() + "', "
+                + "auteurLivre = '" + unLivre.getAuteurLivre() + "', "
+                + "imageLivre = '" + unLivre.getImageLivre() + "', "
+                + "exemplaireLivre = " + unLivre.getExemplaireLivre() + ", "
+                + "prixLivre = " + unLivre.getPrixLivre() + ", "
+                + "idCategorie = " + unLivre.getIdCategorie() + ", "
+                + "idMaisonEdition = " + unLivre.getIdMaisonEdition() + ", "
+                + "idPromotion = " + unLivre.getIdPromotion() + " "
+                + "where idLivre = " + unLivre.getIdLivre() + ";";
+        executerRequete(requete);
     }
 
     public static int selectIdCategorie(String nomCategorie) {
-        String requete = "SELECT idCategorie FROM categorie WHERE nomCategorie = '" + nomCategorie + "';";
+        String requete =    "select idCategorie " +
+                            "from categorie " +
+                            "where nomCategorie = '" + nomCategorie + "';";
         try {
-            Connexion uneConnexion = new Connexion("jdbc:mysql://localhost:3306/votre_base_de_donnees", "votre_utilisateur", "votre_mot_de_passe", "com.mysql.cj.jdbc.Driver");
             uneConnexion.seConnecter();
             Statement unStat = uneConnexion.getMaConnexion().createStatement();
             ResultSet resultat = unStat.executeQuery(requete);
@@ -439,9 +417,10 @@ public class Modele {
     }
 
     public static int selectIdMaisonEdition(String nomMaisonEdition) {
-        String requete = "SELECT idMaisonEdition FROM maisonEdition WHERE nomMaisonEdition = '" + nomMaisonEdition + "';";
+        String requete =    "select idMaisonEdition " +
+                            "from maisonEdition " +
+                            "where nomMaisonEdition = '" + nomMaisonEdition + "';";
         try {
-            Connexion uneConnexion = new Connexion("jdbc:mysql://localhost:3306/votre_base_de_donnees", "votre_utilisateur", "votre_mot_de_passe", "com.mysql.cj.jdbc.Driver");
             uneConnexion.seConnecter();
             Statement unStat = uneConnexion.getMaConnexion().createStatement();
             ResultSet resultat = unStat.executeQuery(requete);
@@ -456,11 +435,116 @@ public class Modele {
         return -1;
     }
 
+    public static int selectIdPromotion(String nomPromotion) {
+        String requete =    "select idPromotion " +
+                            "from promotion " +
+                            "where nomPromotion = '" + nomPromotion + "';";
+        try {
+            uneConnexion.seConnecter();
+            Statement unStat = uneConnexion.getMaConnexion().createStatement();
+            ResultSet resultat = unStat.executeQuery(requete);
+            if (resultat.next()) {
+                return resultat.getInt("idPromotion");
+            }
+            unStat.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException exp) {
+            System.out.println("Erreur d'exécution de la requête : " + requete);
+        }
+        return -1;
+    }
+
+    public static String selectNomCategorie(int idCategorie) {
+        String requete =    "select nomCategorie " +
+                            "from categorie " +
+                            "where idCategorie = " + idCategorie + ";";
+        try {
+            uneConnexion.seConnecter();
+            Statement unStat = uneConnexion.getMaConnexion().createStatement();
+            ResultSet resultat = unStat.executeQuery(requete);
+            if (resultat.next()) {
+                return resultat.getString("nomCategorie");
+            }
+            unStat.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException exp) {
+            System.out.println("Erreur d'exécution de la requête : " + requete);
+        }
+        return null;
+    }
+
+    public static String selectNomMaisonEdition(int idMaisonEdition) {
+        String requete =    "select nomMaisonEdition " +
+                            "from maisonEdition " +
+                            "where idMaisonEdition = " + idMaisonEdition + ";";
+        try {
+            uneConnexion.seConnecter();
+            Statement unStat = uneConnexion.getMaConnexion().createStatement();
+            ResultSet resultat = unStat.executeQuery(requete);
+            if (resultat.next()) {
+                return resultat.getString("nomMaisonEdition");
+            }
+            unStat.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException exp) {
+            System.out.println("Erreur d'exécution de la requête : " + requete);
+        }
+        return null;
+    }
+
+    public static String selectNomPromotion(int idPromotion) {
+        String requete =    "select nomPromotion " +
+                            "from promotion " +
+                            "where idPromotion = " + idPromotion + ";";
+        try {
+            uneConnexion.seConnecter();
+            Statement unStat = uneConnexion.getMaConnexion().createStatement();
+            ResultSet resultat = unStat.executeQuery(requete);
+            if (resultat.next()) {
+                return resultat.getString("nomPromotion");
+            }
+            unStat.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException exp) {
+            System.out.println("Erreur d'exécution de la requête : " + requete);
+        }
+        return null;
+    }
+
 
     /************************ GESTION DES COMMANDES ************************/
-    public static ArrayList<Commande> selectCommande(int idUser) {
+    public static ArrayList<Commande> selectCommande() {
         ArrayList<Commande> lesCommandes = new ArrayList<>();
-        String requete = "SELECT * FROM commande WHERE idUser = " + idUser + ";";
+        String requete = "select * from commande;";
+        try {
+            uneConnexion.seConnecter();
+            Statement unStat = uneConnexion.getMaConnexion().createStatement();
+            ResultSet lesResultats = unStat.executeQuery(requete);
+            while (lesResultats.next()) {
+                Commande uneCommande = new Commande(
+                        lesResultats.getInt("idCommande"),
+                        lesResultats.getDate("dateCommande"),
+                        lesResultats.getString("statutCommande"),
+                        lesResultats.getDate("dateLivraisonCommande"),
+                        lesResultats.getInt("idUser")
+                );
+                lesCommandes.add(uneCommande);
+            }
+            unStat.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException exp) {
+            System.out.println("Erreur d'exécution de la requête : " + requete);
+        }
+        return lesCommandes;
+    }
+
+    public static ArrayList<Commande> selectLikeCommande(String filtre) {
+        ArrayList<Commande> lesCommandes = new ArrayList<>();
+        String requete =    "select * from commande where idCommande like '%" + filtre + "%' " +
+                            "or dateCommande like '%" + filtre + "%' " +
+                            "or statutCommande like '%" + filtre + "%' " +
+                            "or dateLivraisonCommande like '%" + filtre + "%' " +
+                            "or idUser like '%" + filtre + "%';";
         try {
             uneConnexion.seConnecter();
             Statement unStat = uneConnexion.getMaConnexion().createStatement();
@@ -484,16 +568,34 @@ public class Modele {
     }
 
     public static void insertCommande(Commande uneCommande) {
-        String requete = "INSERT INTO commande (dateCommande, statutCommande, dateLivraisonCommande, idUser) VALUES ("
-                + "'" + uneCommande.getDateCommande() + "', "
-                + "'" + uneCommande.getStatutCommande() + "', "
-                + "'" + uneCommande.getDateLivraisonCommande() + "', "
-                + uneCommande.getIdUser() + ");";
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String dateCommande = dateFormat.format(uneCommande.getDateCommande());
+        String dateLivraisonCommande = dateFormat.format(uneCommande.getDateLivraisonCommande());
+
+        String requete =    "insert into commande values (null, '" +
+                            dateCommande + "', '" +
+                            uneCommande.getStatutCommande() + "', '" +
+                            dateLivraisonCommande + "', " +
+                            uneCommande.getIdUser() + ");";
         executerRequete(requete);
     }
 
     public static void deleteCommande(int idCommande) {
         String requete = "DELETE FROM commande WHERE idCommande = " + idCommande + ";";
+        executerRequete(requete);
+    }
+
+    public static void updateCommande(Commande uneCommande) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String dateCommande = dateFormat.format(uneCommande.getDateCommande());
+        String dateLivraisonCommande = dateFormat.format(uneCommande.getDateLivraisonCommande());
+
+        String requete =    "update commande set " +
+                            "dateCommande = '" + dateCommande + "', " +
+                            "statutCommande = '" + uneCommande.getStatutCommande() + "', " +
+                            "dateLivraisonCommande = '" + dateLivraisonCommande + "', " +
+                            "idUser = '" + uneCommande.getIdUser() + "' " +
+                            "where idCommande = " + uneCommande.getIdCommande() + ";";
         executerRequete(requete);
     }
 
@@ -543,25 +645,27 @@ public class Modele {
     }
 
     public static ArrayList<Listing> selectListing() {
-        ArrayList<Listing> lesListings = new ArrayList<Listing>();
-        String requete ="select * from listing;";
+        ArrayList<Listing> lesListings = new ArrayList<>();
+        String requete = "select * from user;";
         try {
             uneConnexion.seConnecter();
             Statement unStat = uneConnexion.getMaConnexion().createStatement();
             ResultSet lesResultats = unStat.executeQuery(requete);
-            while(lesResultats.next()) {
+            while (lesResultats.next()) {
                 Listing unListing = new Listing(
-                        lesResultats.getString("nom"),
-                        lesResultats.getString("prenom"),lesResultats.getString("designation"),
-                        lesResultats.getString("description"), lesResultats.getString("dateInter")
+                        lesResultats.getInt("idUser"),
+                        lesResultats.getString("emailUser"),
+                        lesResultats.getString("mdpUser"),
+                        lesResultats.getString("adresseUser"),
+                        lesResultats.getString("roleUser")
                 );
                 lesListings.add(unListing);
             }
             unStat.close();
             uneConnexion.seDeConnecter();
-        }
-        catch(SQLException exp) {
-            System.out.println("Erreur d'execution de la requete : " + requete);
+        } catch (SQLException exp) {
+            System.out.println("Erreur d'exécution de la requête : " + requete);
+            exp.printStackTrace();
         }
         return lesListings;
     }

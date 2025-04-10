@@ -105,8 +105,8 @@ public class Controleur {
         Modele.deleteLivre(idLivre);
     }
 
-    public static void updateLivre(Livre livre) {
-        Modele.updateLivre(livre);
+    public static void updateLivre(Livre unLivre) {
+        Modele.updateLivre(unLivre);
     }
 
     public static int selectIdCategorie(String nomCategorie) {
@@ -117,10 +117,30 @@ public class Controleur {
         return Modele.selectIdMaisonEdition(nomMaisonEdition);
     }
 
+    public static int selectIdPromotion(String nomPromotion) {
+        return Modele.selectIdPromotion(nomPromotion);
+    }
+
+    public static String selectNomCategorie(int idCategorie) {
+        return Modele.selectNomCategorie(idCategorie);
+    }
+
+    public static String selectNomMaisonEdition(int idMaisonEdition) {
+        return Modele.selectNomMaisonEdition(idMaisonEdition);
+    }
+
+    public static String selectNomPromotion(int idPromotion) {
+        return Modele.selectNomPromotion(idPromotion);
+    }
+
 
     /**************** GESTION DES COMMANDES ****************/
-    public static ArrayList<Commande> selectCommande(int idUser) {
-        return Modele.selectCommande(idUser);
+    public static ArrayList<Commande> selectCommande() {
+        return Modele.selectCommande();
+    }
+
+    public static ArrayList<Commande> selectLikeCommande(String filtre) {
+        return Modele.selectLikeCommande(filtre);
     }
 
     public static void insertCommande(Commande uneCommande) {
@@ -129,6 +149,10 @@ public class Controleur {
 
     public static void deleteCommande(int idCommande) {
         Modele.deleteCommande(idCommande);
+    }
+
+    public static void updateCommande(Commande uneCommande) {
+        Modele.updateCommande(uneCommande);
     }
 
     /*public static ArrayList<Commande> selectCommandesByUser(int idUser) {

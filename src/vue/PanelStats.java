@@ -62,11 +62,11 @@ public class PanelStats extends PanelPrincipal
         Object matrice[][] = new Object[lesListings.size()][5];
         int i = 0;
         for (Listing unListing : lesListings) {
-            matrice[i][0] = unListing.getNom();
-            matrice[i][1] = unListing.getPrenom();
-            matrice[i][2] = unListing.getDesignation();
-            matrice[i][3] = unListing.getDescription();
-            matrice[i][4] = unListing.getDateInter();
+            matrice[i][0] = unListing.getIdUser();
+            matrice[i][1] = unListing.getEmailUser();
+            matrice[i][2] = unListing.getMdpUser();
+            matrice[i][3] = unListing.getAdresseUser();
+            matrice[i][4] = unListing.getRoleUser();
             i++;
         }
         return matrice ;

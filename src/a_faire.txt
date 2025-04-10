@@ -1,31 +1,51 @@
 Problème :
 
-Régler le problème du profil qui n'affiche aucun utilisateur.
+Supprimer les classes qui sont inutiles dans le Controleur :
+    - Admin
 
     Connexion :
         - Admin : Consulte, supprime, modifie, ajoute, etc...
         - Gestionnaire : Consulte uniquement
 
     Gestion du Profil :
-        - Afficher une liste d'utilisateurs qu'on peut sélectionner pour avoir plus d'informations.
+        - Afficher les informations de l'utilisateur actuellement connecté
         - Régler le problème de "Aucun utilisateur connecté"
 
     Gestion des Particuliers :
-        - ...
+        - Mettre "Particulier" dans une sous-catégorie de "Utilisateur"
+            - Soit mettre 2 boutons "Particulier" et "Entreprise" une fois qu'on a appuyé sur le bouton "Utilisateur"
+            - Soit, dans le PanelUser, mettre un bouton "Particulier" qui va afficher le tableau des Particuliers,
+                et un bouton "Entreprise" qui va afficher le tableau des Entreprises.
+            - Chaque tableau devra avoir ses champs personnels (Particulier = nom ; Entreprise = SIRET)
+        - Ajouter un Particulier
+        - Supprimer un Particulier
+        - Modifier un Particulier
+        - Fitrer les Particuliers
 
     Gestion des Livres :
-        - Ajouter un livre (renseigner les informations comme dans Gestion des Particuliers)
-        // - Supprimer un livre
-        // - Ajouter une commande
-        - Filtrer les livres
-
+        // - Ajouter un Livre
+        // - Supprimer un Livre
+        // - Modifier un Livre
+        // - Fitrer les Livres
+        // - Afficher les noms des Categories, MaisonEdition et Promotion au lieu de leur ID
 
     Gestion des Commandes :
-        // - Annuler une commande
-        - Ajouter une commande (avec les informations)
-        - Filtrer les commandes
-        - Modifier la table des commandes pour qu'elle concorde avec les champs
-
+        // - Ajouter un formulaire de Commande
+        // - Ajouter une Commande (en l'associant à un iduser)
+        // - Annuler une Commande
+        // - Modifier une Commande
+        // - Fitrer les Commandes
 
     Gestion des Abonnements :
-        - Gérer la table abonnement avec un insert
+        - Afficher tous les utilisateurs et afficher un champ "abonnement"
+        - Ajouter un Abonnement
+        - Supprimer un Abonnement
+        - Modifier une Abonnement
+        - Fitrer les Abonnement
+
+    Gestion des Statistiques :
+        - Mettre des statistiques à partir de la table "avis"
+        Exemple : Moyenne des livres
+
+    Gestion des Stockages :
+        - Ajouter un panel Stockage

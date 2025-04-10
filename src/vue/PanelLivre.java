@@ -31,10 +31,11 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, KeyLis
     private JTextField txtPrix = new JTextField();
     private JTextField txtCategorie = new JTextField();
     private JTextField txtMaisonEdition = new JTextField();
+    private JTextField txtPromotion = new JTextField();
 
     private JButton btAnnuler = new JButton("Annuler");
     private JButton btValider = new JButton("Valider");
-    private JButton btAjouterCommande = new JButton("Ajouter à la commande");
+    private JButton btSupprimer = new JButton("Supprimer");
 
     private JTable tableLivres;
     private Tableau tableauLivres;
@@ -43,16 +44,14 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, KeyLis
     private JTextField txtFiltre = new JTextField();
     private JButton btFiltrer = new JButton("Filtrer");
 
-    private JButton btSupprimer = new JButton("Supprimer");
-
     private JLabel lbNbLivres = new JLabel();
 
     public PanelLivre() {
         super("Gestion des Livres");
 
         this.panelForm.setBackground(Color.cyan);
-        this.panelForm.setBounds(30, 100, 300, 250);
-        this.panelForm.setLayout(new GridLayout(10, 2));
+        this.panelForm.setBounds(30, 100, 300, 300);
+        this.panelForm.setLayout(new GridLayout(11, 2));
         this.panelForm.add(new JLabel("Nom :"));
         this.panelForm.add(this.txtNom);
 
@@ -74,16 +73,19 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, KeyLis
         this.panelForm.add(new JLabel("Maison d'édition :"));
         this.panelForm.add(this.txtMaisonEdition);
 
+        this.panelForm.add(new JLabel("Promotion :"));
+        this.panelForm.add(this.txtPromotion);
+
         this.panelForm.add(this.btAnnuler);
         this.panelForm.add(this.btValider);
-
-        this.panelForm.add(this.btAjouterCommande);
+        this.panelForm.add(this.btSupprimer);
 
         this.add(this.panelForm);
 
         this.btAnnuler.addActionListener(this);
         this.btValider.addActionListener(this);
-        this.btAjouterCommande.addActionListener(this);
+        this.btSupprimer.addActionListener(this);
+        this.btSupprimer.setVisible(false);
 
         this.txtNom.addKeyListener(this);
         this.txtAuteur.addKeyListener(this);
@@ -92,8 +94,9 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, KeyLis
         this.txtPrix.addKeyListener(this);
         this.txtCategorie.addKeyListener(this);
         this.txtMaisonEdition.addKeyListener(this);
+        this.txtPromotion.addKeyListener(this);
 
-        String entetes[] = {"Id", "Titre", "Auteur", "Catégorie", "Prix"};
+        String entetes[] = {"Id", "Nom", "Auteur", "Catégorie", "Prix"};
         this.tableauLivres = new Tableau(this.obtenirDonnees(""), entetes);
         this.tableLivres = new JTable(this.tableauLivres);
         JScrollPane uneScroll = new JScrollPane(this.tableLivres);
@@ -109,16 +112,11 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, KeyLis
         this.add(this.panelFiltre);
         this.btFiltrer.addActionListener(this);
 
-        this.btSupprimer.setBounds(80, 340, 140, 30);
-        this.add(this.btSupprimer);
-        this.btSupprimer.addActionListener(this);
-        this.btSupprimer.setVisible(false);
-        this.btSupprimer.setBackground(Color.red);
-
         this.lbNbLivres.setBounds(450, 380, 400, 20);
         this.add(this.lbNbLivres);
         this.lbNbLivres.setText("Nombre de livres : " + this.tableauLivres.getRowCount());
 
+        // Affiche les données du formulaire à gauche
         this.tableLivres.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -126,11 +124,17 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, KeyLis
                 if (numLigne >= 0) {
                     txtNom.setText(tableauLivres.getValueAt(numLigne, 1).toString());
                     txtAuteur.setText(tableauLivres.getValueAt(numLigne, 2).toString());
-                    txtImage.setText(tableauLivres.getValueAt(numLigne, 3).toString());
-                    txtExemplaire.setText(tableauLivres.getValueAt(numLigne, 4).toString());
-                    txtPrix.setText(tableauLivres.getValueAt(numLigne, 5).toString());
-                    txtCategorie.setText(tableauLivres.getValueAt(numLigne, 6).toString());
+                    txtCategorie.setText(tableauLivres.getValueAt(numLigne, 3).toString());
+                    txtPrix.setText(tableauLivres.getValueAt(numLigne, 4).toString());
+                    txtExemplaire.setText(tableauLivres.getValueAt(numLigne, 5).toString());
+                    txtImage.setText(tableauLivres.getValueAt(numLigne, 6).toString());
                     txtMaisonEdition.setText(tableauLivres.getValueAt(numLigne, 7).toString());
+                    Object promotionValue = tableauLivres.getValueAt(numLigne, 8);
+                    if (promotionValue == null || promotionValue.toString().trim().isEmpty()) {
+                        txtPromotion.setText("Aucune promotion");
+                    } else {
+                        txtPromotion.setText(promotionValue.toString());
+                    }
 
                     btSupprimer.setVisible(true);
                     btValider.setText("Modifier");
@@ -151,6 +155,7 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, KeyLis
         });
     }
 
+    // Affiche les données du tableau à droit
     public Object[][] obtenirDonnees(String filtre) {
         ArrayList<Livre> lesLivres;
         if (filtre.equals("")) {
@@ -158,17 +163,18 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, KeyLis
         } else {
             lesLivres = Controleur.selectLikeLivre(filtre);
         }
-        Object matrice[][] = new Object[lesLivres.size()][8];
+        Object matrice[][] = new Object[lesLivres.size()][9];
         int i = 0;
         for (Livre unLivre : lesLivres) {
             matrice[i][0] = unLivre.getIdLivre();
             matrice[i][1] = unLivre.getNomLivre();
             matrice[i][2] = unLivre.getAuteurLivre();
-            matrice[i][3] = unLivre.getImageLivre();
-            matrice[i][4] = unLivre.getExemplaireLivre();
-            matrice[i][5] = unLivre.getPrixLivre();
-            matrice[i][6] = unLivre.getNomCategorie();
-            matrice[i][7] = unLivre.getIdMaisonEdition();
+            matrice[i][3] = Controleur.selectNomCategorie(unLivre.getIdCategorie());
+            matrice[i][4] = unLivre.getPrixLivre();
+            matrice[i][5] = unLivre.getExemplaireLivre();
+            matrice[i][6] = unLivre.getImageLivre();
+            matrice[i][7] = Controleur.selectNomMaisonEdition(unLivre.getIdMaisonEdition());
+            matrice[i][8] = Controleur.selectNomPromotion(unLivre.getIdPromotion());
             i++;
         }
         return matrice;
@@ -182,6 +188,7 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, KeyLis
         this.txtPrix.setText("");
         this.txtCategorie.setText("");
         this.txtMaisonEdition.setText("");
+        this.txtPromotion.setText("");
         btSupprimer.setVisible(false);
         btValider.setText("Valider");
     }
@@ -200,25 +207,27 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, KeyLis
             int numLigne = tableLivres.getSelectedRow();
             if (numLigne >= 0) {
                 int idLivre = Integer.parseInt(tableauLivres.getValueAt(numLigne, 0).toString());
-                String nom = this.txtNom.getText();
-                String auteur = this.txtAuteur.getText();
-                String image = this.txtImage.getText();
-                int exemplaire = Integer.parseInt(this.txtExemplaire.getText());
-                float prix = Float.parseFloat(this.txtPrix.getText());
+                String nomLivre = this.txtNom.getText();
+                String auteurLivre = this.txtAuteur.getText();
+                String imageLivre = this.txtImage.getText();
+                int exemplaireLivre = Integer.parseInt(this.txtExemplaire.getText());
+                float prixLivre = Float.parseFloat(this.txtPrix.getText());
                 int idCategorie = Controleur.selectIdCategorie(this.txtCategorie.getText());
                 int idMaisonEdition = Controleur.selectIdMaisonEdition(this.txtMaisonEdition.getText());
+                int idPromotion = Controleur.selectIdPromotion(this.txtPromotion.getText());
 
                 ArrayList<String> lesChamps = new ArrayList<>();
-                lesChamps.add(nom);
-                lesChamps.add(auteur);
-                lesChamps.add(image);
-                lesChamps.add(String.valueOf(exemplaire));
-                lesChamps.add(String.valueOf(prix));
+                lesChamps.add(nomLivre);
+                lesChamps.add(auteurLivre);
+                lesChamps.add(imageLivre);
+                lesChamps.add(String.valueOf(exemplaireLivre));
+                lesChamps.add(String.valueOf(prixLivre));
                 lesChamps.add(String.valueOf(idCategorie));
                 lesChamps.add(String.valueOf(idMaisonEdition));
+                lesChamps.add(String.valueOf(idPromotion));
 
                 if (Controleur.verifDonnees(lesChamps)) {
-                    Livre unLivre = new Livre(idLivre, nom, auteur, image, exemplaire, prix, idCategorie, idMaisonEdition, this.txtCategorie.getText());
+                    Livre unLivre = new Livre(idLivre, nomLivre, auteurLivre, imageLivre, exemplaireLivre, prixLivre, idCategorie, idMaisonEdition, idPromotion);
                     Controleur.updateLivre(unLivre);
                     this.tableauLivres.setDonnees(this.obtenirDonnees(""));
                     JOptionPane.showMessageDialog(this, "Modification réussie du livre.",
@@ -240,27 +249,6 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, KeyLis
                         "Suppression Livre", JOptionPane.INFORMATION_MESSAGE);
                 this.viderChamps();
             }
-        } else if (e.getSource() == this.btAjouterCommande) {
-            int[] lignesSelectionnees = this.tableLivres.getSelectedRows();
-            if (lignesSelectionnees.length == 0) {
-                JOptionPane.showMessageDialog(this, "Veuillez sélectionner au moins un livre.",
-                        "Aucun livre sélectionné", JOptionPane.WARNING_MESSAGE);
-            } else {
-                int idUser = 1;
-
-                for (int ligne : lignesSelectionnees) {
-                    int idLivre = (int) this.tableauLivres.getValueAt(ligne, 0);
-                    java.sql.Date dateCommande = new java.sql.Date(System.currentTimeMillis());
-                    String statutCommande = "en attente";
-                    java.sql.Date dateLivraisonCommande = null;
-
-                    Commande uneCommande = new Commande(0, dateCommande, statutCommande, dateLivraisonCommande, idUser);
-                    Controleur.insertCommande(uneCommande);
-                }
-
-                JOptionPane.showMessageDialog(this, "Les livres sélectionnés ont été ajoutés à la commande.",
-                        "Commande créée", JOptionPane.INFORMATION_MESSAGE);
-            }
         }
     }
 
@@ -272,6 +260,7 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, KeyLis
         String prixStr = this.txtPrix.getText();
         String categorie = this.txtCategorie.getText();
         String maisonEdition = this.txtMaisonEdition.getText();
+        String promotion = this.txtPromotion.getText();
 
         if (!exemplaireStr.matches("\\d+") || !prixStr.matches("\\d+(\\.\\d+)?")) {
             JOptionPane.showMessageDialog(this, "Veuillez entrer des valeurs numériques valides pour l'exemplaire et le prix.",
@@ -283,6 +272,7 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, KeyLis
         float prix = Float.parseFloat(prixStr);
         int idCategorie = Controleur.selectIdCategorie(categorie);
         int idMaisonEdition = Controleur.selectIdMaisonEdition(maisonEdition);
+        int idPromotion = Controleur.selectIdPromotion(promotion);
 
         ArrayList<String> lesChamps = new ArrayList<>();
         lesChamps.add(nom);
@@ -292,9 +282,10 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, KeyLis
         lesChamps.add(String.valueOf(prix));
         lesChamps.add(String.valueOf(idCategorie));
         lesChamps.add(String.valueOf(idMaisonEdition));
+        lesChamps.add(String.valueOf(idPromotion));
 
         if (Controleur.verifDonnees(lesChamps)) {
-            Livre unLivre = new Livre(0, nom, auteur, image, exemplaire, prix, idCategorie, idMaisonEdition, categorie);
+            Livre unLivre = new Livre(0, nom, auteur, image, exemplaire, prix, idCategorie, idMaisonEdition, idPromotion);
             Controleur.insertLivre(unLivre);
             JOptionPane.showMessageDialog(this, "Insertion réussie du livre.",
                     "Insertion Livre", JOptionPane.INFORMATION_MESSAGE);

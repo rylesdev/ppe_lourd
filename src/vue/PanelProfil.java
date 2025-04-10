@@ -5,24 +5,19 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import controleur.Controleur;
 import controleur.User;
 
-public class PanelProfil extends PanelPrincipal implements ActionListener, ListSelectionListener {
+public class PanelProfil extends PanelPrincipal implements ActionListener {
     private JTextArea txtInfos = new JTextArea();
-    private User unUser;
+    private User connectedUser;
     private JButton btModifier = new JButton("Modifier Profil");
 
     private JPanel panelForm = new JPanel();
@@ -34,32 +29,19 @@ public class PanelProfil extends PanelPrincipal implements ActionListener, ListS
     private JButton btAnnuler = new JButton("Annuler");
     private JButton btValider = new JButton("Valider");
 
-    private User connectedUser;
-    private JList<User> userList;
-    private DefaultListModel<User> userListModel;
-
     public PanelProfil() {
         super("Gestion du Profil");
 
         configurerPanelForm();
-
         configurerTxtInfos();
-
         ajouterBoutonsEtEcouteurs();
 
         connectedUser = Controleur.getUserConnecte();
 
-        if (connectedUser != null && "admin".equals(connectedUser.getRoleUser())) {
-            this.btModifier.setEnabled(true);
-            configurerUserList();
-        } else {
-            this.btModifier.setEnabled(false);
-        }
-
-        if (connectedUser != null && "admin".equals(connectedUser.getRoleUser())) {
-            afficherTousLesUtilisateurs();
-        } else if (connectedUser != null) {
+        if (connectedUser != null) {
             afficherInfosUtilisateur(connectedUser);
+        } else {
+            JOptionPane.showMessageDialog(this, "Aucun utilisateur connecté.", "Erreur", JOptionPane.ERROR_MESSAGE);
         }
 
         this.setVisible(true);
@@ -96,21 +78,6 @@ public class PanelProfil extends PanelPrincipal implements ActionListener, ListS
         this.add(this.txtInfos);
     }
 
-    private void configurerUserList() {
-        userListModel = new DefaultListModel<>();
-        userList = new JList<>(userListModel);
-        userList.addListSelectionListener(this);
-
-        ArrayList<User> allUsers = Controleur.selectUser();
-        for (User user : allUsers) {
-            userListModel.addElement(user);
-        }
-
-        JScrollPane scrollPane = new JScrollPane(userList);
-        scrollPane.setBounds(50, 350, 300, 100);
-        this.add(scrollPane);
-    }
-
     private void ajouterBoutonsEtEcouteurs() {
         this.btModifier.setBounds(100, 460, 200, 40);
         this.add(this.btModifier);
@@ -123,28 +90,15 @@ public class PanelProfil extends PanelPrincipal implements ActionListener, ListS
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == this.btModifier) {
-            if (unUser != null && "admin".equals(connectedUser.getRoleUser())) {
-                this.txtEmail.setText(unUser.getEmailUser());
-                this.txtAdresse.setText(unUser.getAdresseUser());
+            if (connectedUser != null) {
+                this.txtEmail.setText(connectedUser.getEmailUser());
+                this.txtAdresse.setText(connectedUser.getAdresseUser());
                 this.panelForm.setVisible(true);
-            } else {
-                JOptionPane.showMessageDialog(this, "Vous n'avez pas les droits nécessaires pour modifier ce profil.",
-                        "Erreur", JOptionPane.ERROR_MESSAGE);
             }
         } else if (e.getSource() == this.btAnnuler) {
             viderChampsFormulaire();
         } else if (e.getSource() == this.btValider) {
             validerModifications();
-        }
-    }
-
-    @Override
-    public void valueChanged(ListSelectionEvent e) {
-        if (!e.getValueIsAdjusting()) {
-            unUser = userList.getSelectedValue();
-            if (unUser != null) {
-                afficherInfosUtilisateur(unUser);
-            }
         }
     }
 
@@ -179,21 +133,26 @@ public class PanelProfil extends PanelPrincipal implements ActionListener, ListS
     }
 
     private void mettreAJourUtilisateur(String email, String adresse, String mdp) {
-        unUser.setEmailUser(email);
-        unUser.setAdresseUser(adresse);
-        unUser.setMdpUser(mdp);
+        connectedUser.setEmailUser(email);
+        connectedUser.setAdresseUser(adresse);
+        connectedUser.setMdpUser(mdp);
 
-        Controleur.updateUser(unUser);
-        Controleur.setUserConnecte(unUser);
+        Controleur.updateUser(connectedUser);
+        Controleur.setUserConnecte(connectedUser);
 
         JOptionPane.showMessageDialog(this,
                 "Modification des données réussie", "Modification",
                 JOptionPane.OK_OPTION);
 
-        afficherInfosUtilisateur(unUser);
+        afficherInfosUtilisateur(connectedUser);
     }
 
     private void afficherInfosUtilisateur(User user) {
+        if (user == null) {
+            System.out.println("Erreur : L'utilisateur est null.");
+            return;
+        }
+        System.out.println("Affichage des informations de l'utilisateur : " + user.getEmailUser());
         this.txtInfos.setText(
                 "________________INFOS PROFIL _____________\n\n"
                         + " ID : " + user.getIdUser() + "\n\n"
@@ -201,18 +160,5 @@ public class PanelProfil extends PanelPrincipal implements ActionListener, ListS
                         + " Adresse : " + user.getAdresseUser() + "\n\n"
                         + "__________________________________________"
         );
-    }
-
-    private void afficherTousLesUtilisateurs() {
-        ArrayList<User> allUsers = Controleur.selectUser();
-        StringBuilder sb = new StringBuilder();
-        for (User user : allUsers) {
-            sb.append("________________INFOS PROFIL _____________\n\n")
-                    .append(" ID : ").append(user.getIdUser()).append("\n\n")
-                    .append(" Email : ").append(user.getEmailUser()).append("\n\n")
-                    .append(" Adresse : ").append(user.getAdresseUser()).append("\n\n")
-                    .append("__________________________________________\n\n");
-        }
-        this.txtInfos.setText(sb.toString());
     }
 }
