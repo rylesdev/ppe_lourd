@@ -5,7 +5,7 @@ import java.util.Date;
 public class Entreprise extends User {
     private String siretUser;
     private String raisonSocialeUser;
-    private double capitalSocialUser;
+    private float capitalSocialUser;
 
     public Entreprise(int idUser, String siretUser, String raisonSocialeUser, float capitalSocialUser,
                       String emailUser, String mdpUser, String adresseUser, String roleUser) {
@@ -31,11 +31,11 @@ public class Entreprise extends User {
         this.raisonSocialeUser = raisonSocialeUser;
     }
 
-    public double getCapitalSocialUser() {
+    public float getCapitalSocialUser() {
         return capitalSocialUser;
     }
 
-    public void setCapitalSocialUser(double capitalSocialUser) {
+    public void setCapitalSocialUser(float capitalSocialUser) {
         this.capitalSocialUser = capitalSocialUser;
     }
 }

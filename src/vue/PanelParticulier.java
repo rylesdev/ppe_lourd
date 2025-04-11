@@ -88,7 +88,8 @@ public class PanelParticulier extends PanelPrincipal implements ActionListener, 
         this.txtDateNaissance.addKeyListener(this);
         this.txtSexe.addKeyListener(this);
 
-        String entetes[] = {"Id", "Nom", "Prénom", "Adresse", "Email", "Date de Naissance", "Sexe"};
+        // Modification des entêtes du tableau (suppression de "Sexe")
+        String entetes[] = {"Id", "Nom", "Prénom", "Adresse", "Email", "Date de Naissance"};
         this.tableauParticulier = new Tableau(this.obtenirDonnees(""), entetes);
         this.tableParticulier = new JTable(this.tableauParticulier);
         JScrollPane uneScroll = new JScrollPane(this.tableParticulier);
@@ -124,10 +125,6 @@ public class PanelParticulier extends PanelPrincipal implements ActionListener, 
                     txtAdresse.setText(tableauParticulier.getValueAt(numLigne, 3).toString());
                     txtEmail.setText(tableauParticulier.getValueAt(numLigne, 4).toString());
                     txtDateNaissance.setText(tableauParticulier.getValueAt(numLigne, 5).toString());
-                    txtSexe.setText(tableauParticulier.getValueAt(numLigne, 6).toString());
-
-                    btSupprimer.setVisible(true);
-                    btValider.setText("Modifier");
                 }
             }
 
@@ -152,7 +149,8 @@ public class PanelParticulier extends PanelPrincipal implements ActionListener, 
         } else {
             lesParticuliers = Controleur.selectLikeParticulier(filtre);
         }
-        Object matrice[][] = new Object[lesParticuliers.size()][7];
+        // Réduction à 6 colonnes
+        Object matrice[][] = new Object[lesParticuliers.size()][6];
         int i = 0;
         for (Particulier unParticulier : lesParticuliers) {
             matrice[i][0] = unParticulier.getIdUser();
@@ -161,7 +159,6 @@ public class PanelParticulier extends PanelPrincipal implements ActionListener, 
             matrice[i][3] = unParticulier.getAdresseUser();
             matrice[i][4] = unParticulier.getEmailUser();
             matrice[i][5] = unParticulier.getDateNaissanceUser();
-            matrice[i][6] = unParticulier.getSexeUser();
             i++;
         }
         return matrice;

@@ -192,7 +192,10 @@ public class PanelCommande extends PanelPrincipal implements ActionListener, Key
     private void traitement() {
         try {
             Date dateCommande = new SimpleDateFormat("yyyy-MM-dd").parse(txtDateCommande.getText());
-            Date dateLivraisonCommande = txtDateLivraisonCommande.getText().isEmpty() ? null : new SimpleDateFormat("yyyy-MM-dd").parse(txtDateLivraisonCommande.getText());
+            Date dateLivraisonCommande = null;
+            if (!txtDateLivraisonCommande.getText().isEmpty()) {
+                dateLivraisonCommande = new SimpleDateFormat("yyyy-MM-dd").parse(txtDateLivraisonCommande.getText());
+            }
             int idUser = Integer.parseInt(txtIdUser.getText());
 
             Commande uneCommande = new Commande(dateCommande, txtStatutCommande.getText(), dateLivraisonCommande, idUser);

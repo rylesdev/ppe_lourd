@@ -3,10 +3,9 @@ package controleur;
 import java.util.Date;
 
 public class Commande {
-    private int idCommande;
+    private int idCommande, idUser;
     private Date dateCommande, dateLivraisonCommande;
     private String statutCommande;
-    private int idUser;
 
     public Commande(int idCommande, Date dateCommande, String statutCommande, Date dateLivraisonCommande, int idUser) {
         this.idCommande = idCommande;

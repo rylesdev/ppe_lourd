@@ -25,8 +25,3 @@ public abstract class PanelPrincipal extends JPanel {
         this.setVisible(false);
     }
 }
-
-
-
-
-

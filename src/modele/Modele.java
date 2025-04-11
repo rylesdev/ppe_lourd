@@ -54,12 +54,12 @@ public class Modele {
     }
 
     public static void updateUser(User unUser) {
-        String requete = "update user set "
-                + "emailUser = '" + unUser.getEmailUser() + "', "
-                + "mdpUser = '" + unUser.getMdpUser() + "', "
-                + "adresseUser = '" + unUser.getAdresseUser() + "', "
-                + "roleUser = '" + unUser.getRoleUser() + "' "
-                + "where idUser = " + unUser.getIdUser() + ";";
+        String requete =    "update user set " +
+                            "emailUser = '" + unUser.getEmailUser() + "', " +
+                            "mdpUser = '" + unUser.getMdpUser() + "', " +
+                            "adresseUser = '" + unUser.getAdresseUser() + "', " +
+                            "roleUser = '" + unUser.getRoleUser() + "' " +
+                            "where idUser = " + unUser.getIdUser() + ";";
         executerRequete(requete);
     }
 
@@ -302,13 +302,170 @@ public class Modele {
     }
 
 
+
+    /************************ GESTION DES ENTREPRISES **********************/
+    public static void insertEntreprise(Entreprise uneEntreprise) {
+        String requete = "insert into entreprise values ("
+                + "'" + uneEntreprise.getSiretUser() + "', "
+                + "'" + uneEntreprise.getRaisonSocialeUser() + "', "
+                + "'" + uneEntreprise.getCapitalSocialUser() + "', "
+                + "'" + uneEntreprise.getEmailUser() + "', "
+                + "'" + uneEntreprise.getMdpUser() + "', "
+                + "'" + uneEntreprise.getAdresseUser() + "', "
+                + "'" + uneEntreprise.getRoleUser() + "');";
+
+        executerRequete(requete);
+    }
+
+    public static ArrayList<Entreprise> selectEntreprise() {
+        ArrayList<Entreprise> lesEntreprises = new ArrayList<Entreprise>();
+        String requete =    "select * from entreprise e " +
+                            "inner join user u " +
+                            "on e.idUser=u.idUser;";
+        try {
+            uneConnexion.seConnecter();
+            Statement unStat = uneConnexion.getMaConnexion().createStatement();
+            ResultSet lesResultats = unStat.executeQuery(requete);
+            while (lesResultats.next()) {
+                Entreprise uneEntreprise = new Entreprise(
+                        lesResultats.getInt("idUser"),
+                        lesResultats.getString("siretUser"),
+                        lesResultats.getString("raisonSocialeUser"),
+                        lesResultats.getFloat("capitalSocialUser"),
+                        lesResultats.getString("emailUser"),
+                        lesResultats.getString("mdpUser"),
+                        lesResultats.getString("adresseUser"),
+                        lesResultats.getString("roleUser")
+                );
+                lesEntreprises.add(uneEntreprise);
+            }
+            unStat.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException exp) {
+            System.out.println("Erreur d'exécution de la requête : " + requete);
+        }
+        return lesEntreprises;
+    }
+
+    public static void deleteEntreprise(int idUser) {
+        String requete = "delete from entreprise where idUser = " + idUser + ";";
+        executerRequete(requete);
+    }
+
+    public static void updateEntreprise(Entreprise uneEntreprise) {
+        String requete =    "update entreprise set "
+                + "siretUser = '" + uneEntreprise.getSiretUser() + "', "
+                + "raisonSocialeUser = '" + uneEntreprise.getRaisonSocialeUser() + "', "
+                + "capitalSocialUser = '" + uneEntreprise.getCapitalSocialUser() + "', "
+                + "emailUser = '" + uneEntreprise.getEmailUser() + "', "
+                + "mdpUser = '" + uneEntreprise.getMdpUser() + "', "
+                + "adresseUser = '" + uneEntreprise.getAdresseUser() + "', "
+                + "roleUser = '" + uneEntreprise.getRoleUser() + "' "
+                + "where idUser = " + uneEntreprise.getIdUser() + ";";
+
+        executerRequete(requete);
+    }
+
+    public static ArrayList<Entreprise> selectLikeEntreprise(String filtre) {
+        ArrayList<Entreprise> lesEntreprises = new ArrayList<Entreprise>();
+        String requete =    "select * from entreprise where "
+                + "siretUser like '%" + filtre + "%' or "
+                + "raisonSocialeUser like '%" + filtre + "%' or "
+                + "capitalSocialUser like '%" + filtre + "%' or "
+                + "sexeUser like '%" + filtre + "%' or "
+                + "adresseUser like '%" + filtre + "%' or "
+                + "emailUser like '%" + filtre + "%';";
+        try {
+            uneConnexion.seConnecter();
+            Statement unStat = uneConnexion.getMaConnexion().createStatement();
+            ResultSet lesResultats = unStat.executeQuery(requete);
+            while (lesResultats.next()) {
+                Entreprise uneEntreprise = new Entreprise(
+                        lesResultats.getInt("idUser"),
+                        lesResultats.getString("siretUser"),
+                        lesResultats.getString("raisonSocialeUser"),
+                        lesResultats.getFloat("capitalSocialUser"),
+                        lesResultats.getString("emailUser"),
+                        lesResultats.getString("mdpUser"),
+                        lesResultats.getString("adresseUser"),
+                        lesResultats.getString("roleUser")
+                );
+                lesEntreprises.add(uneEntreprise);
+            }
+            unStat.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException exp) {
+            System.out.println("Erreur d'exécution de la requête : " + requete);
+        }
+        return lesEntreprises;
+    }
+
+    public static Entreprise selectWhereEntreprise(int idUser) {
+        String requete = "select * from entreprise where idUser = " + idUser + ";";
+        Entreprise uneEntreprise = null;
+        try {
+            uneConnexion.seConnecter();
+            Statement unStat = uneConnexion.getMaConnexion().createStatement();
+            ResultSet unResultat = unStat.executeQuery(requete);
+            if (unResultat.next()) {
+                uneEntreprise = new Entreprise(
+                        unResultat.getInt("idUser"),
+                        unResultat.getString("siretUser"),
+                        unResultat.getString("raisonSocialeUser"),
+                        unResultat.getFloat("capitalSocialUser"),
+                        unResultat.getString("emailUser"),
+                        unResultat.getString("mdpUser"),
+                        unResultat.getString("adresseUser"),
+                        unResultat.getString("roleUser")
+                );
+            }
+            unStat.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException exp) {
+            System.out.println("Erreur d'exécution de la requête : " + requete);
+        }
+        return uneEntreprise;
+    }
+
+    public static Entreprise selectWhereEntreprise(String email, String mdp) {
+        String requete =    "select u.idUser, u.emailUser, u.mdpUser, u.adresseUser, u.roleUser, e.siretUser, e.raisonSocialeUser, e.capitalSocialUser " +
+                "from user u " +
+                "left join entreprise e " +
+                "on u.idUser = e.idUser " +
+                "where u.emailUser = '" + email + "' and u.mdpUser = '" + mdp + "';";
+        Entreprise uneEntreprise = null;
+        try {
+            uneConnexion.seConnecter();
+            Statement unStat = uneConnexion.getMaConnexion().createStatement();
+            ResultSet unResultat = unStat.executeQuery(requete);
+            if(unResultat.next()) {
+                uneEntreprise = new Entreprise(
+                        unResultat.getInt("idUser"),
+                        unResultat.getString("siretUser"),
+                        unResultat.getString("raisonSocialeUser"),
+                        unResultat.getFloat("capitalSocialUser"),
+                        unResultat.getString("emailUser"),
+                        unResultat.getString("mdpUser"),
+                        unResultat.getString("adresseUser"),
+                        unResultat.getString("roleUser")
+                );
+            }
+            unStat.close();
+            uneConnexion.seDeConnecter();
+        }
+        catch(SQLException exp) {
+            System.out.println("Erreur d'execution de la requete : " + requete);
+        }
+        return uneEntreprise;
+    }
+
+
+
     /************************ GESTION DES LIVRES ************************/
     public static ArrayList<Livre> selectLivre() {
         ArrayList<Livre> lesLivres = new ArrayList<>();
-        String requete =    "SELECT l.idLivre, l.nomLivre, l.auteurLivre, l.imageLivre, l.exemplaireLivre, l.prixLivre, l.idCategorie, l.idMaisonEdition, l.idPromotion "
-                            + "FROM livre l "
-                            + "INNER JOIN categorie c "
-                            + "ON l.idCategorie = c.idCategorie;";
+        String requete =    "select * from livre " +
+                            "order by idLivre;";
         try {
             uneConnexion.seConnecter();
             Statement unStat = uneConnexion.getMaConnexion().createStatement();
@@ -385,15 +542,16 @@ public class Modele {
     }
 
     public static void updateLivre(Livre unLivre) {
-        String requete = "update livre set nomLivre = '" + unLivre.getNomLivre() + "', "
-                + "auteurLivre = '" + unLivre.getAuteurLivre() + "', "
-                + "imageLivre = '" + unLivre.getImageLivre() + "', "
-                + "exemplaireLivre = " + unLivre.getExemplaireLivre() + ", "
-                + "prixLivre = " + unLivre.getPrixLivre() + ", "
-                + "idCategorie = " + unLivre.getIdCategorie() + ", "
-                + "idMaisonEdition = " + unLivre.getIdMaisonEdition() + ", "
-                + "idPromotion = " + unLivre.getIdPromotion() + " "
-                + "where idLivre = " + unLivre.getIdLivre() + ";";
+        String requete =    "update livre set " +
+                            "nomLivre = '" + unLivre.getNomLivre() + "', " +
+                            "auteurLivre = '" + unLivre.getAuteurLivre() + "', " +
+                            "imageLivre = '" + unLivre.getImageLivre() + "', " +
+                            "exemplaireLivre = " + unLivre.getExemplaireLivre() + ", " +
+                            "prixLivre = " + unLivre.getPrixLivre() + ", " +
+                            "idCategorie = " + unLivre.getIdCategorie() + ", " +
+                            "idMaisonEdition = " + unLivre.getIdMaisonEdition() + ", " +
+                            "idPromotion = " + unLivre.getIdPromotion() + " " +
+                            "where idLivre = " + unLivre.getIdLivre() + ";";
         executerRequete(requete);
     }
 
@@ -581,7 +739,7 @@ public class Modele {
     }
 
     public static void deleteCommande(int idCommande) {
-        String requete = "DELETE FROM commande WHERE idCommande = " + idCommande + ";";
+        String requete = "delete from commande where idCommande = " + idCommande + ";";
         executerRequete(requete);
     }
 
@@ -602,12 +760,89 @@ public class Modele {
 
     /************************ GESTION DES ABONNEMENTS ************************/
     public static void insertAbonnement(Abonnement unAbonnement) {
-        String requete = "INSERT INTO abonnement (idUser, dateDebutAbonnement, dateFinAbonnement, pointAbonnement) VALUES ("
-                + unAbonnement.getIdUser() + ", "
-                + "'" + unAbonnement.getDateDebutAbonnement() + "', "
-                + "'" + unAbonnement.getDateFinAbonnement() + "', "
-                + unAbonnement.getPointAbonnement() + ");";
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String dateDebutAbonnement = dateFormat.format(unAbonnement.getDateDebutAbonnement());
+        String dateFinAbonnement = dateFormat.format(unAbonnement.getDateFinAbonnement());
+
+        String requete = "insert into abonnement values (null, " +
+                unAbonnement.getIdUser() + ", '" +
+                dateDebutAbonnement + "', '" +
+                dateFinAbonnement + "', " +
+                unAbonnement.getPointAbonnement() + ");";
         executerRequete(requete);
+    }
+
+    public static ArrayList<Abonnement> selectAbonnement() {
+        ArrayList<Abonnement> lesAbonnements = new ArrayList<Abonnement>();
+        String requete = "select * from abonnement;";
+        try {
+            uneConnexion.seConnecter();
+            Statement unStat = uneConnexion.getMaConnexion().createStatement();
+            ResultSet lesResultats = unStat.executeQuery(requete);
+            while (lesResultats.next()) {
+                Abonnement unAbonnement = new Abonnement(
+                        lesResultats.getInt("idAbonnement"),
+                        lesResultats.getInt("idUser"),
+                        lesResultats.getDate("dateDebutAbonnement"),
+                        lesResultats.getDate("dateFinAbonnement"),
+                        lesResultats.getInt("pointAbonnement")
+                );
+                lesAbonnements.add(unAbonnement);
+            }
+            unStat.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException exp) {
+            System.out.println("Erreur d'exécution de la requête : " + requete);
+        }
+        return lesAbonnements;
+    }
+
+    public static void deleteAbonnement(int idAbonnement) {
+        String requete = "delete from abonnement where idAbonnement = " + idAbonnement + ";";
+        executerRequete(requete);
+    }
+
+    public static void updateAbonnement(Abonnement unAbonnement) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String dateDebutAbonnement = dateFormat.format(unAbonnement.getDateDebutAbonnement());
+        String dateFinAbonnement = dateFormat.format(unAbonnement.getDateFinAbonnement());
+
+        String requete =    "update abonnement set " +
+                            "idUser = '" + unAbonnement.getIdUser() + "', " +
+                            "dateDebutAbonnement = '" + dateDebutAbonnement + "', " +
+                            "dateFinAbonnement = '" + dateFinAbonnement + "', " +
+                            "pointAbonnement = '" + unAbonnement.getPointAbonnement() + "' " +
+                            "where idAbonnement = " + unAbonnement.getIdAbonnement() + ";";
+        executerRequete(requete);
+    }
+
+    public static ArrayList<Abonnement> selectLikeAbonnement(String filtre) {
+        ArrayList<Abonnement> lesAbonnements = new ArrayList<Abonnement>();
+        String requete = "select * from abonnement where "
+                + "idUser like '%" + filtre + "%' or "
+                + "dateDebutAbonnement like '%" + filtre + "%' or "
+                + "dateFinAbonnement like '%" + filtre + "%' or "
+                + "pointAbonnement like '%" + filtre + "%';";
+        try {
+            uneConnexion.seConnecter();
+            Statement unStat = uneConnexion.getMaConnexion().createStatement();
+            ResultSet lesResultats = unStat.executeQuery(requete);
+            while (lesResultats.next()) {
+                Abonnement unAbonnement = new Abonnement(
+                        lesResultats.getInt("idAbonnement"),
+                        lesResultats.getInt("idUser"),
+                        lesResultats.getDate("dateDebutAbonnement"),
+                        lesResultats.getDate("dateFinAbonnement"),
+                        lesResultats.getInt("pointAbonnement")
+                );
+                lesAbonnements.add(unAbonnement);
+            }
+            unStat.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException exp) {
+            System.out.println("Erreur d'exécution de la requête : " + requete);
+        }
+        return lesAbonnements;
     }
 
 
@@ -645,28 +880,30 @@ public class Modele {
     }
 
     public static ArrayList<Listing> selectListing() {
-        ArrayList<Listing> lesListings = new ArrayList<>();
-        String requete = "select * from user;";
+        ArrayList<Listing> lesStatsLivres = new ArrayList<>();
+        String requete = "select * from vLivresMieuxNotes;";
+
         try {
             uneConnexion.seConnecter();
             Statement unStat = uneConnexion.getMaConnexion().createStatement();
             ResultSet lesResultats = unStat.executeQuery(requete);
+
             while (lesResultats.next()) {
-                Listing unListing = new Listing(
-                        lesResultats.getInt("idUser"),
-                        lesResultats.getString("emailUser"),
-                        lesResultats.getString("mdpUser"),
-                        lesResultats.getString("adresseUser"),
-                        lesResultats.getString("roleUser")
+                Listing uneStat = new Listing(
+                        lesResultats.getInt("idLivre"),
+                        lesResultats.getString("nomLivre"),
+                        lesResultats.getDouble("noteMoyenne")
                 );
-                lesListings.add(unListing);
+                lesStatsLivres.add(uneStat);
             }
+
             unStat.close();
             uneConnexion.seDeConnecter();
+
         } catch (SQLException exp) {
             System.out.println("Erreur d'exécution de la requête : " + requete);
             exp.printStackTrace();
         }
-        return lesListings;
+        return lesStatsLivres;
     }
 }

@@ -1,54 +1,39 @@
 package controleur;
 
 public class Listing {
-    private int idUser;
-    private String emailUser, mdpUser, adresseUser, roleUser;
+    private int idLivre;
+    private String nomLivre;
+    private double noteMoyenne;
 
-    public Listing(int idUser, String emailUser, String mdpUser, String adresseUser, String roleUser) {
-        this.idUser = idUser;
-        this.emailUser = emailUser;
-        this.mdpUser = mdpUser;
-        this.adresseUser = adresseUser;
-        this.roleUser = roleUser;
+    public Listing(int idLivre, String nomLivre, double noteMoyenne) {
+        this.idLivre = idLivre;
+        this.nomLivre = nomLivre;
+        this.noteMoyenne = noteMoyenne;
     }
 
-    public int getIdUser() {
-        return idUser;
+    // Getters
+    public int getIdLivre() {
+        return idLivre;
     }
 
-    public void setIdUser(int idUser) {
-        this.idUser = idUser;
+    public String getNomLivre() {
+        return nomLivre;
     }
 
-    public String getEmailUser() {
-        return emailUser;
+    public double getNoteMoyenne() {
+        return noteMoyenne;
     }
 
-    public void setEmailUser(String emailUser) {
-        this.emailUser = emailUser;
+    // Setters
+    public void setIdLivre(int idLivre) {
+        this.idLivre = idLivre;
     }
 
-    public String getMdpUser() {
-        return mdpUser;
+    public void setNomLivre(String nomLivre) {
+        this.nomLivre = nomLivre;
     }
 
-    public void setMdpUser(String mdpUser) {
-        this.mdpUser = mdpUser;
-    }
-
-    public String getAdresseUser() {
-        return adresseUser;
-    }
-
-    public void setAdresseUser(String adresseUser) {
-        this.adresseUser = adresseUser;
-    }
-
-    public String getRoleUser() {
-        return roleUser;
-    }
-
-    public void setRoleUser(String roleUser) {
-        this.roleUser = roleUser;
+    public void setNoteMoyenne(double noteMoyenne) {
+        this.noteMoyenne = noteMoyenne;
     }
 }

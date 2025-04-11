@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:8889
--- Généré le : jeu. 10 avr. 2025 à 18:27
+-- Généré le : ven. 11 avr. 2025 à 21:11
 -- Version du serveur : 8.0.35
 -- Version de PHP : 8.3.9
 
@@ -24,10 +24,10 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Structure de la table `Abonnement`
+-- Structure de la table `abonnement`
 --
 
-CREATE TABLE `Abonnement` (
+CREATE TABLE `abonnement` (
   `idAbonnement` int NOT NULL,
   `idUser` int NOT NULL,
   `dateDebutAbonnement` date NOT NULL,
@@ -36,10 +36,10 @@ CREATE TABLE `Abonnement` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Déchargement des données de la table `Abonnement`
+-- Déchargement des données de la table `abonnement`
 --
 
-INSERT INTO `Abonnement` (`idAbonnement`, `idUser`, `dateDebutAbonnement`, `dateFinAbonnement`, `pointAbonnement`) VALUES
+INSERT INTO `abonnement` (`idAbonnement`, `idUser`, `dateDebutAbonnement`, `dateFinAbonnement`, `pointAbonnement`) VALUES
 (1, 2, '2025-01-01', '2025-12-31', 0),
 (3, 23, '2025-01-25', '2025-04-25', 0),
 (4, 15, '2025-01-26', '2025-02-28', 80);
@@ -84,29 +84,66 @@ CREATE TABLE `avis` (
 --
 
 INSERT INTO `avis` (`idAvis`, `idLivre`, `nomLivre`, `idUser`, `commentaireAvis`, `noteAvis`, `dateAvis`) VALUES
-(1, 1, '', 2, 'Excellent livre, très captivant !', 5, '2025-01-25'),
-(2, 4, '', 23, 'Un peu long à démarrer, mais intéressant.', 3, '2025-01-25'),
-(3, 1, '', 1, 'bien', 1, '2025-01-29'),
-(7, 2, '', 15, 'df', 2, '2025-01-29'),
-(8, 4, '', 15, 'azd', 4, '2025-01-29'),
-(14, 6, '', 15, 'dfg', 1, '2025-01-29'),
-(15, 2, '', 15, 'dfg', 1, '2025-01-29'),
-(16, 2, '', 15, 'qsd', 3, '2025-01-29'),
-(17, 6, '', 15, 'tibo', 4, '2025-01-29'),
-(18, 8, '', 15, 'très bon livre', 5, '2025-01-29'),
-(19, 3, 'L', 15, 'bof', 3, '2025-01-29'),
-(20, 3, 'L', 15, 'bof', 3, '2025-01-29'),
-(21, 3, 'L', 15, 'bof', 3, '2025-01-29'),
-(22, 3, 'L', 15, 'bof', 3, '2025-01-29'),
-(23, 3, 'L', 15, 'bof', 3, '2025-01-29'),
-(24, 2, 'Crime et Chatiment', 15, 'surcôté', 3, '2025-01-29'),
-(25, 2, 'Crime et Chatiment', 15, 'surcôté', 3, '2025-01-29'),
-(26, 8, 'SPQR', 15, 'masterclass', 5, '2025-02-02'),
-(27, 8, 'SPQR', 15, 'masterclass', 5, '2025-02-02'),
-(28, 2, 'Crime et Chatiment', 15, '3 étoiles', 3, '2025-02-02'),
-(29, 3, 'L', 15, 'test l\'', 4, '2025-02-02'),
-(30, 2, 'Crime et Chatiment', 15, 'cube information', 4, '2025-02-02'),
-(31, 3, 'L`Etranger', 15, 'test \'', 5, '2025-02-03');
+(1, 1, 'Alcools', 15, 'Poésie complexe mais fascinante', 4, '2025-02-01'),
+(2, 1, 'Alcools', 16, 'Difficile d\'accès', 2, '2025-02-02'),
+(3, 1, 'Alcools', 17, 'Un must de la poésie moderne', 5, '2025-02-03'),
+(4, 2, 'Crime et Chatiment', 18, 'Profondeur psychologique remarquable', 3, '2025-02-04'),
+(5, 2, 'Crime et Chatiment', 19, 'Trop long et lent', 1, '2025-02-05'),
+(6, 2, 'Crime et Chatiment', 20, 'Une œuvre magistrale', 4, '2025-02-06'),
+(7, 3, 'L`Etranger', 21, 'Absurde et génial', 2, '2025-02-07'),
+(8, 3, 'L`Etranger', 22, 'Déprimant mais nécessaire', 5, '2025-02-08'),
+(9, 3, 'L`Etranger', 23, 'Une réflexion sur l\'existence', 3, '2025-02-09'),
+(10, 4, 'L`Odyssée', 24, 'Fondateur de la littérature occidentale', 1, '2025-02-10'),
+(11, 4, 'L`Odyssée', 25, 'Version ancienne peu accessible', 4, '2025-02-11'),
+(12, 4, 'L`Odyssée', 26, 'Indispensable classique', 2, '2025-02-12'),
+(13, 5, 'Les Fleurs du Mal', 27, 'Beauté noire envoûtante', 5, '2025-02-13'),
+(14, 5, 'Les Fleurs du Mal', 28, 'Trop sombre à mon goût', 3, '2025-02-14'),
+(15, 5, 'Les Fleurs du Mal', 29, 'Baudelaire au sommet', 1, '2025-02-15'),
+(16, 6, 'PHP et MySQL pour les nuls', 30, 'Parfait pour débuter', 4, '2025-02-16'),
+(17, 6, 'PHP et MySQL pour les nuls', 31, 'Exemples concrets utiles', 2, '2025-02-17'),
+(18, 6, 'PHP et MySQL pour les nuls', 32, 'Un peu trop basique', 5, '2025-02-18'),
+(19, 7, 'Programmer en Java', 33, 'Guide complet mais dense', 3, '2025-02-19'),
+(20, 7, 'Programmer en Java', 34, 'Approche pédagogique claire', 1, '2025-02-20'),
+(21, 7, 'Programmer en Java', 35, 'Exercices pratiques manquants', 4, '2025-02-21'),
+(22, 8, 'SPQR', 36, 'Histoire romaine captivante', 2, '2025-02-22'),
+(23, 8, 'SPQR', 37, 'Trop académique', 5, '2025-02-23'),
+(24, 8, 'SPQR', 38, 'Une nouvelle perspective', 3, '2025-02-24'),
+(25, 9, 'À la recherche du temps perdu', 39, 'Chef-d\'œuvre de la littérature', 1, '2025-02-25'),
+(26, 9, 'À la recherche du temps perdu', 40, 'Style trop alambiqué', 4, '2025-02-26'),
+(27, 9, 'À la recherche du temps perdu', 41, 'Expérience immersive', 2, '2025-02-27'),
+(28, 10, 'Les Misérables', 42, 'Roman social puissant', 5, '2025-02-28'),
+(29, 10, 'Les Misérables', 43, 'Long mais enrichissant', 3, '2025-03-01'),
+(30, 10, 'Les Misérables', 44, 'Personnages mémorables', 1, '2025-03-02'),
+(31, 11, '1984', 45, 'Vision terrifiante du futur', 4, '2025-03-03'),
+(32, 11, '1984', 46, 'Toujours d\'actualité', 2, '2025-03-04'),
+(33, 11, '1984', 47, 'Un peu angoissant', 5, '2025-03-05'),
+(34, 12, 'L`Art d\'aimer', 48, 'Approche philosophique', 3, '2025-03-06'),
+(35, 12, 'L`Art d\'aimer', 49, 'Intéressant mais daté', 1, '2025-03-07'),
+(36, 12, 'L`Art d\'aimer', 50, 'Une lecture surprenante', 4, '2025-03-08'),
+(37, 13, 'La Peste', 51, 'Allégorie brillante', 2, '2025-03-09'),
+(38, 13, 'La Peste', 52, 'Pertinent en période d\'épidémie', 5, '2025-03-10'),
+(39, 13, 'La Peste', 53, 'Nécessite une relecture', 3, '2025-03-11'),
+(40, 14, 'Les Mémoires d\'Hadrien', 54, 'Écriture sublime', 1, '2025-03-12'),
+(41, 14, 'Les Mémoires d\'Hadrien', 55, 'Rythme trop lent', 4, '2025-03-13'),
+(42, 14, 'Les Mémoires d\'Hadrien', 56, 'Portrait historique vivant', 2, '2025-03-14'),
+(43, 15, 'La Condition humaine', 57, 'Roman profondément humain', 5, '2025-03-15'),
+(44, 15, 'La Condition humaine', 58, 'Passages confus', 3, '2025-03-16'),
+(45, 15, 'La Condition humaine', 59, 'Une réflexion sur l\'engagement', 1, '2025-03-17'),
+(46, 16, 'Le Comte de Monte-Cristo', 60, 'Intrigue palpitante', 4, '2025-03-18'),
+(47, 16, 'Le Comte de Monte-Cristo', 61, 'Trop de rebondissements', 2, '2025-03-19'),
+(48, 16, 'Le Comte de Monte-Cristo', 62, 'Un classique du roman-feuilleton', 5, '2025-03-20'),
+(49, 17, 'Orgueil et Préjugés', 63, 'Ironie sociale délicieuse', 3, '2025-03-21'),
+(50, 17, 'Orgueil et Préjugés', 64, 'Personnages féminins forts', 1, '2025-03-22'),
+(51, 17, 'Orgueil et Préjugés', 65, 'Un peu trop romantique', 4, '2025-03-23'),
+(52, 18, 'Shining', 66, 'Horreur psychologique maîtrisée', 2, '2025-03-24'),
+(53, 18, 'Shining', 67, 'Plus angoissant que le film', 5, '2025-03-25'),
+(54, 18, 'Shining', 68, 'Déception après le film', 3, '2025-03-26'),
+(55, 19, 'Bel-Ami', 69, 'Satire sociale mordante', 1, '2025-03-27'),
+(56, 19, 'Bel-Ami', 70, 'Personnage principal détestable', 4, '2025-03-28'),
+(57, 19, 'Bel-Ami', 71, 'Un Maupassant incontournable', 2, '2025-03-29'),
+(58, 20, 'Fahrenheit 451', 72, 'Vision prophétique', 5, '2025-03-30'),
+(59, 20, 'Fahrenheit 451', 73, 'Surcoté selon moi', 3, '2025-03-31'),
+(60, 20, 'Fahrenheit 451', 74, 'Un avertissement nécessaire', 1, '2025-04-01');
 
 -- --------------------------------------------------------
 
@@ -328,7 +365,7 @@ CREATE TABLE `entreprise` (
   `idUser` int NOT NULL,
   `siretUser` varchar(14) DEFAULT NULL,
   `raisonSocialeUser` varchar(255) DEFAULT NULL,
-  `capitalSocialUser` decimal(15,2) DEFAULT NULL
+  `capitalSocialUser` float(15,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
@@ -338,7 +375,7 @@ CREATE TABLE `entreprise` (
 INSERT INTO `entreprise` (`idUser`, `siretUser`, `raisonSocialeUser`, `capitalSocialUser`) VALUES
 (26, '123456789', 'Entreprise SARL', 10000.00),
 (27, '123456789', 'Entreprise SARL', 10000.00),
-(30, '123123123', 'yasser', 123123123.00),
+(30, '123123123', 'yasser', 123123120.00),
 (31, '1298371892', '123', NULL),
 (32, '123', '123', 123124.00),
 (33, '123123', '123123', 123123.00),
@@ -580,7 +617,7 @@ INSERT INTO `livre` (`idLivre`, `nomLivre`, `auteurLivre`, `imageLivre`, `exempl
 (7, 'Programmer en Java', 'Delannoy', 'programmer_en_java.png', 100, 25.00, 4, 7, NULL),
 (8, 'SPQR', 'Beard', 'spqr.png', 99, 18.00, 2, 8, NULL),
 (9, 'À la recherche du temps perdu', 'Proust', 'a_la_recherche_du_temps_perdu.png', 96, 0.00, 1, 1, NULL),
-(10, 'Les Misérables', 'Hugo', 'les_miserables_I.png', 99, 0.00, 1, 2, NULL),
+(10, 'Les Misérables', 'Hugo', 'les_miserables_I.png', 98, 0.00, 1, 2, 10),
 (11, '1984', 'Orwell', '1984.png', 95, 0.00, 1, 3, NULL),
 (12, 'L`Art d\'aimer', 'Ovide', 'l_art_d_aimer', 92, 0.00, 1, 4, NULL),
 (13, 'La Peste', 'Camus', 'la_peste.png', 98, 15.99, 1, 1, NULL),
@@ -604,8 +641,8 @@ INSERT INTO `livre` (`idLivre`, `nomLivre`, `auteurLivre`, `imageLivre`, `exempl
 (48, 'Les Templiers', 'Demurger', 'les_templiers.png', 100, 18.99, 2, 8, NULL),
 (49, 'La Seconde Guerre mondiale', 'Beevor', 'la_seconde_guerre_mondiale.png', 100, 19.99, 2, 8, NULL),
 (50, 'Napoléon : Une ambition française', 'Tulard', 'napoleon_une_ambition_francaise.png', 100, 20.99, 2, 8, NULL),
-(51, 'dimanche', 'dimanche', 'dimanche.png', 180, 7.20, NULL, 3, NULL),
-(52, 'cate', 'cate', 'cate.png', 12, 12.00, NULL, 3, NULL),
+(51, 'dimanche', 'dimanche', 'dimanche.png', 180, 7.20, 3, 3, NULL),
+(52, 'cate', 'cate', 'cate.png', 12, 12.00, 3, 3, NULL),
 (53, 'po', 'po', 'po', 1, 1.00, 1, 3, 1),
 (55, 'ok', 'no', 'no', 9, 9.00, 2, 3, 4);
 
@@ -686,7 +723,9 @@ INSERT INTO `promotion` (`idPromotion`, `nomPromotion`, `dateDebutPromotion`, `d
 (5, '50%', '2025-03-26', '2026-12-12', 50),
 (6, '60%', '2025-02-02', '2025-02-10', 60),
 (7, '70%', '2025-03-26', '2026-12-12', 70),
-(8, '80%', '2025-03-26', '2026-12-12', 80);
+(8, '80%', '2025-03-26', '2026-12-12', 80),
+(9, '90%', '2025-04-11', '2025-12-31', 90),
+(10, 'Aucune Promotion', '2025-04-11', '2025-12-31', 0);
 
 -- --------------------------------------------------------
 
@@ -751,6 +790,18 @@ CREATE TABLE `vlivresenstock` (
 ,`nomLivre` varchar(50)
 ,`prixLivre` float(10,2)
 ,`exemplaireLivre` int
+);
+
+-- --------------------------------------------------------
+
+--
+-- Doublure de structure pour la vue `vlivresmieuxnotes`
+-- (Voir ci-dessous la vue réelle)
+--
+CREATE TABLE `vlivresmieuxnotes` (
+`idLivre` int
+,`nomLivre` varchar(50)
+,`noteMoyenne` decimal(6,2)
 );
 
 -- --------------------------------------------------------
@@ -879,6 +930,15 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- --------------------------------------------------------
 
 --
+-- Structure de la vue `vlivresmieuxnotes`
+--
+DROP TABLE IF EXISTS `vlivresmieuxnotes`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vlivresmieuxnotes`  AS SELECT `avis`.`idLivre` AS `idLivre`, max(`avis`.`nomLivre`) AS `nomLivre`, round(avg(`avis`.`noteAvis`),2) AS `noteMoyenne` FROM `avis` GROUP BY `avis`.`idLivre` ORDER BY `noteMoyenne` DESC ;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la vue `vmeilleuresventes`
 --
 DROP TABLE IF EXISTS `vmeilleuresventes`;
@@ -953,9 +1013,9 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 
 --
--- Index pour la table `Abonnement`
+-- Index pour la table `abonnement`
 --
-ALTER TABLE `Abonnement`
+ALTER TABLE `abonnement`
   ADD PRIMARY KEY (`idAbonnement`),
   ADD KEY `fk_user` (`idUser`);
 
@@ -1037,6 +1097,12 @@ ALTER TABLE `user`
 --
 -- AUTO_INCREMENT pour les tables déchargées
 --
+
+--
+-- AUTO_INCREMENT pour la table `abonnement`
+--
+ALTER TABLE `abonnement`
+  MODIFY `idAbonnement` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT pour la table `commande`

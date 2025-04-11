@@ -1,16 +1,22 @@
 package controleur;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class Abonnement {
-    private int idAbonnement;
-    private int idUser;
+    private int idAbonnement, idUser, pointAbonnement;
     private Date dateDebutAbonnement;
     private Date dateFinAbonnement;
-    private int pointAbonnement;
 
     public Abonnement(int idAbonnement, int idUser, Date dateDebutAbonnement, Date dateFinAbonnement, int pointAbonnement) {
         this.idAbonnement = idAbonnement;
+        this.idUser = idUser;
+        this.dateDebutAbonnement = dateDebutAbonnement;
+        this.dateFinAbonnement = dateFinAbonnement;
+        this.pointAbonnement = pointAbonnement;
+    }
+
+    public Abonnement(int idUser, Date dateDebutAbonnement, Date dateFinAbonnement, int pointAbonnement) {
+        this.idAbonnement = 0;
         this.idUser = idUser;
         this.dateDebutAbonnement = dateDebutAbonnement;
         this.dateFinAbonnement = dateFinAbonnement;

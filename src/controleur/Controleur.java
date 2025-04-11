@@ -3,6 +3,7 @@ package controleur;
 import modele.Modele;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Controleur {
     private static User userConnecte;
@@ -88,6 +89,34 @@ public class Controleur {
     }*/
 
 
+
+    /**************** GESTION DES ENTREPRISES ****************/
+    public static void insertEntreprise(Entreprise uneEntreprise) {
+        Modele.insertEntreprise(uneEntreprise);
+    }
+
+    public static ArrayList<Entreprise> selectEntreprise() {
+        return Modele.selectEntreprise();
+    }
+
+    public static void deleteEntreprise(int idUser) {
+        Modele.deleteEntreprise(idUser);
+    }
+
+    public static void updateEntreprise(Entreprise uneEntreprise) {
+            Modele.updateEntreprise(uneEntreprise);
+    }
+
+    public static ArrayList<Entreprise> selectLikeEntreprise(String filtre) {
+        return Modele.selectLikeEntreprise(filtre);
+    }
+
+    public static Entreprise selectWhereEntreprise(String email, String mdp) {
+        return Modele.selectWhereEntreprise(email, mdp);
+    }
+
+
+
     /**************** GESTION DES LIVRES ****************/
     public static ArrayList<Livre> selectLivre() {
         return Modele.selectLivre();
@@ -170,6 +199,22 @@ public class Controleur {
         Modele.insertAbonnement(unAbonnement);
     }
 
+    public static ArrayList<Abonnement> selectAbonnement() {
+        return Modele.selectAbonnement();
+    }
+
+    public static void deleteAbonnement(int idAbonnement) {
+        Modele.deleteAbonnement(idAbonnement);
+    }
+
+    public static void updateAbonnement(Abonnement unAbonnement) {
+        Modele.updateAbonnement(unAbonnement);
+    }
+
+    public static ArrayList<Abonnement> selectLikeAbonnement(String filtre) {
+        return Modele.selectLikeAbonnement(filtre);
+    }
+
 
     /**************** VÉRIFICATION DES DONNÉES ***************/
     public static boolean verifDonnees(Particulier unParticulier) {
@@ -215,4 +260,8 @@ public class Controleur {
     public static ArrayList<Listing> selectListing(){
         return Modele.selectListing();
     }
+
+    /*public static List<LivreNote> selectLivresMieuxNotes() {
+        return Modele.selectLivresMieuxNotes();
+    }*/
 }
