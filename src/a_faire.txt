@@ -15,14 +15,28 @@ soit supprimer l'ID dans tous les panels (car inutiles dans le CRUDI)
 
     Gestion des Particuliers :
         // - Mettre "Particulier" dans une sous-catégorie de "Utilisateur"
-        // - Dans le PanelUser, mettre un bouton "Particulier" qui va afficher le tableau des Particuliers,
-                et un bouton "Entreprise" qui va afficher le tableau des Entreprises.
+        // - Dans le PanelUser, mettre un bouton "Particulier" qui va afficher le tableau des Particuliers
         // - Chaque tableau devra avoir ses champs personnels (Particulier = nom ; Entreprise = SIRET)
-        - Ajouter un Particulier
-        - Supprimer un Particulier
-        - Modifier un Particulier
-        - Fitrer les Particuliers
-        - Vérifier que les héritages marchent bien (quand on insère dans Particulier, ça insert bien dans User grâce au trigger)
+        // - Afficher tous les champs de User et Particulier dans le tableau et le formulaire
+        // - Ajouter un Particulier
+        // - Supprimer un Particulier
+        // - Modifier un Particulier
+        // - Gérer le mot de passe dans la modification d'un Particulier
+        // - Fitrer les Particuliers
+        // - Vérifier que les héritages marchent bien (quand on insère dans Particulier, ça insert bien dans User grâce au trigger)
+        - Faire la gestion des erreurs pour "Rôle", "Email", "Date de Naissance", "Sexe"
+
+     Gestion des Entreprises :
+        // - Mettre "Entreprise" dans une sous-catégorie de "Utilisateur"
+        // - Dans le PanelUser, mettre un bouton "Entreprise" qui va afficher le tableau des Entreprises
+        // - Chaque tableau devra avoir ses champs personnels (Particulier = nom ; Entreprise = SIRET)
+        // - Afficher tous les champs de User et Entreprise dans le tableau et le formulaire
+        // - Ajouter une Entreprise
+        // - Supprimer une Entreprise
+        // - Modifier une Entreprise
+        // - Fitrer les Entreprises
+        // - Vérifier que les héritages marchent bien (quand on insère dans Entreprise, ça insert bien dans User grâce au trigger)
+        - Faire la gestion des erreurs pour "Rôle", "Email", etc...
 
     Gestion des Livres :
         // - Ajouter un Livre

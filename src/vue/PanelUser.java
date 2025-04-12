@@ -19,6 +19,7 @@ public class PanelUser extends PanelPrincipal implements ActionListener {
     private JPanel contentPanel = new JPanel(new CardLayout());
     private PanelParticulier panelParticulier = new PanelParticulier();
     private PanelEntreprise panelEntreprise = new PanelEntreprise();
+    private JLabel titreLabel; // Déclaré comme variable de classe pour pouvoir le modifier
 
     public PanelUser() {
         super("");
@@ -30,8 +31,8 @@ public class PanelUser extends PanelPrincipal implements ActionListener {
         // Création du panel titre avec police taille 30
         JPanel panelTitre = new JPanel(new FlowLayout(FlowLayout.CENTER));
         panelTitre.setBackground(Color.CYAN);
-        JLabel titreLabel = new JLabel("Gestion des Utilisateurs");
-        titreLabel.setFont(new Font("Arial", Font.BOLD, 25)); // Modification ici
+        titreLabel = new JLabel("Gestion des Utilisateurs");
+        titreLabel.setFont(new Font("Arial", Font.BOLD, 25));
         panelTitre.add(titreLabel);
         this.add(panelTitre, BorderLayout.NORTH);
 
@@ -64,9 +65,11 @@ public class PanelUser extends PanelPrincipal implements ActionListener {
 
         if(e.getSource() == btParticulier) {
             cl.show(contentPanel, "Particulier");
+            titreLabel.setText("Gestion des Particuliers"); // Modification du titre
         }
         else if(e.getSource() == btEntreprise) {
             cl.show(contentPanel, "Entreprise");
+            titreLabel.setText("Gestion des Entreprises"); // Modification cohérente pour l'autre bouton
         }
     }
 }

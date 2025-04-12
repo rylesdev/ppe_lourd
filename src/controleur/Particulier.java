@@ -6,8 +6,8 @@ public class Particulier extends User {
     private String nomUser, prenomUser, sexeUser;
     private Date dateNaissanceUser;
 
-    public Particulier(int idUser, String nomUser, String prenomUser, Date dateNaissanceUser, String sexeUser,
-                       String emailUser, String mdpUser, String adresseUser, String roleUser) {
+    public Particulier(int idUser, String emailUser, String mdpUser, String adresseUser, String roleUser,
+                       String nomUser, String prenomUser, Date dateNaissanceUser, String sexeUser) {
         super(idUser, emailUser, mdpUser, adresseUser, roleUser);
         this.nomUser = nomUser;
         this.prenomUser = prenomUser;

@@ -2,6 +2,7 @@ package controleur;
 
 import modele.Modele;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,11 +50,17 @@ public class Controleur {
 
     /**************** GESTION DES PARTICULIERS ***************/
     public static void insertParticulier(Particulier unParticulier) {
-        if (verifDonnees(unParticulier)) {
+        /*if (!unParticulier.getRoleUser().equals("client") &&
+                !unParticulier.getRoleUser().equals("admin") &&
+                !unParticulier.getRoleUser().equals("gestionnaire")) {
+            JOptionPane.showMessageDialog(null,
+                    "Erreur. Rôle de l'utilisateur non valide.", "Rôle invalide",
+                    JOptionPane.ERROR_MESSAGE);
+        } else {*/
             Modele.insertParticulier(unParticulier);
-        } else {
-            System.out.println("Erreur : Données invalides pour l'insertion du particulier.");
-        }
+            /*JOptionPane.showMessageDialog(null, "Insertion réussie du particulier.",
+                    "Insertion Particulier", JOptionPane.INFORMATION_MESSAGE);
+        }*/
     }
 
     public static ArrayList<Particulier> selectParticulier() {
@@ -65,11 +72,7 @@ public class Controleur {
     }
 
     public static void updateParticulier(Particulier unParticulier) {
-        if (verifDonnees(unParticulier)) {
             Modele.updateParticulier(unParticulier);
-        } else {
-            System.out.println("Erreur : Données invalides pour la mise à jour du particulier.");
-        }
     }
 
     public static ArrayList<Particulier> selectLikeParticulier(String filtre) {
@@ -217,7 +220,7 @@ public class Controleur {
 
 
     /**************** VÉRIFICATION DES DONNÉES ***************/
-    public static boolean verifDonnees(Particulier unParticulier) {
+    /*public static boolean verifDonnees(Particulier unParticulier) {
         if (unParticulier.getNomUser() == null || unParticulier.getNomUser().trim().isEmpty()) {
             return false;
         }
@@ -240,7 +243,7 @@ public class Controleur {
             return false;
         }
         return true;
-    }
+    }*/
 
     public static boolean verifDonnees(ArrayList<String> lesChamps) {
         for (String champ : lesChamps) {

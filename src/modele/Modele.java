@@ -14,12 +14,11 @@ public class Modele {
 
     /************************ GESTION DES USERS ************************/
     public static void insertUser(User unUser) {
-        String requete = "insert into user values ("
-                + "'" + unUser.getEmailUser() + "', "
-                + "'" + unUser.getMdpUser() + "', "
-                + "'" + unUser.getAdresseUser() + "', "
-                + "'" + unUser.getRoleUser() + "');";
-
+        String requete =    "insert into user values (null," + "'" +
+                            unUser.getEmailUser() + "', '" +
+                            "d43affcc277ee52980fc4ecea523730f28d6405b" + "', '" +
+                            unUser.getAdresseUser() + "', '" +
+                            unUser.getRoleUser() + "');";
         executerRequete(requete);
     }
 
@@ -56,7 +55,6 @@ public class Modele {
     public static void updateUser(User unUser) {
         String requete =    "update user set " +
                             "emailUser = '" + unUser.getEmailUser() + "', " +
-                            "mdpUser = '" + unUser.getMdpUser() + "', " +
                             "adresseUser = '" + unUser.getAdresseUser() + "', " +
                             "roleUser = '" + unUser.getRoleUser() + "' " +
                             "where idUser = " + unUser.getIdUser() + ";";
@@ -138,19 +136,43 @@ public class Modele {
         return unUser;
     }
 
+    public static int selectIdUser() {
+        int idUser = 0;
+        String requete = "select max(idUser) from user;";
+
+        try {
+            uneConnexion.seConnecter();
+            Statement unStat = uneConnexion.getMaConnexion().createStatement();
+            ResultSet unResultat = unStat.executeQuery(requete);
+
+            if (unResultat.next()) {
+                idUser = unResultat.getInt(1);
+            }
+
+            unStat.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException exp) {
+            System.out.println("Erreur d'exécution de la requête : " + requete);
+        }
+        return idUser;
+    }
+
+
 
     /************************ GESTION DES PARTICULIERS **********************/
     public static void insertParticulier(Particulier unParticulier) {
-        String requete = "insert into particulier (nomUser, prenomUser, dateNaissanceUser, sexeUser, emailUser, mdpUser, adresseUser, roleUser) values ("
-                + "'" + unParticulier.getNomUser() + "', "
-                + "'" + unParticulier.getPrenomUser() + "', "
-                + "'" + unParticulier.getDateNaissanceUser() + "', "
-                + "'" + unParticulier.getSexeUser() + "', "
-                + "'" + unParticulier.getEmailUser() + "', "
-                + "'" + unParticulier.getMdpUser() + "', "
-                + "'" + unParticulier.getAdresseUser() + "', "
-                + "'" + unParticulier.getRoleUser() + "');";
+        Modele.insertUser(unParticulier);
+        int idUser = Modele.selectIdUser();
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String dateUser = dateFormat.format(unParticulier.getDateNaissanceUser());
+
+        String requete =    "insert into particulier values (" +
+                            idUser + ", '" +
+                            unParticulier.getNomUser() + "', '" +
+                            unParticulier.getPrenomUser() + "', '" +
+                            dateUser + "', '" +
+                            unParticulier.getSexeUser() + "');";
         executerRequete(requete);
     }
 
@@ -166,14 +188,14 @@ public class Modele {
             while (lesResultats.next()) {
                 Particulier unParticulier = new Particulier(
                         lesResultats.getInt("idUser"),
-                        lesResultats.getString("nomUser"),
-                        lesResultats.getString("prenomUser"),
-                        lesResultats.getDate("dateNaissanceUser"),
-                        lesResultats.getString("sexeUser"),
                         lesResultats.getString("emailUser"),
                         lesResultats.getString("mdpUser"),
                         lesResultats.getString("adresseUser"),
-                        lesResultats.getString("roleUser")
+                        lesResultats.getString("roleUser"),
+                        lesResultats.getString("nomUser"),
+                        lesResultats.getString("prenomUser"),
+                        lesResultats.getDate("dateNaissanceUser"),
+                        lesResultats.getString("sexeUser")
                 );
                 lesParticuliers.add(unParticulier);
             }
@@ -186,34 +208,40 @@ public class Modele {
     }
 
     public static void deleteParticulier(int idUser) {
+        Modele.deleteUser(idUser);
+
         String requete = "delete from particulier where idUser = " + idUser + ";";
         executerRequete(requete);
     }
 
     public static void updateParticulier(Particulier unParticulier) {
-        String requete =    "update particulier set "
-                            + "nomUser = '" + unParticulier.getNomUser() + "', "
-                            + "prenomUser = '" + unParticulier.getPrenomUser() + "', "
-                            + "dateNaissanceUser = '" + unParticulier.getDateNaissanceUser() + "', "
-                            + "sexeUser = '" + unParticulier.getSexeUser() + "', "
-                            + "emailUser = '" + unParticulier.getEmailUser() + "', "
-                            + "mdpUser = '" + unParticulier.getMdpUser() + "', "
-                            + "adresseUser = '" + unParticulier.getAdresseUser() + "', "
-                            + "roleUser = '" + unParticulier.getRoleUser() + "' "
-                            + "where idUser = " + unParticulier.getIdUser() + ";";
+        Modele.updateUser(unParticulier);
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String dateUser = dateFormat.format(unParticulier.getDateNaissanceUser());
+
+        String requete =    "update particulier set " +
+                            "nomUser = '" + unParticulier.getNomUser() + "', " +
+                            "prenomUser = '" + unParticulier.getPrenomUser() + "', " +
+                            "dateNaissanceUser = '" + dateUser + "', " +
+                            "sexeUser = '" + unParticulier.getSexeUser() + "' " +
+                            "where idUser = " + unParticulier.getIdUser() + ";";
         executerRequete(requete);
     }
 
     public static ArrayList<Particulier> selectLikeParticulier(String filtre) {
         ArrayList<Particulier> lesParticuliers = new ArrayList<Particulier>();
-        String requete =    "select * from particulier where "
-                            + "nomUser like '%" + filtre + "%' or "
-                            + "prenomUser like '%" + filtre + "%' or "
-                            + "dateNaissanceUser like '%" + filtre + "%' or "
-                            + "sexeUser like '%" + filtre + "%' or "
-                            + "emailUser like '%" + filtre + "%' or "
-                            + "adresseUser like '%" + filtre + "%';";
+        String requete =    "select * from user u " +
+                            "inner join particulier p " +
+                            "on u.idUser=p.idUser where " +
+                            "u.idUser like '%" + filtre + "%' or " +
+                            "u.emailUser like '%" + filtre + "%' or " +
+                            "u.adresseUser like '%" + filtre + "%' or " +
+                            "u.roleUser like '%" + filtre + "%' or " +
+                            "p.nomUser like '%" + filtre + "%' or " +
+                            "p.prenomUser like '%" + filtre + "%' or " +
+                            "p.dateNaissanceUser like '%" + filtre + "%' or " +
+                            "p.sexeUser like '%" + filtre + "%';";
         try {
             uneConnexion.seConnecter();
             Statement unStat = uneConnexion.getMaConnexion().createStatement();
@@ -221,14 +249,14 @@ public class Modele {
             while (lesResultats.next()) {
                 Particulier unParticulier = new Particulier(
                         lesResultats.getInt("idUser"),
-                        lesResultats.getString("nomUser"),
-                        lesResultats.getString("prenomUser"),
-                        lesResultats.getDate("dateNaissanceUser"),
-                        lesResultats.getString("sexeUser"),
                         lesResultats.getString("emailUser"),
                         lesResultats.getString("mdpUser"),
                         lesResultats.getString("adresseUser"),
-                        lesResultats.getString("roleUser")
+                        lesResultats.getString("roleUser"),
+                        lesResultats.getString("nomUser"),
+                        lesResultats.getString("prenomUser"),
+                        lesResultats.getDate("dateNaissanceUser"),
+                        lesResultats.getString("sexeUser")
                 );
                 lesParticuliers.add(unParticulier);
             }
@@ -250,14 +278,14 @@ public class Modele {
             if (unResultat.next()) {
                 unParticulier = new Particulier(
                         unResultat.getInt("idUser"),
-                        unResultat.getString("nomUser"),
-                        unResultat.getString("prenomUser"),
-                        unResultat.getDate("dateNaissanceUser"),
-                        unResultat.getString("sexeUser"),
                         unResultat.getString("emailUser"),
                         unResultat.getString("mdpUser"),
                         unResultat.getString("adresseUser"),
-                        unResultat.getString("roleUser")
+                        unResultat.getString("roleUser"),
+                        unResultat.getString("nomUser"),
+                        unResultat.getString("prenomUser"),
+                        unResultat.getDate("dateNaissanceUser"),
+                        unResultat.getString("sexeUser")
                 );
             }
             unStat.close();
@@ -282,14 +310,14 @@ public class Modele {
             if(unResultat.next()) {
                 unParticulier = new Particulier(
                         unResultat.getInt("idUser"),
-                        unResultat.getString("nomUser"),
-                        unResultat.getString("prenomUser"),
-                        unResultat.getDate("dateNaissanceUser"),
-                        unResultat.getString("sexeUser"),
                         unResultat.getString("emailUser"),
                         unResultat.getString("mdpUser"),
                         unResultat.getString("adresseUser"),
-                        unResultat.getString("roleUser")
+                        unResultat.getString("roleUser"),
+                        unResultat.getString("nomUser"),
+                        unResultat.getString("prenomUser"),
+                        unResultat.getDate("dateNaissanceUser"),
+                        unResultat.getString("sexeUser")
                 );
             }
             unStat.close();
@@ -305,15 +333,14 @@ public class Modele {
 
     /************************ GESTION DES ENTREPRISES **********************/
     public static void insertEntreprise(Entreprise uneEntreprise) {
-        String requete = "insert into entreprise values ("
-                + "'" + uneEntreprise.getSiretUser() + "', "
-                + "'" + uneEntreprise.getRaisonSocialeUser() + "', "
-                + "'" + uneEntreprise.getCapitalSocialUser() + "', "
-                + "'" + uneEntreprise.getEmailUser() + "', "
-                + "'" + uneEntreprise.getMdpUser() + "', "
-                + "'" + uneEntreprise.getAdresseUser() + "', "
-                + "'" + uneEntreprise.getRoleUser() + "');";
+        Modele.insertUser(uneEntreprise);
+        int idUser = Modele.selectIdUser();
 
+        String requete =    "insert into entreprise values (" +
+                            idUser + ", '" +
+                            uneEntreprise.getSiretUser() + "', '" +
+                            uneEntreprise.getRaisonSocialeUser() + "', " +
+                            uneEntreprise.getCapitalSocialUser() + ");";
         executerRequete(requete);
     }
 
@@ -348,33 +375,35 @@ public class Modele {
     }
 
     public static void deleteEntreprise(int idUser) {
+        Modele.deleteUser(idUser);
+
         String requete = "delete from entreprise where idUser = " + idUser + ";";
         executerRequete(requete);
     }
 
     public static void updateEntreprise(Entreprise uneEntreprise) {
-        String requete =    "update entreprise set "
-                + "siretUser = '" + uneEntreprise.getSiretUser() + "', "
-                + "raisonSocialeUser = '" + uneEntreprise.getRaisonSocialeUser() + "', "
-                + "capitalSocialUser = '" + uneEntreprise.getCapitalSocialUser() + "', "
-                + "emailUser = '" + uneEntreprise.getEmailUser() + "', "
-                + "mdpUser = '" + uneEntreprise.getMdpUser() + "', "
-                + "adresseUser = '" + uneEntreprise.getAdresseUser() + "', "
-                + "roleUser = '" + uneEntreprise.getRoleUser() + "' "
-                + "where idUser = " + uneEntreprise.getIdUser() + ";";
+        Modele.updateUser(uneEntreprise);
 
+        String requete =    "update entreprise set " +
+                            "siretUser = '" + uneEntreprise.getSiretUser() + "', " +
+                            "raisonSocialeUser = '" + uneEntreprise.getRaisonSocialeUser() + "', " +
+                            "capitalSocialUser = " + uneEntreprise.getCapitalSocialUser() + " " +
+                            "where idUser = " + uneEntreprise.getIdUser() + ";";
         executerRequete(requete);
     }
 
     public static ArrayList<Entreprise> selectLikeEntreprise(String filtre) {
         ArrayList<Entreprise> lesEntreprises = new ArrayList<Entreprise>();
-        String requete =    "select * from entreprise where "
-                + "siretUser like '%" + filtre + "%' or "
-                + "raisonSocialeUser like '%" + filtre + "%' or "
-                + "capitalSocialUser like '%" + filtre + "%' or "
-                + "sexeUser like '%" + filtre + "%' or "
-                + "adresseUser like '%" + filtre + "%' or "
-                + "emailUser like '%" + filtre + "%';";
+        String requete =    "select * from user u " +
+                            "inner join entreprise e " +
+                            "on u.idUser=e.idUser where " +
+                            "u.idUser like '%" + filtre + "%' or " +
+                            "u.emailUser like '%" + filtre + "%' or " +
+                            "u.adresseUser like '%" + filtre + "%' or " +
+                            "u.roleUser like '%" + filtre + "%' or " +
+                            "e.siretUser like '%" + filtre + "%' or " +
+                            "e.raisonSocialeUser like '%" + filtre + "%' or " +
+                            "e.capitalSocialUser like '%" + filtre + "%';";
         try {
             uneConnexion.seConnecter();
             Statement unStat = uneConnexion.getMaConnexion().createStatement();
@@ -428,11 +457,12 @@ public class Modele {
     }
 
     public static Entreprise selectWhereEntreprise(String email, String mdp) {
-        String requete =    "select u.idUser, u.emailUser, u.mdpUser, u.adresseUser, u.roleUser, e.siretUser, e.raisonSocialeUser, e.capitalSocialUser " +
-                "from user u " +
-                "left join entreprise e " +
-                "on u.idUser = e.idUser " +
-                "where u.emailUser = '" + email + "' and u.mdpUser = '" + mdp + "';";
+        String requete =    "select u.idUser, u.emailUser, u.mdpUser, u.adresseUser, u.roleUser, " +
+                            "e.siretUser, e.raisonSocialeUser, e.capitalSocialUser " +
+                            "from user u " +
+                            "left join entreprise e " +
+                            "on u.idUser = e.idUser " +
+                            "where u.emailUser = '" + email + "' and u.mdpUser = '" + mdp + "';";
         Entreprise uneEntreprise = null;
         try {
             uneConnexion.seConnecter();
@@ -452,8 +482,7 @@ public class Modele {
             }
             unStat.close();
             uneConnexion.seDeConnecter();
-        }
-        catch(SQLException exp) {
+        } catch(SQLException exp) {
             System.out.println("Erreur d'execution de la requete : " + requete);
         }
         return uneEntreprise;
