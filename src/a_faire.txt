@@ -1,7 +1,7 @@
 Supprimer les classes qui sont inutiles dans le Controleur :
     - Admin
 
-Supprimer les trimmers qui sont inutiles dans la bdd
+Supprimer les triggers qui sont inutiles dans la bdd
 
 
 // - Soit ajouter l'ID dans le formulaire du PanelLivre,
