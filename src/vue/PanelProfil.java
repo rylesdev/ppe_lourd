@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -17,12 +16,12 @@ import controleur.User;
 
 public class PanelProfil extends PanelPrincipal implements ActionListener {
     private JTextArea txtInfos = new JTextArea();
-    private User connectedUser;
     private JButton btModifier = new JButton("Modifier Profil");
 
     private JPanel panelForm = new JPanel();
     private JTextField txtEmail = new JTextField();
     private JTextField txtAdresse = new JTextField();
+    private JTextField txtRole = new JTextField();
     private JPasswordField txtMdp1 = new JPasswordField();
     private JPasswordField txtMdp2 = new JPasswordField();
 
@@ -32,39 +31,49 @@ public class PanelProfil extends PanelPrincipal implements ActionListener {
     public PanelProfil() {
         super("Gestion du Profil");
 
+        // Configuration initiale
         configurerPanelForm();
         configurerTxtInfos();
         ajouterBoutonsEtEcouteurs();
 
-        connectedUser = Controleur.getUserConnecte();
-
-        if (connectedUser != null) {
-            afficherInfosUtilisateur(connectedUser);
-        } else {
-            JOptionPane.showMessageDialog(this, "Aucun utilisateur connecté.", "Erreur", JOptionPane.ERROR_MESSAGE);
-        }
+        // Chargement initial
+        actualiserProfil();
 
         this.setVisible(true);
+    }
+
+    // Nouvelle méthode pour actualiser complètement le profil
+    public void actualiserProfil() {
+        User currentUser = Controleur.getUserConnecte();
+        if (currentUser == null) {
+            JOptionPane.showMessageDialog(this,
+                    "Aucun utilisateur connecté",
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Rafraîchir l'affichage
+        afficherInfosUtilisateur(currentUser);
+        viderChampsFormulaire();
     }
 
     private void configurerPanelForm() {
         this.panelForm.setBackground(Color.cyan);
         this.panelForm.setBounds(400, 100, 400, 300);
-        this.panelForm.setLayout(new GridLayout(4, 2));
+        this.panelForm.setLayout(new GridLayout(5, 2));
         this.panelForm.setVisible(false);
 
-        this.panelForm.add(new JLabel("Email :"));
+        this.panelForm.add(new JLabel("Email:"));
         this.panelForm.add(this.txtEmail);
-
-        this.panelForm.add(new JLabel("Adresse :"));
+        this.panelForm.add(new JLabel("Adresse:"));
         this.panelForm.add(this.txtAdresse);
-
-        this.panelForm.add(new JLabel("Mot de Passe :"));
+        this.panelForm.add(new JLabel("Rôle:"));
+        this.panelForm.add(this.txtRole);
+        this.txtRole.setEditable(false);
+        this.panelForm.add(new JLabel("Nouveau mot de passe:"));
         this.panelForm.add(this.txtMdp1);
-
-        this.panelForm.add(new JLabel("Confirmation :"));
+        this.panelForm.add(new JLabel("Confirmation:"));
         this.panelForm.add(this.txtMdp2);
-
         this.panelForm.add(this.btAnnuler);
         this.panelForm.add(this.btValider);
 
@@ -81,84 +90,108 @@ public class PanelProfil extends PanelPrincipal implements ActionListener {
     private void ajouterBoutonsEtEcouteurs() {
         this.btModifier.setBounds(100, 460, 200, 40);
         this.add(this.btModifier);
-
         this.btAnnuler.addActionListener(this);
         this.btValider.addActionListener(this);
         this.btModifier.addActionListener(this);
     }
 
+    private void afficherInfosUtilisateur(User user) {
+        if (user == null) return;
+
+        this.txtInfos.setText(
+                "________________ INFOS PROFIL ________________\n\n"
+                        + " ID: " + user.getIdUser() + "\n\n"
+                        + " Email: " + user.getEmailUser() + "\n\n"
+                        + " Mot de passe: ********\n\n"
+                        + " Adresse: " + user.getAdresseUser() + "\n\n"
+                        + " Rôle: " + user.getRoleUser() + "\n\n"
+                        + "_____________________________________________"
+        );
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
+        User currentUser = Controleur.getUserConnecte();
+        if (currentUser == null) {
+            JOptionPane.showMessageDialog(this,
+                    "Session expirée. Veuillez vous reconnecter.",
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         if (e.getSource() == this.btModifier) {
-            if (connectedUser != null) {
-                this.txtEmail.setText(connectedUser.getEmailUser());
-                this.txtAdresse.setText(connectedUser.getAdresseUser());
-                this.panelForm.setVisible(true);
-            }
-        } else if (e.getSource() == this.btAnnuler) {
+            this.txtEmail.setText(currentUser.getEmailUser());
+            this.txtAdresse.setText(currentUser.getAdresseUser());
+            this.txtRole.setText(currentUser.getRoleUser());
+            this.txtMdp1.setText("");
+            this.txtMdp2.setText("");
+            this.panelForm.setVisible(true);
+        }
+        else if (e.getSource() == this.btAnnuler) {
             viderChampsFormulaire();
-        } else if (e.getSource() == this.btValider) {
-            validerModifications();
+        }
+        else if (e.getSource() == this.btValider) {
+            validerModifications(currentUser);
+        }
+    }
+
+    private void validerModifications(User originalUser) {
+        String email = this.txtEmail.getText().trim();
+        String adresse = this.txtAdresse.getText().trim();
+        String mdp1 = new String(this.txtMdp1.getPassword());
+        String mdp2 = new String(this.txtMdp2.getPassword());
+
+        // Validation des données
+        if (email.isEmpty() || adresse.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                    "Email et adresse sont obligatoires",
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (!mdp1.isEmpty() && !mdp1.equals(mdp2)) {
+            JOptionPane.showMessageDialog(this,
+                    "Les mots de passe ne correspondent pas",
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            // Création d'une copie pour la modification
+            User modifiedUser = new User(
+                    originalUser.getIdUser(),
+                    email,
+                    mdp1.isEmpty() ? originalUser.getMdpUser() : mdp1,
+                    adresse,
+                    originalUser.getRoleUser()
+            );
+
+            // Mise à jour dans la base
+            Controleur.updateUser(modifiedUser);
+
+            // Rechargement complet de l'utilisateur
+            Controleur.actualiserUserConnecte();
+
+            JOptionPane.showMessageDialog(this,
+                    "Profil mis à jour avec succès",
+                    "Succès", JOptionPane.INFORMATION_MESSAGE);
+
+            // Actualisation de l'affichage
+            actualiserProfil();
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Erreur lors de la mise à jour: " + ex.getMessage(),
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private void viderChampsFormulaire() {
         this.txtEmail.setText("");
         this.txtAdresse.setText("");
+        this.txtRole.setText("");
         this.txtMdp1.setText("");
         this.txtMdp2.setText("");
         this.panelForm.setVisible(false);
-    }
-
-    private void validerModifications() {
-        String email = this.txtEmail.getText();
-        String adresse = this.txtAdresse.getText();
-        String mdp1 = new String(this.txtMdp1.getPassword());
-        String mdp2 = new String(this.txtMdp2.getPassword());
-
-        ArrayList<String> lesChamps = new ArrayList<>();
-        lesChamps.add(email);
-        lesChamps.add(adresse);
-        lesChamps.add(mdp1);
-        lesChamps.add(mdp2);
-
-        if (Controleur.verifDonnees(lesChamps) && mdp1.equals(mdp2)) {
-            mettreAJourUtilisateur(email, adresse, mdp1);
-        } else {
-            JOptionPane.showMessageDialog(this, "Veuillez remplir les champs correctement.",
-                    "Modification Profil", JOptionPane.ERROR_MESSAGE);
-        }
-
-        viderChampsFormulaire();
-    }
-
-    private void mettreAJourUtilisateur(String email, String adresse, String mdp) {
-        connectedUser.setEmailUser(email);
-        connectedUser.setAdresseUser(adresse);
-        connectedUser.setMdpUser(mdp);
-
-        Controleur.updateUser(connectedUser);
-        Controleur.setUserConnecte(connectedUser);
-
-        JOptionPane.showMessageDialog(this,
-                "Modification des données réussie", "Modification",
-                JOptionPane.OK_OPTION);
-
-        afficherInfosUtilisateur(connectedUser);
-    }
-
-    private void afficherInfosUtilisateur(User user) {
-        if (user == null) {
-            System.out.println("Erreur : L'utilisateur est null.");
-            return;
-        }
-        System.out.println("Affichage des informations de l'utilisateur : " + user.getEmailUser());
-        this.txtInfos.setText(
-                "________________INFOS PROFIL _____________\n\n"
-                        + " ID : " + user.getIdUser() + "\n\n"
-                        + " Email : " + user.getEmailUser() + "\n\n"
-                        + " Adresse : " + user.getAdresseUser() + "\n\n"
-                        + "__________________________________________"
-        );
     }
 }

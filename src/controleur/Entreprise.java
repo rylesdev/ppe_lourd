@@ -3,12 +3,11 @@ package controleur;
 import java.util.Date;
 
 public class Entreprise extends User {
-    private String siretUser;
-    private String raisonSocialeUser;
+    private String siretUser, raisonSocialeUser;
     private float capitalSocialUser;
 
-    public Entreprise(int idUser, String siretUser, String raisonSocialeUser, float capitalSocialUser,
-                      String emailUser, String mdpUser, String adresseUser, String roleUser) {
+    public Entreprise(int idUser, String emailUser, String mdpUser, String adresseUser, String roleUser,
+                      String siretUser, String raisonSocialeUser, float capitalSocialUser) {
         super(idUser, emailUser, mdpUser, adresseUser, roleUser);
         this.siretUser = siretUser;
         this.raisonSocialeUser = raisonSocialeUser;

@@ -356,13 +356,13 @@ public class Modele {
             while (lesResultats.next()) {
                 Entreprise uneEntreprise = new Entreprise(
                         lesResultats.getInt("idUser"),
-                        lesResultats.getString("siretUser"),
-                        lesResultats.getString("raisonSocialeUser"),
-                        lesResultats.getFloat("capitalSocialUser"),
                         lesResultats.getString("emailUser"),
                         lesResultats.getString("mdpUser"),
                         lesResultats.getString("adresseUser"),
-                        lesResultats.getString("roleUser")
+                        lesResultats.getString("roleUser"),
+                        lesResultats.getString("siretUser"),
+                        lesResultats.getString("raisonSocialeUser"),
+                        lesResultats.getFloat("capitalSocialUser")
                 );
                 lesEntreprises.add(uneEntreprise);
             }
@@ -411,13 +411,13 @@ public class Modele {
             while (lesResultats.next()) {
                 Entreprise uneEntreprise = new Entreprise(
                         lesResultats.getInt("idUser"),
-                        lesResultats.getString("siretUser"),
-                        lesResultats.getString("raisonSocialeUser"),
-                        lesResultats.getFloat("capitalSocialUser"),
                         lesResultats.getString("emailUser"),
                         lesResultats.getString("mdpUser"),
                         lesResultats.getString("adresseUser"),
-                        lesResultats.getString("roleUser")
+                        lesResultats.getString("roleUser"),
+                        lesResultats.getString("siretUser"),
+                        lesResultats.getString("raisonSocialeUser"),
+                        lesResultats.getFloat("capitalSocialUser")
                 );
                 lesEntreprises.add(uneEntreprise);
             }
@@ -439,13 +439,13 @@ public class Modele {
             if (unResultat.next()) {
                 uneEntreprise = new Entreprise(
                         unResultat.getInt("idUser"),
-                        unResultat.getString("siretUser"),
-                        unResultat.getString("raisonSocialeUser"),
-                        unResultat.getFloat("capitalSocialUser"),
                         unResultat.getString("emailUser"),
                         unResultat.getString("mdpUser"),
                         unResultat.getString("adresseUser"),
-                        unResultat.getString("roleUser")
+                        unResultat.getString("roleUser"),
+                        unResultat.getString("siretUser"),
+                        unResultat.getString("raisonSocialeUser"),
+                        unResultat.getFloat("capitalSocialUser")
                 );
             }
             unStat.close();
@@ -471,13 +471,13 @@ public class Modele {
             if(unResultat.next()) {
                 uneEntreprise = new Entreprise(
                         unResultat.getInt("idUser"),
-                        unResultat.getString("siretUser"),
-                        unResultat.getString("raisonSocialeUser"),
-                        unResultat.getFloat("capitalSocialUser"),
                         unResultat.getString("emailUser"),
                         unResultat.getString("mdpUser"),
                         unResultat.getString("adresseUser"),
-                        unResultat.getString("roleUser")
+                        unResultat.getString("roleUser"),
+                        unResultat.getString("siretUser"),
+                        unResultat.getString("raisonSocialeUser"),
+                        unResultat.getFloat("capitalSocialUser")
                 );
             }
             unStat.close();

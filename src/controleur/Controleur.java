@@ -267,4 +267,15 @@ public class Controleur {
     /*public static List<LivreNote> selectLivresMieuxNotes() {
         return Modele.selectLivresMieuxNotes();
     }*/
+
+    public static String getRoleUserConnecte() {
+        return userConnecte.getRoleUser();
+    }
+
+    public static void actualiserUserConnecte() {
+        User user = getUserConnecte();
+        if (user != null) {
+            userConnecte = selectWhereUser(user.getEmailUser(), user.getMdpUser(), user.getRoleUser());
+        }
+    }
 }

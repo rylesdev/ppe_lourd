@@ -26,7 +26,6 @@ import controleur.Tableau;
 public class PanelAbonnement extends PanelPrincipal implements ActionListener, KeyListener {
     private JPanel panelForm = new JPanel();
 
-    private JTextField txtIdAbonnement = new JTextField();
     private JTextField txtIdUser = new JTextField();
     private JTextField txtDateDebutAbonnement = new JTextField();
     private JTextField txtDateFinAbonnement = new JTextField();
@@ -48,11 +47,11 @@ public class PanelAbonnement extends PanelPrincipal implements ActionListener, K
     public PanelAbonnement(int idUser) {
         super("Gestion des Abonnements");
 
+        // Initialisation de l'interface
         this.panelForm.setBackground(Color.cyan);
         this.panelForm.setBounds(30, 100, 300, 250);
         this.panelForm.setLayout(new GridLayout(10, 2));
-        this.panelForm.add(new JLabel("Id Abonnement :"));
-        this.panelForm.add(this.txtIdAbonnement);
+
         this.panelForm.add(new JLabel("Id User :"));
         this.panelForm.add(this.txtIdUser);
         this.panelForm.add(new JLabel("Date Début :"));
@@ -67,24 +66,26 @@ public class PanelAbonnement extends PanelPrincipal implements ActionListener, K
 
         this.add(this.panelForm);
 
+        // Initialisation des listeners
         this.btAnnuler.addActionListener(this);
         this.btValider.addActionListener(this);
         this.btSupprimer.addActionListener(this);
         this.btSupprimer.setVisible(false);
 
-        this.txtIdAbonnement.addKeyListener(this);
         this.txtIdUser.addKeyListener(this);
         this.txtDateDebutAbonnement.addKeyListener(this);
         this.txtDateFinAbonnement.addKeyListener(this);
         this.txtPointAbonnement.addKeyListener(this);
 
-        String entetes[] = {"Id", "Id User", "Date Début", "Date Fin", "Points"};
+        // Initialisation du tableau
+        String entetes[] = {"Id", "Id User", "Date Début Abonnement", "Date Fin Abonnement", "Points"};
         this.tableauAbonnements = new Tableau(this.obtenirDonnees(""), entetes);
         this.tableAbonnements = new JTable(this.tableauAbonnements);
         JScrollPane uneScroll = new JScrollPane(this.tableAbonnements);
         uneScroll.setBounds(360, 100, 480, 250);
         this.add(uneScroll);
 
+        // Initialisation du filtre
         this.panelFiltre.setBackground(Color.cyan);
         this.panelFiltre.setBounds(370, 60, 450, 30);
         this.panelFiltre.setLayout(new GridLayout(1, 3));
@@ -98,45 +99,36 @@ public class PanelAbonnement extends PanelPrincipal implements ActionListener, K
         this.add(this.lbNbAbonnements);
         this.lbNbAbonnements.setText("Nombre d'abonnements : " + this.tableauAbonnements.getRowCount());
 
-        // Affiche les données du formulaire à gauche
+        // Gestion de la sélection dans le tableau
         this.tableAbonnements.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                int numLigne = tableAbonnements.getSelectedRow();
-                if (numLigne >= 0) {
-                    txtIdAbonnement.setText(tableauAbonnements.getValueAt(numLigne, 0).toString());
-                    txtIdUser.setText(tableauAbonnements.getValueAt(numLigne, 1).toString());
-                    txtDateDebutAbonnement.setText(tableauAbonnements.getValueAt(numLigne, 2).toString());
-                    txtDateFinAbonnement.setText(tableauAbonnements.getValueAt(numLigne, 3).toString());
-                    txtPointAbonnement.setText(tableauAbonnements.getValueAt(numLigne, 4).toString());
-
-                    btSupprimer.setVisible(true);
-                    btValider.setText("Modifier");
-                }
+                afficherDetailsAbonnementSelectionne();
             }
-
-            @Override
-            public void mousePressed(MouseEvent e) {}
-
-            @Override
-            public void mouseReleased(MouseEvent e) {}
-
-            @Override
-            public void mouseEntered(MouseEvent e) {}
-
-            @Override
-            public void mouseExited(MouseEvent e) {}
+            @Override public void mousePressed(MouseEvent e) {}
+            @Override public void mouseReleased(MouseEvent e) {}
+            @Override public void mouseEntered(MouseEvent e) {}
+            @Override public void mouseExited(MouseEvent e) {}
         });
     }
 
-    // Affiche les données du tableau à droite
-    public Object[][] obtenirDonnees(String filtre) {
-        ArrayList<Abonnement> lesAbonnements;
-        if (filtre.equals("")) {
-            lesAbonnements = Controleur.selectAbonnement();
-        } else {
-            lesAbonnements = Controleur.selectLikeAbonnement(filtre);
+    private void afficherDetailsAbonnementSelectionne() {
+        int numLigne = tableAbonnements.getSelectedRow();
+        if (numLigne >= 0) {
+            txtIdUser.setText(tableauAbonnements.getValueAt(numLigne, 1).toString());
+            txtDateDebutAbonnement.setText(tableauAbonnements.getValueAt(numLigne, 2).toString());
+            txtDateFinAbonnement.setText(tableauAbonnements.getValueAt(numLigne, 3).toString());
+            txtPointAbonnement.setText(tableauAbonnements.getValueAt(numLigne, 4).toString());
+
+            btSupprimer.setVisible(true);
+            btValider.setText("Modifier");
         }
+    }
+
+    public Object[][] obtenirDonnees(String filtre) {
+        ArrayList<Abonnement> lesAbonnements = filtre.isEmpty() ?
+                Controleur.selectAbonnement() : Controleur.selectLikeAbonnement(filtre);
+
         Object matrice[][] = new Object[lesAbonnements.size()][5];
         int i = 0;
         for (Abonnement unAbonnement : lesAbonnements) {
@@ -151,13 +143,156 @@ public class PanelAbonnement extends PanelPrincipal implements ActionListener, K
     }
 
     public void viderChamps() {
-        this.txtIdAbonnement.setText("");
         this.txtIdUser.setText("");
         this.txtDateDebutAbonnement.setText("");
         this.txtDateFinAbonnement.setText("");
         this.txtPointAbonnement.setText("");
         btSupprimer.setVisible(false);
         btValider.setText("Valider");
+    }
+
+    private void insererAbonnement() {
+        if (!Controleur.getRoleUserConnecte().equals("admin")) {
+            JOptionPane.showMessageDialog(this,
+                    "Accès refusé : Seuls les administrateurs peuvent ajouter des abonnements",
+                    "Droits insuffisants", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+            // Validation des dates
+            Date dateDebut = new SimpleDateFormat("yyyy-MM-dd").parse(txtDateDebutAbonnement.getText());
+            Date dateFin = new SimpleDateFormat("yyyy-MM-dd").parse(txtDateFinAbonnement.getText());
+
+            // Validation que la date de fin est après la date de début
+            if (dateFin.before(dateDebut)) {
+                JOptionPane.showMessageDialog(this,
+                        "La date de fin doit être postérieure à la date de début",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            int idUser = Integer.parseInt(this.txtIdUser.getText());
+            int points = Integer.parseInt(this.txtPointAbonnement.getText());
+
+            // Validation des points
+            if (points < 0) {
+                JOptionPane.showMessageDialog(this,
+                        "Le nombre de points doit être positif",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            Abonnement unAbonnement = new Abonnement(0, idUser, dateDebut, dateFin, points);
+            Controleur.insertAbonnement(unAbonnement);
+
+            // Formatage des dates pour l'affichage
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String debutStr = dateFormat.format(dateDebut);
+            String finStr = dateFormat.format(dateFin);
+
+            JOptionPane.showMessageDialog(this,
+                    "Abonnement créé avec succès !\n" +
+                            "Période : " + debutStr + " au " + finStr + "\n" +
+                            "Points : " + points,
+                    "Succès", JOptionPane.INFORMATION_MESSAGE);
+
+            this.tableauAbonnements.setDonnees(this.obtenirDonnees(""));
+            this.lbNbAbonnements.setText("Nombre d'abonnements : " + this.tableauAbonnements.getRowCount());
+            this.viderChamps();
+
+        } catch (ParseException ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Format de date invalide (utilisez yyyy-MM-dd)",
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this,
+                    "ID utilisateur ou points invalides",
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void modifierAbonnement() {
+        if (!Controleur.getRoleUserConnecte().equals("admin")) {
+            JOptionPane.showMessageDialog(this,
+                    "Accès refusé : Seuls les administrateurs peuvent modifier des abonnements",
+                    "Droits insuffisants", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int numLigne = tableAbonnements.getSelectedRow();
+        if (numLigne >= 0) {
+            try {
+                int idAbonnement = Integer.parseInt(tableauAbonnements.getValueAt(numLigne, 0).toString());
+                Date dateDebut = new SimpleDateFormat("yyyy-MM-dd").parse(txtDateDebutAbonnement.getText());
+                Date dateFin = new SimpleDateFormat("yyyy-MM-dd").parse(txtDateFinAbonnement.getText());
+
+                // Validation que la date de fin est après la date de début
+                if (dateFin.before(dateDebut)) {
+                    JOptionPane.showMessageDialog(this,
+                            "La date de fin doit être postérieure à la date de début",
+                            "Erreur", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                int idUser = Integer.parseInt(this.txtIdUser.getText());
+                int points = Integer.parseInt(this.txtPointAbonnement.getText());
+
+                // Validation des points
+                if (points < 0) {
+                    JOptionPane.showMessageDialog(this,
+                            "Le nombre de points doit être positif",
+                            "Erreur", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                Abonnement unAbonnement = new Abonnement(idAbonnement, idUser, dateDebut, dateFin, points);
+                Controleur.updateAbonnement(unAbonnement);
+
+                JOptionPane.showMessageDialog(this,
+                        "Modification de l'abonnement réussie",
+                        "Succès", JOptionPane.INFORMATION_MESSAGE);
+
+                this.tableauAbonnements.setDonnees(this.obtenirDonnees(""));
+                this.viderChamps();
+
+            } catch (ParseException ex) {
+                JOptionPane.showMessageDialog(this,
+                        "Format de date invalide (utilisez yyyy-MM-dd)",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this,
+                        "ID invalide",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void supprimerAbonnement() {
+        if (!Controleur.getRoleUserConnecte().equals("admin")) {
+            JOptionPane.showMessageDialog(this,
+                    "Accès refusé : Seuls les administrateurs peuvent supprimer des abonnements",
+                    "Droits insuffisants", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int numLigne = tableAbonnements.getSelectedRow();
+        if (numLigne >= 0) {
+            int idAbonnement = Integer.parseInt(tableauAbonnements.getValueAt(numLigne, 0).toString());
+            int reponse = JOptionPane.showConfirmDialog(this,
+                    "Confirmez-vous la suppression de cet abonnement ?",
+                    "Confirmation", JOptionPane.YES_NO_OPTION);
+
+            if (reponse == JOptionPane.YES_OPTION) {
+                Controleur.deleteAbonnement(idAbonnement);
+                this.tableauAbonnements.setDonnees(this.obtenirDonnees(""));
+                this.lbNbAbonnements.setText("Nombre d'abonnements : " + this.tableauAbonnements.getRowCount());
+                JOptionPane.showMessageDialog(this,
+                        "Suppression de l'abonnement réussie",
+                        "Succès", JOptionPane.INFORMATION_MESSAGE);
+                this.viderChamps();
+            }
+        }
     }
 
     @Override
@@ -167,72 +302,15 @@ public class PanelAbonnement extends PanelPrincipal implements ActionListener, K
         } else if (e.getSource() == this.btFiltrer) {
             String filtre = this.txtFiltre.getText();
             this.tableauAbonnements.setDonnees(this.obtenirDonnees(filtre));
-        } else if (e.getSource() == this.btValider && this.btValider.getText().equals("Valider")) {
-            this.traitement();
             this.lbNbAbonnements.setText("Nombre d'abonnements : " + this.tableauAbonnements.getRowCount());
-        } else if (e.getSource() == this.btValider && this.btValider.getText().equals("Modifier")) {
-            this.modifierAbonnement();
-        } else if (e.getSource() == this.btSupprimer) {
-            int numLigne = tableAbonnements.getSelectedRow();
-            if (numLigne >= 0) {
-                int idAbonnement = Integer.parseInt(tableauAbonnements.getValueAt(numLigne, 0).toString());
-                Controleur.deleteAbonnement(idAbonnement);
-                this.tableauAbonnements.setDonnees(this.obtenirDonnees(""));
-                this.lbNbAbonnements.setText("Nombre d'abonnements : " + this.tableauAbonnements.getRowCount());
-                JOptionPane.showMessageDialog(this, "Suppression réussie de l'abonnement.",
-                        "Suppression Abonnement", JOptionPane.INFORMATION_MESSAGE);
-                this.viderChamps();
+        } else if (e.getSource() == this.btValider) {
+            if (this.btValider.getText().equals("Valider")) {
+                insererAbonnement();
+            } else {
+                modifierAbonnement();
             }
-        }
-    }
-
-    private void traitement() {
-        try {
-            Date dateDebut = new SimpleDateFormat("yyyy-MM-dd").parse(txtDateDebutAbonnement.getText());
-            Date dateFin = new SimpleDateFormat("yyyy-MM-dd").parse(txtDateFinAbonnement.getText());
-            int idUser = Integer.parseInt(this.txtIdUser.getText());
-            int points = Integer.parseInt(this.txtPointAbonnement.getText());
-
-            Abonnement unAbonnement = new Abonnement(0, idUser, dateDebut, dateFin, points);
-            Controleur.insertAbonnement(unAbonnement);
-
-            // Afficher un message de confirmation
-            JOptionPane.showMessageDialog(this, "Insertion réussie de l'abonnement.",
-                    "Insertion Abonnement", JOptionPane.INFORMATION_MESSAGE);
-
-            // Mettre à jour le tableau des abonnements
-            this.tableauAbonnements.setDonnees(this.obtenirDonnees(""));
-
-        } catch (ParseException ex) {
-            JOptionPane.showMessageDialog(this, "Format de date invalide. Utilisez yyyy-MM-dd.",
-                    "Erreur", JOptionPane.ERROR_MESSAGE);
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "ID utilisateur ou points invalide.",
-                    "Erreur", JOptionPane.ERROR_MESSAGE);
-        }
-        this.viderChamps();
-    }
-
-    private void modifierAbonnement() {
-        try {
-            int idAbonnement = Integer.parseInt(this.txtIdAbonnement.getText());
-            Date dateDebut = new SimpleDateFormat("yyyy-MM-dd").parse(txtDateDebutAbonnement.getText());
-            Date dateFin = new SimpleDateFormat("yyyy-MM-dd").parse(txtDateFinAbonnement.getText());
-            int idUser = Integer.parseInt(this.txtIdUser.getText());
-            int points = Integer.parseInt(this.txtPointAbonnement.getText());
-
-            Abonnement unAbonnement = new Abonnement(idAbonnement, idUser, dateDebut, dateFin, points);
-            Controleur.updateAbonnement(unAbonnement);
-            this.tableauAbonnements.setDonnees(this.obtenirDonnees(""));
-            JOptionPane.showMessageDialog(this, "Modification réussie de l'abonnement.",
-                    "Modification Abonnement", JOptionPane.INFORMATION_MESSAGE);
-            this.viderChamps();
-        } catch (ParseException ex) {
-            JOptionPane.showMessageDialog(this, "Format de date invalide. Utilisez yyyy-MM-dd.",
-                    "Erreur", JOptionPane.ERROR_MESSAGE);
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "ID invalide.",
-                    "Erreur", JOptionPane.ERROR_MESSAGE);
+        } else if (e.getSource() == this.btSupprimer) {
+            supprimerAbonnement();
         }
     }
 
@@ -243,9 +321,9 @@ public class PanelAbonnement extends PanelPrincipal implements ActionListener, K
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             if (this.btValider.getText().equals("Valider")) {
-                this.traitement();
+                insererAbonnement();
             } else {
-                this.modifierAbonnement();
+                modifierAbonnement();
             }
         }
     }

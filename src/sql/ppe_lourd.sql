@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:8889
--- Généré le : ven. 11 avr. 2025 à 21:11
+-- Généré le : sam. 12 avr. 2025 à 22:08
 -- Version du serveur : 8.0.35
 -- Version de PHP : 8.3.9
 
@@ -185,7 +185,7 @@ CREATE TABLE `commande` (
 --
 
 INSERT INTO `commande` (`idCommande`, `dateCommande`, `statutCommande`, `dateLivraisonCommande`, `idUser`) VALUES
-(301, '2025-01-24', 'en attente', '2025-01-31', 2),
+(301, '2025-01-24', 'expédiée', '2025-01-31', 2),
 (302, '2025-01-24', 'en attente', '2025-01-31', 2),
 (303, '2025-01-24', 'en attente', '2025-01-31', 2),
 (304, '2025-01-24', 'en attente', '2025-01-31', 2),
@@ -363,7 +363,7 @@ DELIMITER ;
 
 CREATE TABLE `entreprise` (
   `idUser` int NOT NULL,
-  `siretUser` varchar(14) DEFAULT NULL,
+  `siretUser` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `raisonSocialeUser` varchar(255) DEFAULT NULL,
   `capitalSocialUser` float(15,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -376,10 +376,10 @@ INSERT INTO `entreprise` (`idUser`, `siretUser`, `raisonSocialeUser`, `capitalSo
 (26, '123456789', 'Entreprise SARL', 10000.00),
 (27, '123456789', 'Entreprise SARL', 10000.00),
 (30, '123123123', 'yasser', 123123120.00),
-(31, '1298371892', '123', NULL),
 (32, '123', '123', 123124.00),
 (33, '123123', '123123', 123123.00),
-(34, '987987', '987987', 987987.00);
+(34, '987987', '987987', 987987.00),
+(52, 'zaopdkazd', 'pokdzad', 21312.31);
 
 -- --------------------------------------------------------
 
@@ -608,7 +608,7 @@ CREATE TABLE `livre` (
 --
 
 INSERT INTO `livre` (`idLivre`, `nomLivre`, `auteurLivre`, `imageLivre`, `exemplaireLivre`, `prixLivre`, `idCategorie`, `idMaisonEdition`, `idPromotion`) VALUES
-(1, 'Alcools', 'Apollinaire', 'alcools.png', 99, 12.50, 3, 1, NULL),
+(1, 'Alcools', 'Apollinaire', 'alcools.png', 96, 12.50, 3, 1, NULL),
 (2, 'Crime et Chatiment', 'Dostoïevski', 'crime_et_chatiment.png', 91, 15.00, 1, 2, NULL),
 (3, 'L`Etranger', 'Camus', 'l_etranger.png', 56, 10.00, 1, 3, NULL),
 (4, 'L`Odyssée', 'Homère', 'l_odyssee.png', 89, 13.50, 2, 4, NULL),
@@ -695,7 +695,9 @@ INSERT INTO `particulier` (`idUser`, `nomUser`, `prenomUser`, `dateNaissanceUser
 (35, 'yasser', 'yasser', '2010-12-21', 'M'),
 (36, 'yasser', 'yasser', '2010-12-21', 'M'),
 (37, 'part', 'part', '2009-12-12', 'M'),
-(38, 'uy', 'uy', '2003-03-12', 'M');
+(38, 'uy', 'uy', '2003-03-12', 'M'),
+(41, 'final', 'final', '2025-12-12', 'F'),
+(50, 'mlm', 'lmlml', '2999-12-12', 'M');
 
 -- --------------------------------------------------------
 
@@ -759,7 +761,6 @@ INSERT INTO `user` (`idUser`, `emailUser`, `mdpUser`, `adresseUser`, `roleUser`)
 (28, 'michael@gmail.com', '123', '89 Impasse des Cerisiers', 'client'),
 (29, 'ryles', '123', '102 Rue du Moulin', 'client'),
 (30, 'yasser@gmail.com', '123', '76 Avenue des Rosiers', 'client'),
-(31, 'entreprise@gmail.com', '123', '58 Chemin des Vignes', 'client'),
 (32, 'test@gmail.com', '123', '21 Boulevard de la Liberté', 'client'),
 (33, 'yass@gmail.com', '123', '34 Rue des Érables', 'client'),
 (34, '987987@gmail.com', '123', '47 Allée des Chênes', 'client'),
@@ -767,7 +768,11 @@ INSERT INTO `user` (`idUser`, `emailUser`, `mdpUser`, `adresseUser`, `roleUser`)
 (36, 'yasser@gmail.com', '123', '63 Place du Marché', 'client'),
 (37, 'part@gmail.com', '123', 'part', 'client'),
 (38, 'uy@gmail.com', '123', 'uy', 'client'),
-(39, 'gest@gmail.com', '123', '16 rue des Lilas', 'gestionnaire');
+(39, 'gest@gmail.com', '123', '16 rue des Lilas', 'gestionnaire'),
+(40, 'test', '123', 'test', 'client'),
+(41, 'final@gmail.com', '123', 'final', 'gestionnaire'),
+(50, 'mlml', 'd43affcc277ee52980fc4ecea523730f28d6405b', 'mlml', 'client'),
+(52, 'azdazpdok', 'd43affcc277ee52980fc4ecea523730f28d6405b', 'pokazd', 'client');
 
 -- --------------------------------------------------------
 
@@ -1102,19 +1107,31 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT pour la table `abonnement`
 --
 ALTER TABLE `abonnement`
-  MODIFY `idAbonnement` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `idAbonnement` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT pour la table `commande`
 --
 ALTER TABLE `commande`
-  MODIFY `idCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=458;
+  MODIFY `idCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=459;
 
 --
 -- AUTO_INCREMENT pour la table `livre`
 --
 ALTER TABLE `livre`
-  MODIFY `idLivre` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+  MODIFY `idLivre` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+
+--
+-- AUTO_INCREMENT pour la table `particulier`
+--
+ALTER TABLE `particulier`
+  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+
+--
+-- AUTO_INCREMENT pour la table `user`
+--
+ALTER TABLE `user`
+  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 
 --
 -- Contraintes pour les tables déchargées

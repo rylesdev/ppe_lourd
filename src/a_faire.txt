@@ -1,17 +1,22 @@
 Supprimer les classes qui sont inutiles dans le Controleur :
     - Admin
 
-Soit ajouter l'ID dans le formulaire du PanelLivre,
-soit supprimer l'ID dans tous les panels (car inutiles dans le CRUDI)
+Supprimer les trimmers qui sont inutiles dans la bdd
+
+
+// - Soit ajouter l'ID dans le formulaire du PanelLivre,
+// - soit supprimer l'ID dans tous les panels (car inutiles dans le CRUDI)
 
 
     Connexion :
-        - Admin : Consulte, supprime, modifie, ajoute, etc...
-        - Gestionnaire : Consulte uniquement
+        // - Admin : Consulte, supprime, modifie, ajoute, etc...
+        // - Gestionnaire : Consulte uniquement
 
     Gestion du Profil :
-        - Afficher les informations de l'utilisateur actuellement connecté
-        - Régler le problème de "Aucun utilisateur connecté"
+        // - Afficher toutes les informations de l'utilisateur actuellement connecté
+        // - Régler le problème de "Aucun utilisateur connecté"
+        - Régler le problème de la modification des infos profil qui ne se font pas malgré le changement de user
+            Lorsque je me connecte une 1ère fois en admin puis en gestionnaire, je garde les infos de l'admin
 
     Gestion des Particuliers :
         // - Mettre "Particulier" dans une sous-catégorie de "Utilisateur"
