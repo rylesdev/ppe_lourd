@@ -125,6 +125,10 @@ public class Controleur {
         return Modele.selectLivre();
     }
 
+    public static Livre selectWhereLivre(int idLivre) {
+        return Modele.selectWhereLivre(idLivre);
+    }
+
     public static ArrayList<Livre> selectLikeLivre(String filtre) {
         return Modele.selectLikeLivre(filtre);
     }
@@ -171,6 +175,10 @@ public class Controleur {
         return Modele.selectCommande();
     }
 
+    public static Commande selectWhereCommande(int idCommande) {
+        return Modele.selectWhereCommande(idCommande);
+    }
+
     public static ArrayList<Commande> selectLikeCommande(String filtre) {
         return Modele.selectLikeCommande(filtre);
     }
@@ -203,6 +211,10 @@ public class Controleur {
         Modele.updateCommande(uneCommande);
     }
     */
+
+    public static LigneCommande selectWhereLigneCommande(int idLigneCommande) {
+       return Modele.selectWhereLigneCommande(idLigneCommande);
+    }
 
 
 

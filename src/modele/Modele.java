@@ -522,6 +522,34 @@ public class Modele {
         return lesLivres;
     }
 
+    public static Livre selectWhereLivre(int idLivre) {
+        String requete = "select * from livre where idLivre = " + idLivre + ";";
+        Livre unLivre = null;
+        try {
+            uneConnexion.seConnecter();
+            Statement unStat = uneConnexion.getMaConnexion().createStatement();
+            ResultSet unResultat = unStat.executeQuery(requete);
+            if (unResultat.next()) {
+                unLivre = new Livre(
+                        unResultat.getInt("idLivre"),
+                        unResultat.getString("nomLivre"),
+                        unResultat.getString("auteurLivre"),
+                        unResultat.getString("imageLivre"),
+                        unResultat.getInt("exemplaireLivre"),
+                        unResultat.getFloat("prixLivre"),
+                        unResultat.getInt("idCategorie"),
+                        unResultat.getInt("idMaisonEdition"),
+                        unResultat.getInt("idPromotion")
+                );
+            }
+            unStat.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException exp) {
+            System.out.println("Erreur d'exécution de la requête : " + requete);
+        }
+        return unLivre;
+    }
+
     public static ArrayList<Livre> selectLikeLivre(String filtre) {
         ArrayList<Livre> lesLivres = new ArrayList<>();
         String requete =    "select * from livre where nomLivre like '%" + filtre + "%' " +
@@ -703,9 +731,7 @@ public class Modele {
     /************************ GESTION DES COMMANDES ************************/
     public static ArrayList<Commande> selectCommande() {
         ArrayList<Commande> lesCommandes = new ArrayList<>();
-        String requete =    "select * from commande c " +
-                            "inner join ligneCommande l " +
-                            "on c.idCommande=l.idCommande;";
+        String requete = "select * from commande;";
         try {
             uneConnexion.seConnecter();
             Statement unStat = uneConnexion.getMaConnexion().createStatement();
@@ -713,14 +739,24 @@ public class Modele {
             while (lesResultats.next()) {
                 Commande uneCommande = new Commande(
                         lesResultats.getInt("idCommande"),
-                        lesResultats.getInt("idLigneCommande"),
-                        lesResultats.getInt("idLivre"),
-                        lesResultats.getInt("quantiteLigneCommande"),
                         lesResultats.getDate("dateCommande"),
                         lesResultats.getString("statutCommande"),
                         lesResultats.getDate("dateLivraisonCommande"),
                         lesResultats.getInt("idUser")
                 );
+                String reqLignes = "select * from ligneCommande where idCommande = " + uneCommande.getIdCommande();
+                Statement statLignes = uneConnexion.getMaConnexion().createStatement();
+                ResultSet resLignes = statLignes.executeQuery(reqLignes);
+                while (resLignes.next()) {
+                    LigneCommande uneLigne = new LigneCommande(
+                            resLignes.getInt("idLigneCommande"),
+                            resLignes.getInt("idCommande"),
+                            resLignes.getInt("idLivre"),
+                            resLignes.getInt("quantiteLigneCommande")
+                    );
+                    uneCommande.ajouterLigneCommande(uneLigne);
+                }
+                statLignes.close();
                 lesCommandes.add(uneCommande);
             }
             unStat.close();
@@ -731,9 +767,34 @@ public class Modele {
         return lesCommandes;
     }
 
+    public static Commande selectWhereCommande(int idCommande) {
+        String requete = "select * from commande where idCommande = " + idCommande + ";";
+        Commande uneCommande = null;
+        try {
+            uneConnexion.seConnecter();
+            Statement unStat = uneConnexion.getMaConnexion().createStatement();
+            ResultSet unResultat = unStat.executeQuery(requete);
+            if (unResultat.next()) {
+                uneCommande = new Commande(
+                        unResultat.getInt("idCommande"),
+                        unResultat.getDate("dateCommande"),
+                        unResultat.getString("statutCommande"),
+                        unResultat.getDate("dateLivraisonCommande"),
+                        unResultat.getInt("idUser")
+                );
+            }
+            unStat.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException exp) {
+            System.out.println("Erreur d'exécution de la requête : " + requete);
+        }
+        return uneCommande;
+    }
+
     public static ArrayList<Commande> selectLikeCommande(String filtre) {
         ArrayList<Commande> lesCommandes = new ArrayList<>();
-        String requete =    "select * from commande where idCommande like '%" + filtre + "%' " +
+        String requete =    "select * from commande where " +
+                            "idCommande like '%" + filtre + "%' " +
                             "or dateCommande like '%" + filtre + "%' " +
                             "or statutCommande like '%" + filtre + "%' " +
                             "or dateLivraisonCommande like '%" + filtre + "%' " +
@@ -745,14 +806,24 @@ public class Modele {
             while (lesResultats.next()) {
                 Commande uneCommande = new Commande(
                         lesResultats.getInt("idCommande"),
-                        lesResultats.getInt("idLigneCommande"),
-                        lesResultats.getInt("idLivre"),
-                        lesResultats.getInt("quantiteLigneCommande"),
                         lesResultats.getDate("dateCommande"),
                         lesResultats.getString("statutCommande"),
                         lesResultats.getDate("dateLivraisonCommande"),
                         lesResultats.getInt("idUser")
                 );
+                String reqLignes = "select * from ligneCommande where idCommande = " + uneCommande.getIdCommande();
+                Statement statLignes = uneConnexion.getMaConnexion().createStatement();
+                ResultSet resLignes = statLignes.executeQuery(reqLignes);
+                while (resLignes.next()) {
+                    LigneCommande uneLigne = new LigneCommande(
+                            resLignes.getInt("idLigneCommande"),
+                            resLignes.getInt("idCommande"),
+                            resLignes.getInt("idLivre"),
+                            resLignes.getInt("quantiteLigneCommande")
+                    );
+                    uneCommande.ajouterLigneCommande(uneLigne);
+                }
+                statLignes.close();
                 lesCommandes.add(uneCommande);
             }
             unStat.close();
@@ -763,40 +834,105 @@ public class Modele {
         return lesCommandes;
     }
 
+    public static LigneCommande selectWhereLigneCommande(int idLigneCommande) {
+        String requete = "select * from lignecommande where idLigneCommande = " + idLigneCommande + ";";
+        LigneCommande uneLigne = null;
+        try {
+            uneConnexion.seConnecter();
+            Statement unStat = uneConnexion.getMaConnexion().createStatement();
+            ResultSet unResultat = unStat.executeQuery(requete);
+            if (unResultat.next()) {
+                uneLigne = new LigneCommande(
+                        unResultat.getInt("idLigneCommande"),
+                        unResultat.getInt("idCommande"),
+                        unResultat.getInt("idLivre"),
+                        unResultat.getInt("quantiteLigneCommande")
+                );
+            }
+            unStat.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException exp) {
+            System.out.println("Erreur d'exécution de la requête : " + requete);
+        }
+        return uneLigne;
+    }
+
     public static void insertCommande(Commande uneCommande) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String dateCommande = dateFormat.format(uneCommande.getDateCommande());
-        String dateLivraisonCommande = dateFormat.format(uneCommande.getDateLivraisonCommande());
+        String dateLivraison = uneCommande.getDateLivraisonCommande() != null
+                ? dateFormat.format(uneCommande.getDateLivraisonCommande())
+                : "null";
 
-        String requete =    "insert into commande values (null, '" +
-                            dateCommande + "', '" +
-                            uneCommande.getStatutCommande() + "', '" +
-                            dateLivraisonCommande + "', " +
-                            uneCommande.getIdUser() + ");";
-        executerRequete(requete);
+        try {
+            // 1. Insertion de la commande
+            String requete = "insert into commande values (null, '"
+                    + dateCommande + "', '"
+                    + uneCommande.getStatutCommande() + "', "
+                    + (dateLivraison.equals("null") ? "null" : "'" + dateLivraison + "'") + ", "
+                    + uneCommande.getIdUser() + ")";
 
-        Modele.insertLigneCommande(uneCommande);
+            uneConnexion.seConnecter();
+            Statement st = uneConnexion.getMaConnexion().createStatement();
+            st.executeUpdate(requete, Statement.RETURN_GENERATED_KEYS);
+
+            // 2. Récupération de l'ID
+            ResultSet rs = st.getGeneratedKeys();
+            int idCommande = 0;
+            if (rs.next()) {
+                idCommande = rs.getInt(1);
+            }
+
+            // 3. Insertion des lignes
+            for (LigneCommande uneLigneCommande : uneCommande.getLesLignesCommande()) {
+                String reqLigne = "insert into ligneCommande values (null, "
+                        + idCommande + ", "
+                        + uneLigneCommande.getIdLivre() + ", "
+                        + uneLigneCommande.getQuantiteLigneCommande() + ")";
+                st.executeUpdate(reqLigne);
+            }
+
+            st.close();
+            uneConnexion.seDeConnecter();
+
+        } catch (SQLException exp) {
+            System.out.println("Erreur insertion commande : " + exp.getMessage());
+        }
     }
 
     public static void deleteCommande(int idCommande) {
-        String requete = "delete from commande where idCommande = " + idCommande + ";";
-        executerRequete(requete);
+        String requeteCommande = "delete from commande where idCommande = " + idCommande + ";";
+        String requeteLigneCommande = "delete from ligneCommande where idCommande = " + idCommande + ";";
+        executerRequete(requeteCommande);
+        executerRequete(requeteLigneCommande);
     }
 
     public static void updateCommande(Commande uneCommande) {
-        Modele.updateLigneCommande(uneCommande);
-
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String dateCommande = dateFormat.format(uneCommande.getDateCommande());
-        String dateLivraisonCommande = dateFormat.format(uneCommande.getDateLivraisonCommande());
+        String dateLivraison = uneCommande.getDateLivraisonCommande() != null
+                ? dateFormat.format(uneCommande.getDateLivraisonCommande())
+                : "null";
 
-        String requete =    "update commande set " +
-                            "dateCommande = '" + dateCommande + "', " +
-                            "statutCommande = '" + uneCommande.getStatutCommande() + "', " +
-                            "dateLivraisonCommande = '" + dateLivraisonCommande + "', " +
-                            "idUser = '" + uneCommande.getIdUser() + "' " +
-                            "where idCommande = " + uneCommande.getIdCommande() + ";";
-        executerRequete(requete);
+        try {
+            String requete = "update commande set "
+                    + "dateCommande = '" + dateCommande + "', "
+                    + "statutCommande = '" + uneCommande.getStatutCommande() + "', "
+                    + "dateLivraisonCommande = " + (dateLivraison.equals("null") ? "null" : "'" + dateLivraison + "'") + ", "
+                    + "idUser = " + uneCommande.getIdUser() + " "
+                    + "where idCommande = " + uneCommande.getIdCommande();
+            executerRequete(requete);
+
+            for (LigneCommande uneLigneCommande : uneCommande.getLesLignesCommande()) {
+                String reqLigne =   "update ligneCommande set " +
+                                    "idLivre = " + uneLigneCommande.getIdLivre() + ", " +
+                                    "quantiteLigneCommande = " + uneLigneCommande.getQuantiteLigneCommande() + " " +
+                                    "where idLigneCommande = " + uneLigneCommande.getIdLigneCommande();
+                executerRequete(reqLigne);
+            }
+        } catch (Exception e) {
+            System.out.println("Erreur lors de la mise à jour : " + e.getMessage());
+        }
     }
 
     public static int selectIdLivre(String nomLivre) {
@@ -853,27 +989,6 @@ public class Modele {
             System.out.println("Erreur d'exécution de la requête : " + requete);
         }
         return idCommande;
-    }
-
-
-
-    /************************ GESTION DES LIGNES DE COMMANDE **********************/
-    public static void insertLigneCommande(LigneCommande uneLigneCommande) {
-        int idCommande = Modele.selectIdCommande();
-
-        String requete =    "insert into ligneCommande values (null, " +
-                            idCommande + ", " +
-                            uneLigneCommande.getIdLivre() + ", " +
-                            uneLigneCommande.getQuantiteLigneCommande() + ");";
-        executerRequete(requete);
-    }
-
-    public static void updateLigneCommande(Commande uneCommande) {
-        String requete =    "update ligneCommande set " +
-                            "idLivre = '" + uneCommande.getIdLivre() + "', " +
-                            "quantiteLigneCommande = '" + uneCommande.getQuantiteLigneCommande() + "' " +
-                            "where idLigneCommande = " + uneCommande.getIdLigneCommande() + ";";
-        executerRequete(requete);
     }
 
 

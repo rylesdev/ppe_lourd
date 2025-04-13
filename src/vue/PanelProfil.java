@@ -36,23 +36,25 @@ public class PanelProfil extends PanelPrincipal implements ActionListener {
         configurerTxtInfos();
         ajouterBoutonsEtEcouteurs();
 
-        // Chargement initial
-        actualiserProfil();
-
+        // Ne pas charger de profil au démarrage
+        viderAffichage();
         this.setVisible(true);
     }
 
-    // Nouvelle méthode pour actualiser complètement le profil
-    public void actualiserProfil() {
+    // Nouvelle méthode pour vider l'affichage
+    private void viderAffichage() {
+        this.txtInfos.setText("");
+        this.panelForm.setVisible(false);
+    }
+
+    // Méthode publique pour charger le profil
+    public void chargerProfil() {
         User currentUser = Controleur.getUserConnecte();
         if (currentUser == null) {
-            JOptionPane.showMessageDialog(this,
-                    "Aucun utilisateur connecté",
-                    "Erreur", JOptionPane.ERROR_MESSAGE);
+            viderAffichage();
             return;
         }
 
-        // Rafraîchir l'affichage
         afficherInfosUtilisateur(currentUser);
         viderChampsFormulaire();
     }
@@ -96,7 +98,10 @@ public class PanelProfil extends PanelPrincipal implements ActionListener {
     }
 
     private void afficherInfosUtilisateur(User user) {
-        if (user == null) return;
+        if (user == null) {
+            viderAffichage();
+            return;
+        }
 
         this.txtInfos.setText(
                 "________________ INFOS PROFIL ________________\n\n"
@@ -116,6 +121,7 @@ public class PanelProfil extends PanelPrincipal implements ActionListener {
             JOptionPane.showMessageDialog(this,
                     "Session expirée. Veuillez vous reconnecter.",
                     "Erreur", JOptionPane.ERROR_MESSAGE);
+            viderAffichage();
             return;
         }
 
@@ -129,6 +135,7 @@ public class PanelProfil extends PanelPrincipal implements ActionListener {
         }
         else if (e.getSource() == this.btAnnuler) {
             viderChampsFormulaire();
+            afficherInfosUtilisateur(currentUser);
         }
         else if (e.getSource() == this.btValider) {
             validerModifications(currentUser);
@@ -141,7 +148,6 @@ public class PanelProfil extends PanelPrincipal implements ActionListener {
         String mdp1 = new String(this.txtMdp1.getPassword());
         String mdp2 = new String(this.txtMdp2.getPassword());
 
-        // Validation des données
         if (email.isEmpty() || adresse.isEmpty()) {
             JOptionPane.showMessageDialog(this,
                     "Email et adresse sont obligatoires",
@@ -157,7 +163,6 @@ public class PanelProfil extends PanelPrincipal implements ActionListener {
         }
 
         try {
-            // Création d'une copie pour la modification
             User modifiedUser = new User(
                     originalUser.getIdUser(),
                     email,
@@ -166,18 +171,13 @@ public class PanelProfil extends PanelPrincipal implements ActionListener {
                     originalUser.getRoleUser()
             );
 
-            // Mise à jour dans la base
             Controleur.updateUser(modifiedUser);
-
-            // Rechargement complet de l'utilisateur
             Controleur.actualiserUserConnecte();
+            chargerProfil();
 
             JOptionPane.showMessageDialog(this,
                     "Profil mis à jour avec succès",
                     "Succès", JOptionPane.INFORMATION_MESSAGE);
-
-            // Actualisation de l'affichage
-            actualiserProfil();
 
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this,

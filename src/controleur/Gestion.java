@@ -2,6 +2,7 @@ package controleur;
 
 import vue.VueConnexion;
 import vue.VueGenerale;
+import vue.PanelProfil;
 
 import javax.swing.*;
 
@@ -21,6 +22,9 @@ public class Gestion {
         if (action) {
             User user = Controleur.getUserConnecte();
             if (user != null) {
+                if (uneVueGenerale != null) {
+                    uneVueGenerale.dispose();
+                }
                 uneVueGenerale = new VueGenerale(user.getIdUser());
                 uneVueGenerale.setVisible(true);
             } else {
@@ -31,14 +35,33 @@ public class Gestion {
         } else {
             if (uneVueGenerale != null) {
                 uneVueGenerale.dispose();
+                uneVueGenerale = null;
             }
         }
     }
 
     public static void rendreVisibleVueConnexion(boolean action) {
-        if (uneVueConnexion != null) {
-            uneVueConnexion.setVisible(action);
+        if (action) {
+            if (uneVueConnexion == null) {
+                uneVueConnexion = new VueConnexion();
+            }
+            uneVueConnexion.setVisible(true);
+        } else {
+            if (uneVueConnexion != null) {
+                uneVueConnexion.setVisible(false);
+            }
         }
+    }
+
+    public static VueGenerale getVueGenerale() {
+        return uneVueGenerale;
+    }
+
+    public static PanelProfil getPanelProfil() {
+        if (uneVueGenerale != null) {
+            return uneVueGenerale.getPanelProfil();
+        }
+        return null;
     }
 
     public static void main(String[] args) {

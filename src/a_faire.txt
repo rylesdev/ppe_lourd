@@ -1,7 +1,17 @@
 - Supprimer les triggers qui sont inutiles dans la bdd
+- Faire fonctionner les triggers qui sont utiles dans le code
+- Créer un trigger pour la table "LigneCommande" qui va mettre à jour le stock de livre en fonction de quantiteLigneCommande
+    Si il y a un "insertLigneCommande" de quantiteLigneCommande = 20, alors enlever 20 dans la classe livre.
+- Créer un trigger qui va empêcher d'acheter un livre si son stock, après l'achat, est inférieur à 0
 
-- Vérifier que la classe "LigneCommande" et que le "PanelCommande" fonctionne bien
-- Corriger le bug d'affichage de "idLigneCommande" dans le tableau
+- Faire la gestion d'erreur pour chaque Panel
+
+- Voir pourquoi dans le tableau des Commandes, les dernières commandes ne s'affichent pas
+
+
+
+// - Vérifier que la classe "LigneCommande" et que le "PanelCommande" fonctionne bien
+// - Corriger le bug d'affichage de "idLigneCommande" dans le tableau, ou sinon supprimer l'affichage de ligneCommande
 
 
 // - Soit ajouter l'ID dans le formulaire du PanelLivre,
@@ -15,8 +25,7 @@
     Gestion du Profil :
         // - Afficher toutes les informations de l'utilisateur actuellement connecté
         // - Régler le problème de "Aucun utilisateur connecté"
-        - Régler le problème de la modification des infos profil qui ne se font pas malgré le changement de user
-            Lorsque je me connecte une 1ère fois en admin puis en gestionnaire, je garde les infos de l'admin
+        // - Régler le problème de la modification des infos profil qui ne se font pas malgré le changement de user
 
     Gestion des Particuliers :
         // - Mettre "Particulier" dans une sous-catégorie de "Utilisateur"
