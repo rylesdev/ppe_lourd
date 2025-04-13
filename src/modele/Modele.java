@@ -699,10 +699,13 @@ public class Modele {
     }
 
 
+
     /************************ GESTION DES COMMANDES ************************/
     public static ArrayList<Commande> selectCommande() {
         ArrayList<Commande> lesCommandes = new ArrayList<>();
-        String requete = "select * from commande;";
+        String requete =    "select * from commande c " +
+                            "inner join ligneCommande l " +
+                            "on c.idCommande=l.idCommande;";
         try {
             uneConnexion.seConnecter();
             Statement unStat = uneConnexion.getMaConnexion().createStatement();
@@ -710,6 +713,9 @@ public class Modele {
             while (lesResultats.next()) {
                 Commande uneCommande = new Commande(
                         lesResultats.getInt("idCommande"),
+                        lesResultats.getInt("idLigneCommande"),
+                        lesResultats.getInt("idLivre"),
+                        lesResultats.getInt("quantiteLigneCommande"),
                         lesResultats.getDate("dateCommande"),
                         lesResultats.getString("statutCommande"),
                         lesResultats.getDate("dateLivraisonCommande"),
@@ -739,6 +745,9 @@ public class Modele {
             while (lesResultats.next()) {
                 Commande uneCommande = new Commande(
                         lesResultats.getInt("idCommande"),
+                        lesResultats.getInt("idLigneCommande"),
+                        lesResultats.getInt("idLivre"),
+                        lesResultats.getInt("quantiteLigneCommande"),
                         lesResultats.getDate("dateCommande"),
                         lesResultats.getString("statutCommande"),
                         lesResultats.getDate("dateLivraisonCommande"),
@@ -765,6 +774,8 @@ public class Modele {
                             dateLivraisonCommande + "', " +
                             uneCommande.getIdUser() + ");";
         executerRequete(requete);
+
+        Modele.insertLigneCommande(uneCommande);
     }
 
     public static void deleteCommande(int idCommande) {
@@ -773,6 +784,8 @@ public class Modele {
     }
 
     public static void updateCommande(Commande uneCommande) {
+        Modele.updateLigneCommande(uneCommande);
+
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String dateCommande = dateFormat.format(uneCommande.getDateCommande());
         String dateLivraisonCommande = dateFormat.format(uneCommande.getDateLivraisonCommande());
@@ -785,6 +798,84 @@ public class Modele {
                             "where idCommande = " + uneCommande.getIdCommande() + ";";
         executerRequete(requete);
     }
+
+    public static int selectIdLivre(String nomLivre) {
+        String requete =    "select idLivre " +
+                            "from livre " +
+                            "where nomLivre = '" + nomLivre + "';";
+        try {
+            uneConnexion.seConnecter();
+            Statement unStat = uneConnexion.getMaConnexion().createStatement();
+            ResultSet resultat = unStat.executeQuery(requete);
+            if (resultat.next()) {
+                return resultat.getInt("idLivre");
+            }
+            unStat.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException exp) {
+            System.out.println("Erreur d'exécution de la requête : " + requete);
+        }
+        return -1;
+    }
+
+    public static String selectNomLivre(int idLivre) {
+        String requete =    "select nomLivre " +
+                            "from livre " +
+                            "where idLivre = " + idLivre + ";";
+        try {
+            uneConnexion.seConnecter();
+            Statement unStat = uneConnexion.getMaConnexion().createStatement();
+            ResultSet resultat = unStat.executeQuery(requete);
+            if (resultat.next()) {
+                return resultat.getString("nomLivre");
+            }
+            unStat.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException exp) {
+            System.out.println("Erreur d'exécution de la requête : " + requete);
+        }
+        return null;
+    }
+
+    public static int selectIdCommande() {
+        int idCommande = 0;
+        String requete = "select max(idCommande) from commande;";
+        try {
+            uneConnexion.seConnecter();
+            Statement unStat = uneConnexion.getMaConnexion().createStatement();
+            ResultSet unResultat = unStat.executeQuery(requete);
+            if (unResultat.next()) {
+                idCommande = unResultat.getInt(1);
+            }
+            unStat.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException exp) {
+            System.out.println("Erreur d'exécution de la requête : " + requete);
+        }
+        return idCommande;
+    }
+
+
+
+    /************************ GESTION DES LIGNES DE COMMANDE **********************/
+    public static void insertLigneCommande(LigneCommande uneLigneCommande) {
+        int idCommande = Modele.selectIdCommande();
+
+        String requete =    "insert into ligneCommande values (null, " +
+                            idCommande + ", " +
+                            uneLigneCommande.getIdLivre() + ", " +
+                            uneLigneCommande.getQuantiteLigneCommande() + ");";
+        executerRequete(requete);
+    }
+
+    public static void updateLigneCommande(Commande uneCommande) {
+        String requete =    "update ligneCommande set " +
+                            "idLivre = '" + uneCommande.getIdLivre() + "', " +
+                            "quantiteLigneCommande = '" + uneCommande.getQuantiteLigneCommande() + "' " +
+                            "where idLigneCommande = " + uneCommande.getIdLigneCommande() + ";";
+        executerRequete(requete);
+    }
+
 
 
     /************************ GESTION DES ABONNEMENTS ************************/

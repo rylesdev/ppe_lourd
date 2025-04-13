@@ -1,7 +1,7 @@
-Supprimer les classes qui sont inutiles dans le Controleur :
-    - Admin
+- Supprimer les triggers qui sont inutiles dans la bdd
 
-Supprimer les triggers qui sont inutiles dans la bdd
+- Vérifier que la classe "LigneCommande" et que le "PanelCommande" fonctionne bien
+- Corriger le bug d'affichage de "idLigneCommande" dans le tableau
 
 
 // - Soit ajouter l'ID dans le formulaire du PanelLivre,

@@ -187,6 +187,14 @@ public class Controleur {
         Modele.updateCommande(uneCommande);
     }
 
+    public static int selectIdLivre(String nomLivre) {
+        return Modele.selectIdLivre(nomLivre);
+    }
+
+    public static String selectNomLivre(int idLivre) {
+        return Modele.selectNomLivre(idLivre);
+    }
+
     /*public static ArrayList<Commande> selectCommandesByUser(int idUser) {
         return Modele.selectCommandesByUser(idUser);
     }
@@ -195,6 +203,7 @@ public class Controleur {
         Modele.updateCommande(uneCommande);
     }
     */
+
 
 
     /**************** GESTION DES ABONNEMENTS ****************/

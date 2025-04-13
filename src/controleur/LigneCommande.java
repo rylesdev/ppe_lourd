@@ -1,7 +1,10 @@
 package controleur;
 
 public class LigneCommande {
-    private int idLigneCommande, idCommande, idLivre, quantiteLigneCommande;
+    private int idLigneCommande;
+    private int idCommande;
+    private int idLivre;
+    private int quantiteLigneCommande;
 
     public LigneCommande(int idLigneCommande, int idCommande, int idLivre, int quantiteLigneCommande) {
         this.idLigneCommande = idLigneCommande;

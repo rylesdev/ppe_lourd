@@ -30,6 +30,8 @@ public class PanelCommande extends PanelPrincipal implements ActionListener, Key
     private JTextField txtStatutCommande = new JTextField();
     private JTextField txtDateLivraisonCommande = new JTextField();
     private JTextField txtIdUser = new JTextField();
+    private JTextField txtLivre = new JTextField();
+    private JTextField txtQuantiteLigneCommande = new JTextField();
 
     private JButton btAnnuler = new JButton("Annuler");
     private JButton btValider = new JButton("Valider");
@@ -60,6 +62,10 @@ public class PanelCommande extends PanelPrincipal implements ActionListener, Key
         this.panelForm.add(this.txtDateLivraisonCommande);
         this.panelForm.add(new JLabel("Id User :"));
         this.panelForm.add(this.txtIdUser);
+        this.panelForm.add(new JLabel("Nom Livre :"));
+        this.panelForm.add(this.txtLivre);
+        this.panelForm.add(new JLabel("Quantité Ligne Commande :"));
+        this.panelForm.add(this.txtQuantiteLigneCommande);
         this.panelForm.add(this.btAnnuler);
         this.panelForm.add(this.btValider);
         this.panelForm.add(this.btSupprimer);
@@ -76,9 +82,11 @@ public class PanelCommande extends PanelPrincipal implements ActionListener, Key
         this.txtStatutCommande.addKeyListener(this);
         this.txtDateLivraisonCommande.addKeyListener(this);
         this.txtIdUser.addKeyListener(this);
+        this.txtLivre.addKeyListener(this);
+        this.txtQuantiteLigneCommande.addKeyListener(this);
 
         // Initialisation du tableau
-        String entetes[] = {"Id", "Date Commande", "Statut", "Date Livraison", "Id User"};
+        String entetes[] = {"Id Commande", "Date Commande", "Statut", "Date Livraison", "Id User", "ID Ligne Commande", "Nom Livre", "Quantite Ligne Commande"};
         this.tableauCommandes = new Tableau(this.obtenirDonnees(""), entetes);
         this.tableCommandes = new JTable(this.tableauCommandes);
         JScrollPane uneScroll = new JScrollPane(this.tableCommandes);
@@ -119,6 +127,8 @@ public class PanelCommande extends PanelPrincipal implements ActionListener, Key
             txtStatutCommande.setText(tableauCommandes.getValueAt(numLigne, 2).toString());
             txtDateLivraisonCommande.setText(tableauCommandes.getValueAt(numLigne, 3).toString());
             txtIdUser.setText(tableauCommandes.getValueAt(numLigne, 4).toString());
+            txtLivre.setText(tableauCommandes.getValueAt(numLigne, 6).toString());
+            txtQuantiteLigneCommande.setText(tableauCommandes.getValueAt(numLigne, 7).toString());
 
             btSupprimer.setVisible(true);
             btValider.setText("Modifier");
@@ -129,7 +139,7 @@ public class PanelCommande extends PanelPrincipal implements ActionListener, Key
         ArrayList<Commande> lesCommandes = filtre.isEmpty() ?
                 Controleur.selectCommande() : Controleur.selectLikeCommande(filtre);
 
-        Object matrice[][] = new Object[lesCommandes.size()][5];
+        Object matrice[][] = new Object[lesCommandes.size()][8];
         int i = 0;
         for (Commande uneCommande : lesCommandes) {
             matrice[i][0] = uneCommande.getIdCommande();
@@ -137,6 +147,9 @@ public class PanelCommande extends PanelPrincipal implements ActionListener, Key
             matrice[i][2] = uneCommande.getStatutCommande();
             matrice[i][3] = uneCommande.getDateLivraisonCommande();
             matrice[i][4] = uneCommande.getIdUser();
+            matrice[i][5] = uneCommande.getIdLigneCommande();
+            matrice[i][6] = Controleur.selectNomLivre(uneCommande.getIdLivre());
+            matrice[i][7] = uneCommande.getQuantiteLigneCommande();
             i++;
         }
         return matrice;
@@ -147,6 +160,8 @@ public class PanelCommande extends PanelPrincipal implements ActionListener, Key
         this.txtStatutCommande.setText("");
         this.txtDateLivraisonCommande.setText("");
         this.txtIdUser.setText("");
+        this.txtLivre.setText("");
+        this.txtQuantiteLigneCommande.setText("");
         btSupprimer.setVisible(false);
         btValider.setText("Valider");
     }
@@ -160,19 +175,15 @@ public class PanelCommande extends PanelPrincipal implements ActionListener, Key
         }
 
         try {
+            int idLivre = Controleur.selectIdLivre(txtLivre.getText());
+            int quantiteLigneCommande = Integer.parseInt(txtQuantiteLigneCommande.getText());
             Date dateCommande = new SimpleDateFormat("yyyy-MM-dd").parse(txtDateCommande.getText());
             Date dateLivraisonCommande = txtDateLivraisonCommande.getText().isEmpty() ?
                     null : new SimpleDateFormat("yyyy-MM-dd").parse(txtDateLivraisonCommande.getText());
             int idUser = Integer.parseInt(txtIdUser.getText());
 
-            if (txtStatutCommande.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Le statut est obligatoire",
-                        "Erreur", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            Commande uneCommande = new Commande(dateCommande, txtStatutCommande.getText(),
-                    dateLivraisonCommande, idUser);
+            Commande uneCommande = new Commande(0, 0, idLivre, quantiteLigneCommande,
+                    dateCommande, txtStatutCommande.getText(), dateLivraisonCommande, idUser);
             Controleur.insertCommande(uneCommande);
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -193,9 +204,6 @@ public class PanelCommande extends PanelPrincipal implements ActionListener, Key
         } catch (ParseException ex) {
             JOptionPane.showMessageDialog(this, "Format de date invalide (yyyy-MM-dd)",
                     "Erreur", JOptionPane.ERROR_MESSAGE);
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "ID utilisateur invalide",
-                    "Erreur", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -210,20 +218,15 @@ public class PanelCommande extends PanelPrincipal implements ActionListener, Key
         int numLigne = tableCommandes.getSelectedRow();
         if (numLigne >= 0) {
             try {
-                int idCommande = Integer.parseInt(tableauCommandes.getValueAt(numLigne, 0).toString());
+                int idLivre = Controleur.selectIdLivre(txtLivre.getText());
+                int quantiteLigneCommande = Integer.parseInt(txtQuantiteLigneCommande.getText());
                 Date dateCommande = new SimpleDateFormat("yyyy-MM-dd").parse(txtDateCommande.getText());
                 Date dateLivraisonCommande = txtDateLivraisonCommande.getText().isEmpty() ?
                         null : new SimpleDateFormat("yyyy-MM-dd").parse(txtDateLivraisonCommande.getText());
                 int idUser = Integer.parseInt(txtIdUser.getText());
 
-                if (txtStatutCommande.getText().isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "Le statut est obligatoire",
-                            "Erreur", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-                Commande uneCommande = new Commande(idCommande, dateCommande,
-                        txtStatutCommande.getText(), dateLivraisonCommande, idUser);
+                Commande uneCommande = new Commande(0, 0, idLivre, quantiteLigneCommande,
+                        dateCommande, txtStatutCommande.getText(), dateLivraisonCommande, idUser);
                 Controleur.updateCommande(uneCommande);
 
                 JOptionPane.showMessageDialog(this, "Modification réussie de la commande",

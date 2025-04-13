@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:8889
--- Généré le : sam. 12 avr. 2025 à 22:08
+-- Généré le : dim. 13 avr. 2025 à 11:26
 -- Version du serveur : 8.0.35
 -- Version de PHP : 8.3.9
 
@@ -334,7 +334,8 @@ INSERT INTO `commande` (`idCommande`, `dateCommande`, `statutCommande`, `dateLiv
 (453, '2025-02-03', 'expédiée', '2025-02-10', 15),
 (454, '2025-02-03', 'expédiée', '2025-02-10', 15),
 (455, '2025-02-03', 'expédiée', '2025-02-10', 15),
-(456, '2025-04-10', 'en attente', '2025-04-17', 3);
+(456, '2025-04-10', 'en attente', '2025-04-17', 3),
+(459, '2000-12-12', 'en attente', '2000-12-20', 3);
 
 --
 -- Déclencheurs `commande`
@@ -547,7 +548,9 @@ INSERT INTO `ligneCommande` (`idLigneCommande`, `idCommande`, `idLivre`, `quanti
 (716, 454, 2, 1),
 (717, 454, 3, 1),
 (718, 454, 13, 1),
-(720, 455, 2, 1);
+(720, 455, 2, 1),
+(721, 0, 1, 20),
+(722, 459, 1, 20);
 
 --
 -- Déclencheurs `ligneCommande`
@@ -791,10 +794,10 @@ CREATE TABLE `vcommandesenattente` (
 -- (Voir ci-dessous la vue réelle)
 --
 CREATE TABLE `vlivresenstock` (
-`idLivre` int
+`exemplaireLivre` int
+,`idLivre` int
 ,`nomLivre` varchar(50)
 ,`prixLivre` float(10,2)
-,`exemplaireLivre` int
 );
 
 -- --------------------------------------------------------
@@ -829,8 +832,8 @@ CREATE TABLE `vmeilleuresventes` (
 --
 CREATE TABLE `vmeilleursavis` (
 `idLivre` int
-,`nomLivre` varchar(50)
 ,`moyenneNote` decimal(7,4)
+,`nomLivre` varchar(50)
 );
 
 -- --------------------------------------------------------
@@ -888,9 +891,9 @@ CREATE TABLE `vtotallivre` (
 -- (Voir ci-dessous la vue réelle)
 --
 CREATE TABLE `vtotallivreenattente` (
-`idLivre` int
-,`idCommande` int
+`idCommande` int
 ,`idLigneCommande` int
+,`idLivre` int
 ,`idUser` int
 ,`nomLivre` varchar(50)
 ,`prixLivre` float(10,2)
@@ -906,8 +909,8 @@ CREATE TABLE `vtotallivreenattente` (
 --
 CREATE TABLE `vtotallivreexpediee` (
 `idCommande` int
-,`idUser` int
 ,`idLivre` int
+,`idUser` int
 ,`nomLivre` varchar(50)
 ,`prixLivre` float(10,2)
 ,`quantiteLigneCommande` int
@@ -1113,7 +1116,13 @@ ALTER TABLE `abonnement`
 -- AUTO_INCREMENT pour la table `commande`
 --
 ALTER TABLE `commande`
-  MODIFY `idCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=459;
+  MODIFY `idCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=460;
+
+--
+-- AUTO_INCREMENT pour la table `ligneCommande`
+--
+ALTER TABLE `ligneCommande`
+  MODIFY `idLigneCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=723;
 
 --
 -- AUTO_INCREMENT pour la table `livre`
