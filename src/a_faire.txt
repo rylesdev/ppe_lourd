@@ -6,7 +6,7 @@
 
 - Faire la gestion d'erreur pour chaque Panel
 
-- Voir pourquoi dans le tableau des Commandes, les dernières commandes ne s'affichent pas
+- Modifier le PanelCommande pour que la Date du "initCommande" s'affiche correctement
 
 
 

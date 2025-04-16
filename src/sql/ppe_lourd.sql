@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:8889
--- Généré le : dim. 13 avr. 2025 à 23:36
+-- Généré le : mer. 16 avr. 2025 à 22:16
 -- Version du serveur : 8.0.35
 -- Version de PHP : 8.3.9
 
@@ -332,7 +332,10 @@ INSERT INTO `commande` (`idCommande`, `dateCommande`, `statutCommande`, `dateLiv
 (453, '2025-02-03', 'expédiée', '2025-02-10', 15),
 (454, '2025-02-03', 'expédiée', '2025-02-10', 15),
 (456, '2025-04-10', 'en attente', '2025-04-17', 3),
-(460, '2020-12-12', 'en attente', '2020-12-13', 3);
+(460, '2020-12-12', 'en attente', '2020-12-13', 3),
+(463, '2000-12-10', 'en attente', '2000-12-20', 15),
+(464, '2000-12-20', 'en attente', '2000-12-22', 15),
+(465, '2000-12-12', 'en attente', '2000-12-20', 3);
 
 --
 -- Déclencheurs `commande`
@@ -547,7 +550,11 @@ INSERT INTO `ligneCommande` (`idLigneCommande`, `idCommande`, `idLivre`, `quanti
 (721, 0, 1, 20),
 (722, 459, 1, 20),
 (723, 461, 2, 30),
-(724, 462, 11, 30);
+(724, 462, 11, 30),
+(725, 463, 13, 20),
+(726, 464, 1, 10),
+(727, 465, 1, 2),
+(728, 465, 3, 10);
 
 --
 -- Déclencheurs `ligneCommande`
@@ -1106,13 +1113,13 @@ ALTER TABLE `abonnement`
 -- AUTO_INCREMENT pour la table `commande`
 --
 ALTER TABLE `commande`
-  MODIFY `idCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=463;
+  MODIFY `idCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=466;
 
 --
 -- AUTO_INCREMENT pour la table `ligneCommande`
 --
 ALTER TABLE `ligneCommande`
-  MODIFY `idLigneCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=725;
+  MODIFY `idLigneCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=729;
 
 --
 -- AUTO_INCREMENT pour la table `livre`

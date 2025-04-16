@@ -12,7 +12,6 @@ public class Commande {
     private int idUser;
     private List<LigneCommande> lesLignesCommande;
 
-    // Constructeur complet (pour chargement depuis BDD)
     public Commande(int idCommande, Date dateCommande, String statutCommande,
                     Date dateLivraisonCommande, int idUser) {
         this.idCommande = idCommande;
