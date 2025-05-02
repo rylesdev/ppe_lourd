@@ -364,7 +364,7 @@ DELIMITER ;
 
 CREATE TABLE `entreprise` (
   `idUser` int NOT NULL,
-  `siretUser` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `siretUser` int DEFAULT NULL,
   `raisonSocialeUser` varchar(255) DEFAULT NULL,
   `capitalSocialUser` float(15,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -374,12 +374,12 @@ CREATE TABLE `entreprise` (
 --
 
 INSERT INTO `entreprise` (`idUser`, `siretUser`, `raisonSocialeUser`, `capitalSocialUser`) VALUES
-(26, '123456789', 'Entreprise SARL', 10000.00),
-(27, '123456789', 'Entreprise SARL', 10000.00),
-(30, '123123123', 'yasser', 123123120.00),
-(32, '123', '123', 123124.00),
-(33, '123123', '123123', 123123.00),
-(34, '987987', '987987', 987987.00);
+(26, 123456789, 'Entreprise SARL', 10000.00),
+(27, 123456789, 'Entreprise SARL', 10000.00),
+(30, 123123123, 'yasser', 123123120.00),
+(32, 123, '123', 123124.00),
+(33, 123123, '123123', 123123.00),
+(34, 987987, '987987', 987987.00);
 
 -- --------------------------------------------------------
 
