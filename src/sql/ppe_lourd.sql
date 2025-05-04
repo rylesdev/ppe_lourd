@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:8889
--- Généré le : dim. 04 mai 2025 à 01:22
+-- Généré le : dim. 04 mai 2025 à 14:07
 -- Version du serveur : 8.0.35
 -- Version de PHP : 8.3.9
 
@@ -412,7 +412,7 @@ DELIMITER ;
 
 CREATE TABLE `entreprise` (
   `idUser` int NOT NULL,
-  `siretUser` int DEFAULT NULL,
+  `siretUser` bigint DEFAULT NULL,
   `raisonSocialeUser` varchar(255) DEFAULT NULL,
   `capitalSocialUser` float(15,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -427,7 +427,8 @@ INSERT INTO `entreprise` (`idUser`, `siretUser`, `raisonSocialeUser`, `capitalSo
 (30, 123123123, 'yasser', 123123120.00),
 (32, 123, '123', 123124.00),
 (33, 123123, '123123', 123123.00),
-(34, 987987, '987987', 987987.00);
+(63, 12312312312312, 'azd', 123123.12),
+(66, 12312312312312, 'AZDazdazdaz', 1231231232.00);
 
 -- --------------------------------------------------------
 
@@ -755,7 +756,21 @@ INSERT INTO `particulier` (`idUser`, `nomUser`, `prenomUser`, `dateNaissanceUser
 (35, 'yasser', 'yasser', '2010-12-21', 'M'),
 (36, 'yasser', 'yasser', '2010-12-21', 'M'),
 (37, 'part', 'part', '2009-12-12', 'M'),
-(38, 'uy', 'uy', '2003-03-12', 'F');
+(38, 'uy', 'uy', '2003-03-12', 'F'),
+(54, 'azd', 'azd', '2020-12-12', 'M'),
+(55, 'mlk', 'mlk', '2020-12-12', 'M'),
+(56, 'kjh', 'kjh', '2020-12-12', 'F'),
+(57, 'iuy', 'iuy', '2020-12-12', 'F'),
+(58, 'nbv', 'nbv', '2020-12-12', 'M'),
+(59, 'zad', 'zad', '0200-12-12', 'M'),
+(61, 'parto', 'parto', '2020-12-12', 'M'),
+(62, 'part12h', 'part12h', '2000-12-12', 'M'),
+(63, 'azd@gmail.com', 'azd@gmail.com', '2000-12-12', 'M'),
+(64, 'ryles', 'ryles', '2002-12-12', 'F'),
+(65, '123', '123', '2020-12-12', 'M'),
+(67, '123', '123', '2020-12-12', 'M'),
+(68, 'd', 'z', '2020-12-12', 'M'),
+(69, 'jhghjgjh', 'jhghjgjh', '2002-01-12', 'F');
 
 -- --------------------------------------------------------
 
@@ -806,7 +821,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`idUser`, `emailUser`, `mdpUser`, `adresseUser`, `roleUser`) VALUES
-(1, 'ryles@gmail.com', '123', '123 Rue des Lilas', 'admin'),
+(1, 'ryles@gmail.com', '123', '321 Rue des lilas', 'admin'),
 (2, 'jean@gmail.com', '123', '45 Avenue de la République', 'client'),
 (12, 'm', '123', '78 Boulevard Haussmann', 'client'),
 (13, 'klza', '123', '9 Place de la Liberté', 'client'),
@@ -821,13 +836,28 @@ INSERT INTO `user` (`idUser`, `emailUser`, `mdpUser`, `adresseUser`, `roleUser`)
 (30, 'yasser@gmail.com', '123', '76 Avenue des Rosiers', 'client'),
 (32, 'test@gmail.com', '123', '21 Boulevard de la Liberté', 'client'),
 (33, 'yass@gmail.com', '123', '34 Rue des Érables', 'client'),
-(34, '987987@gmail.com', '123', '47 Allée des Chênes', 'client'),
 (35, 'yasser@gmail.com', '123', '15 Route du Soleil', 'client'),
 (36, 'yasser@gmail.com', '123', '63 Place du Marché', 'client'),
 (37, 'part@gmail.com', '123', 'part', 'client'),
 (38, 'uy@gmail.com', '123', 'uy', 'client'),
-(39, 'gest@gmail.com', '123', '16 rue des Lilas', 'gestionnaire'),
-(40, 'test', '123', 'test', 'client');
+(39, 'gest@gmail.com', '123', '61 rue des Lilas', 'gestionnaire'),
+(40, 'test', '123', 'test', 'client'),
+(54, 'azd@gmail.com', 'd43affcc277ee52980fc4ecea523730f28d6405b', 'azd', 'client'),
+(55, 'mlk@gmail.com', 'd43affcc277ee52980fc4ecea523730f28d6405b', 'mlk', 'client'),
+(56, 'kjh@gmail.com', 'd43affcc277ee52980fc4ecea523730f28d6405b', 'kjh', 'client'),
+(57, 'iuy@gmail.com', 'd43affcc277ee52980fc4ecea523730f28d6405b', 'iuy', 'client'),
+(58, 'nbv@gmail.com', 'd43affcc277ee52980fc4ecea523730f28d6405b', 'nbv', 'client'),
+(59, 'zad', 'd43affcc277ee52980fc4ecea523730f28d6405b', 'zad', 'client'),
+(60, 'entra@gmail.com', 'd43affcc277ee52980fc4ecea523730f28d6405b', 'entra', 'client'),
+(61, 'parto@gmail.com', 'c09dc8942171b50a019e6693b7814afdd3f21dbc', 'parto', 'client'),
+(62, 'part12h@gmail.com', '3819afec6a032b738b9c68e2fbb7d6bdfd9f446a', 'part12h', 'client'),
+(63, 'entr12h@gmail.com', '5ee9f001562f0311b1e2084cd5953b5e3bf9ae89', 'entr12h', 'client'),
+(64, 'ryles@gmail.com', '55eacda73040413f44453f53c4292daeeefdee89', 'ryles', 'client'),
+(65, 'testaiojzadaz@gmail.com', '8f82cb800fdbe25533f00ec6b2505059c6cfdccd', '123', 'client'),
+(66, 'testaiazdazdazd@gmail.com', '143d848d07d4b4fea895e673db6e38df09125ab7', 'testaiojzadaz@gmail.com', 'client'),
+(67, 'testaiojzadazazd@gmail.com', '14b39fe9e9a3a77fa0f4290a2ec54ba89769bc00', '123', 'client'),
+(68, 'testaiojzaazdazddazazd@gmail.com', '5cbe14105823c8f6e8ddc23246ffbd04d564f678', '123', 'client'),
+(69, 'jhghjgjh@gmail.com', '6354409966349dd4d290a148e49a2b4e177b1c0c', 'jhghjgjh', 'client');
 
 --
 -- Déclencheurs `user`
@@ -1227,13 +1257,13 @@ ALTER TABLE `livre`
 -- AUTO_INCREMENT pour la table `particulier`
 --
 ALTER TABLE `particulier`
-  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
+  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
 
 --
 -- AUTO_INCREMENT pour la table `user`
 --
 ALTER TABLE `user`
-  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
+  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
 
 --
 -- Contraintes pour les tables déchargées

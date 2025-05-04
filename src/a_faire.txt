@@ -1,10 +1,12 @@
-- Pour assurer la sécurité, créer un mdp au hasard et dans la requete (modele) faire un "sha1(mdp)".
+A Faire :
+- Mettre le logo sr la page Profil.
 
-- Trier les méthodes du modele et du controleur
+- Changer la couleur de fond.
 
-- Faire la gestion d'erreur pour chaque Panel (obliger un @ dans le champ email, obliger de remplir tous les champs, etc...)
+- Mettre plus d'enregistrements dans les champs des tables (notamment la table abonnement).
 
-- Modifier le PanelCommande pour que la Date du "initCommande" s'affiche correctement
+- Faire une dernière vérification de toutes les fonctionnalitées (insert, update, gestion des erreurs, role admin / gestionnaire, etc...).
+
 
 
 

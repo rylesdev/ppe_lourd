@@ -10,29 +10,14 @@ public class Controleur {
     private static User userConnecte;
 
 
+
     /************************ GESTION DES USERS ************************/
-    public static void insertUser(User unUser) {
-        Modele.insertUser(unUser);
-    }
-
-    public static ArrayList<User> selectUser() {
-        return Modele.selectUser();
-    }
-
-    public static void deleteUser(int idUser) {
-        Modele.deleteUser(idUser);
+    public static boolean emailExiste(String email) {
+        return Modele.emailExiste(email);
     }
 
     public static void updateUser(User unUser) {
         Modele.updateUser(unUser);
-    }
-
-    public static ArrayList<User> selectLikeUser(String filtre) {
-        return Modele.selectLikeUser(filtre);
-    }
-
-    public static User selectWhereUser(int idUser) {
-        return Modele.selectWhereUser(idUser);
     }
 
     public static User selectWhereUser(String email, String mdp, String role) {
@@ -48,19 +33,10 @@ public class Controleur {
     }
 
 
+
     /**************** GESTION DES PARTICULIERS ***************/
-    public static void insertParticulier(Particulier unParticulier) {
-        /*if (!unParticulier.getRoleUser().equals("client") &&
-                !unParticulier.getRoleUser().equals("admin") &&
-                !unParticulier.getRoleUser().equals("gestionnaire")) {
-            JOptionPane.showMessageDialog(null,
-                    "Erreur. Rôle de l'utilisateur non valide.", "Rôle invalide",
-                    JOptionPane.ERROR_MESSAGE);
-        } else {*/
-            Modele.insertParticulier(unParticulier);
-            /*JOptionPane.showMessageDialog(null, "Insertion réussie du particulier.",
-                    "Insertion Particulier", JOptionPane.INFORMATION_MESSAGE);
-        }*/
+    public static String insertParticulier(Particulier unParticulier) {
+        return Modele.insertParticulier(unParticulier);
     }
 
     public static ArrayList<Particulier> selectParticulier() {
@@ -79,23 +55,11 @@ public class Controleur {
         return Modele.selectLikeParticulier(filtre);
     }
 
-    public static Particulier selectWhereParticulier(String email, String mdp) {
-        return Modele.selectWhereParticulier(email, mdp);
-    }
-
-    /*public static Particulier getParticulierConnecte() {
-        return particulierConnecte;
-    }
-
-    public static void setParticulierConnecte(Particulier particulier) {
-        particulierConnecte = particulier;
-    }*/
-
 
 
     /**************** GESTION DES ENTREPRISES ****************/
-    public static void insertEntreprise(Entreprise uneEntreprise) {
-        Modele.insertEntreprise(uneEntreprise);
+    public static String insertEntreprise(Entreprise uneEntreprise) {
+        return Modele.insertEntreprise(uneEntreprise);
     }
 
     public static ArrayList<Entreprise> selectEntreprise() {
@@ -112,10 +76,6 @@ public class Controleur {
 
     public static ArrayList<Entreprise> selectLikeEntreprise(String filtre) {
         return Modele.selectLikeEntreprise(filtre);
-    }
-
-    public static Entreprise selectWhereEntreprise(String email, String mdp) {
-        return Modele.selectWhereEntreprise(email, mdp);
     }
 
 
@@ -170,6 +130,7 @@ public class Controleur {
     }
 
 
+
     /**************** GESTION DES COMMANDES ****************/
     public static ArrayList<Commande> selectCommande() {
         return Modele.selectCommande();
@@ -193,27 +154,6 @@ public class Controleur {
 
     public static void updateCommande(Commande uneCommande) {
         Modele.updateCommande(uneCommande);
-    }
-
-    public static int selectIdLivre(String nomLivre) {
-        return Modele.selectIdLivre(nomLivre);
-    }
-
-    public static String selectNomLivre(int idLivre) {
-        return Modele.selectNomLivre(idLivre);
-    }
-
-    /*public static ArrayList<Commande> selectCommandesByUser(int idUser) {
-        return Modele.selectCommandesByUser(idUser);
-    }
-
-    public static void updateCommande(Commande uneCommande) {
-        Modele.updateCommande(uneCommande);
-    }
-    */
-
-    public static LigneCommande selectWhereLigneCommande(int idLigneCommande) {
-       return Modele.selectWhereLigneCommande(idLigneCommande);
     }
 
 
@@ -240,32 +180,8 @@ public class Controleur {
     }
 
 
-    /**************** VÉRIFICATION DES DONNÉES ***************/
-    /*public static boolean verifDonnees(Particulier unParticulier) {
-        if (unParticulier.getNomUser() == null || unParticulier.getNomUser().trim().isEmpty()) {
-            return false;
-        }
-        if (unParticulier.getPrenomUser() == null || unParticulier.getPrenomUser().trim().isEmpty()) {
-            return false;
-        }
-        if (unParticulier.getEmailUser() == null || unParticulier.getEmailUser().trim().isEmpty()) {
-            return false;
-        }
-        if (unParticulier.getMdpUser() == null || unParticulier.getMdpUser().trim().isEmpty()) {
-            return false;
-        }
-        if (unParticulier.getAdresseUser() == null || unParticulier.getAdresseUser().trim().isEmpty()) {
-            return false;
-        }
-        if (unParticulier.getDateNaissanceUser() == null) {
-            return false;
-        }
-        if (unParticulier.getSexeUser() == null || unParticulier.getSexeUser().trim().isEmpty()) {
-            return false;
-        }
-        return true;
-    }*/
 
+    /**************** GESTION DES DONNÉES ***************/
     public static boolean verifDonnees(ArrayList<String> lesChamps) {
         for (String champ : lesChamps) {
             if (champ == null || champ.trim().isEmpty()) {
@@ -274,6 +190,11 @@ public class Controleur {
         }
         return true;
     }
+
+    public static String sha1Hash(String input) {
+        return Modele.sha1Hash(input);
+    }
+
 
 
     /************************ AUTRES MÉTHODES ************************/
@@ -284,10 +205,6 @@ public class Controleur {
     public static ArrayList<Listing> selectListing(){
         return Modele.selectListing();
     }
-
-    /*public static List<LivreNote> selectLivresMieuxNotes() {
-        return Modele.selectLivresMieuxNotes();
-    }*/
 
     public static String getRoleUserConnecte() {
         return userConnecte.getRoleUser();

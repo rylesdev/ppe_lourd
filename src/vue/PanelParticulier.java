@@ -8,6 +8,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.security.SecureRandom;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -192,18 +193,56 @@ public class PanelParticulier extends PanelPrincipal implements ActionListener, 
             return;
         }
 
-        String email = this.txtEmail.getText();
-        String mdp = "d43affcc277ee52980fc4ecea523730f28d6405b";
+        String email = this.txtEmail.getText().trim();
         String adresse = this.txtAdresse.getText();
         String role = this.txtRole.getText();
         String nom = this.txtNom.getText();
         String prenom = this.txtPrenom.getText();
-        String dateNaissance = this.txtDateNaissance.getText();
+        String dateNaissance = this.txtDateNaissance.getText().trim();
         String sexe = this.txtSexe.getText();
+
+        // Vérification du format de l'email
+        if (!email.matches("^[^@]+@[^@]+\\.[^@]+$")) {
+            JOptionPane.showMessageDialog(this,
+                    "L'email doit contenir un '@' et un '.' (ex: exemple@domaine.com)",
+                    "Format email invalide", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Vérification du format de la date
+        if (!dateNaissance.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
+            JOptionPane.showMessageDialog(this,
+                    "La date doit être au format YYYY-MM-DD (ex: 1990-12-31)",
+                    "Format date invalide", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Vérification de l'existence de l'email
+        if (Controleur.emailExiste(email)) {
+            JOptionPane.showMessageDialog(this,
+                    "Cet email est déjà utilisé par un autre utilisateur.",
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Vérification du rôle utilisateur
+        String[] roles = {"admin", "client", "gestionnaire"}; // Exemple de rôles possibles
+        boolean roleValide = false;
+        for (String r : roles) {
+            if (r.equals(role)) {
+                roleValide = true;
+                break;
+            }
+        }
+        if (!roleValide) {
+            JOptionPane.showMessageDialog(this,
+                    "Le rôle spécifié n'est pas valide.",
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
         ArrayList<String> lesChamps = new ArrayList<>();
         lesChamps.add(email);
-        lesChamps.add(mdp);
         lesChamps.add(adresse);
         lesChamps.add(role);
         lesChamps.add(nom);
@@ -214,12 +253,20 @@ public class PanelParticulier extends PanelPrincipal implements ActionListener, 
         if (Controleur.verifDonnees(lesChamps)) {
             Date dateNaissanceDate = convertirEnDate(dateNaissance);
             if (dateNaissanceDate != null) {
-                Particulier unParticulier = new Particulier(0, email, mdp, adresse, role, nom, prenom, dateNaissanceDate, sexe);
-                Controleur.insertParticulier(unParticulier);
-                this.tableauParticulier.setDonnees(this.obtenirDonnees(""));
-                JOptionPane.showMessageDialog(this, "Particulier ajouté avec succès",
-                        "Succès", JOptionPane.INFORMATION_MESSAGE);
-                this.viderChamps();
+                String resultat = Controleur.insertParticulier(
+                        new Particulier(0, email, "", adresse, role, nom, prenom, dateNaissanceDate, sexe));
+
+                if (resultat.startsWith("OK:")) {
+                    String mdpGenere = resultat.substring(3); // Extrait le mot de passe temporaire
+                    this.tableauParticulier.setDonnees(this.obtenirDonnees(""));
+                    JOptionPane.showMessageDialog(this,
+                            "Particulier ajouté avec succès !\nMot de passe temporaire: " + mdpGenere,
+                            "Succès", JOptionPane.INFORMATION_MESSAGE);
+                    this.viderChamps();
+                } else {
+                    JOptionPane.showMessageDialog(this, resultat,
+                            "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
             } else {
                 JOptionPane.showMessageDialog(this, "Erreur de format de date",
                         "Erreur", JOptionPane.ERROR_MESSAGE);
@@ -242,7 +289,6 @@ public class PanelParticulier extends PanelPrincipal implements ActionListener, 
         if (numLigne >= 0) {
             int idUser = Integer.parseInt(tableauParticulier.getValueAt(numLigne, 0).toString());
             String email = this.txtEmail.getText();
-            String mdp = "d43affcc277ee52980fc4ecea523730f28d6405b"; // Mot de passe inchangé
             String adresse = this.txtAdresse.getText();
             String role = this.txtRole.getText();
             String nom = this.txtNom.getText();
@@ -250,9 +296,24 @@ public class PanelParticulier extends PanelPrincipal implements ActionListener, 
             String dateNaissance = this.txtDateNaissance.getText();
             String sexe = this.txtSexe.getText();
 
+            // Vérification du format de l'email
+            if (!email.matches("^[^@]+@[^@]+\\.[^@]+$")) {
+                JOptionPane.showMessageDialog(this,
+                        "L'email doit contenir un '@' et un '.' (ex: exemple@domaine.com)",
+                        "Format email invalide", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Vérification du format de la date
+            if (!dateNaissance.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
+                JOptionPane.showMessageDialog(this,
+                        "La date doit être au format YYYY-MM-DD (ex: 1990-12-31)",
+                        "Format date invalide", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
             ArrayList<String> lesChamps = new ArrayList<>();
             lesChamps.add(email);
-            lesChamps.add(mdp);
             lesChamps.add(adresse);
             lesChamps.add(role);
             lesChamps.add(nom);
@@ -263,7 +324,7 @@ public class PanelParticulier extends PanelPrincipal implements ActionListener, 
             if (Controleur.verifDonnees(lesChamps)) {
                 Date dateNaissanceDate = convertirEnDate(dateNaissance);
                 if (dateNaissanceDate != null) {
-                    Particulier unParticulier = new Particulier(idUser, email, mdp, adresse, role, nom, prenom, dateNaissanceDate, sexe);
+                    Particulier unParticulier = new Particulier(idUser, email, "", adresse, role, nom, prenom, dateNaissanceDate, sexe);
                     Controleur.updateParticulier(unParticulier);
                     this.tableauParticulier.setDonnees(this.obtenirDonnees(""));
                     JOptionPane.showMessageDialog(this, "Modification réussie",

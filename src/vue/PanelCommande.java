@@ -75,7 +75,7 @@ public class PanelCommande extends PanelPrincipal implements ActionListener, Key
 
     private void initLigneCommande() {
         this.panelLigneForm.setBackground(Color.cyan);
-        this.panelLigneForm.setBounds(30, 100, 350, 200);
+        this.panelLigneForm.setBounds(30, 100, 350, 150); // Ajustement de la hauteur
         this.panelLigneForm.setLayout(new GridLayout(6, 2));
 
         // Charger tous les livres
@@ -104,7 +104,7 @@ public class PanelCommande extends PanelPrincipal implements ActionListener, Key
 
     private void initCommande(int idUser) {
         this.panelCommandeForm.setBackground(Color.cyan);
-        this.panelCommandeForm.setBounds(30, 260, 350, 250);
+        this.panelCommandeForm.setBounds(30, 260, 350, 200); // Ajustement de la hauteur
         this.panelCommandeForm.setLayout(new GridLayout(7, 2));
 
         this.txtIdUser.setText(String.valueOf(idUser));

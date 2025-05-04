@@ -176,16 +176,54 @@ public class PanelEntreprise extends PanelPrincipal implements ActionListener, K
         }
 
         String email = this.txtEmail.getText();
-        String mdp = "d43affcc277ee52980fc4ecea523730f28d6405b";
         String adresse = this.txtAdresse.getText();
         String role = this.txtRole.getText();
         String siret = this.txtSiret.getText();
         String raisonSociale = this.txtRaisonSociale.getText();
         String capitalSocialText = this.txtCapitalSocial.getText();
 
+        // Vérification du format de l'email
+        if (!email.matches("^[^@]+@[^@]+\\.[^@]+$")) {
+            JOptionPane.showMessageDialog(this,
+                    "L'email doit contenir un '@' et un '.' (ex: exemple@domaine.com)",
+                    "Format email invalide", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Vérification du format du SIRET (14 chiffres)
+        if (!siret.matches("^\\d{14}$")) {
+            JOptionPane.showMessageDialog(this,
+                    "Le SIRET doit contenir exactement 14 chiffres.",
+                    "Format SIRET invalide", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Vérification de l'existence de l'email
+        if (Controleur.emailExiste(email)) {
+            JOptionPane.showMessageDialog(this,
+                    "Cet email est déjà utilisé par un autre utilisateur.",
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Vérification du rôle utilisateur
+        String[] roles = {"admin", "client", "gestionnaire"}; // Exemple de rôles possibles
+        boolean roleValide = false;
+        for (String r : roles) {
+            if (r.equals(role)) {
+                roleValide = true;
+                break;
+            }
+        }
+        if (!roleValide) {
+            JOptionPane.showMessageDialog(this,
+                    "Le rôle spécifié n'est pas valide.",
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         ArrayList<String> lesChamps = new ArrayList<>();
         lesChamps.add(email);
-        lesChamps.add(mdp);
         lesChamps.add(adresse);
         lesChamps.add(role);
         lesChamps.add(siret);
@@ -196,13 +234,20 @@ public class PanelEntreprise extends PanelPrincipal implements ActionListener, K
             try {
                 float capitalSocial = Float.parseFloat(capitalSocialText);
                 Entreprise uneEntreprise = new Entreprise(
-                        0, email, mdp, adresse, role, siret, raisonSociale, capitalSocial
+                        0, email, "", adresse, role, siret, raisonSociale, capitalSocial
                 );
-                Controleur.insertEntreprise(uneEntreprise);
-                this.tableauEntreprise.setDonnees(this.obtenirDonnees(""));
-                JOptionPane.showMessageDialog(this, "Entreprise créée avec succès !",
-                        "Succès", JOptionPane.INFORMATION_MESSAGE);
-                this.viderChamps();
+                String resultat = Controleur.insertEntreprise(uneEntreprise);
+                if (resultat.startsWith("OK:")) {
+                    String mdpGenere = resultat.substring(3); // Extrait le mot de passe généré
+                    this.tableauEntreprise.setDonnees(this.obtenirDonnees(""));
+                    JOptionPane.showMessageDialog(this,
+                            "Entreprise créée avec succès !\nMot de passe temporaire: " + mdpGenere,
+                            "Succès", JOptionPane.INFORMATION_MESSAGE);
+                    this.viderChamps();
+                } else {
+                    JOptionPane.showMessageDialog(this, resultat,
+                            "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Format du capital social invalide",
                         "Erreur", JOptionPane.ERROR_MESSAGE);

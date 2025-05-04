@@ -1,5 +1,7 @@
 package modele;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,39 +15,34 @@ public class Modele {
     private static Connexion uneConnexion = new Connexion("localhost:8889", "ppe_lourd", "root", "root");
 
 
+
     /************************ GESTION DES USERS ************************/
     public static void insertUser(User unUser) {
-        String requete =    "insert into user values (null," + "'" +
-                            unUser.getEmailUser() + "', '" +
-                            "d43affcc277ee52980fc4ecea523730f28d6405b" + "', '" +
-                            unUser.getAdresseUser() + "', '" +
-                            unUser.getRoleUser() + "');";
+        String mdpHashe = sha1Hash(unUser.getMdpUser()); // Hachage du mot de passe
+        String requete = "insert into user values (null," + "'" +
+                unUser.getEmailUser() + "', '" +
+                mdpHashe + "', '" +
+                unUser.getAdresseUser() + "', '" +
+                unUser.getRoleUser() + "');";
         executerRequete(requete);
     }
 
-    public static ArrayList<User> selectUser() {
-        ArrayList<User> lesUsers = new ArrayList<User>();
-        String requete = "select * from user;";
+    public static boolean emailExiste(String email) {
+        String requete = "SELECT COUNT(*) AS count FROM user WHERE emailUser = '" + email + "'";
         try {
             uneConnexion.seConnecter();
             Statement unStat = uneConnexion.getMaConnexion().createStatement();
-            ResultSet lesResultats = unStat.executeQuery(requete);
-            while (lesResultats.next()) {
-                User unUser = new User(
-                        lesResultats.getInt("idUser"),
-                        lesResultats.getString("emailUser"),
-                        lesResultats.getString("mdpUser"),
-                        lesResultats.getString("adresseUser"),
-                        lesResultats.getString("roleUser")
-                );
-                lesUsers.add(unUser);
+            ResultSet rs = unStat.executeQuery(requete);
+            if (rs.next()) {
+                int count = rs.getInt("count");
+                return count > 0;
             }
             unStat.close();
             uneConnexion.seDeConnecter();
-        } catch (SQLException exp) {
-            System.out.println("Erreur d'exécution de la requête : " + requete);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        return lesUsers;
+        return false;
     }
 
     public static void deleteUser(int idUser) {
@@ -60,57 +57,6 @@ public class Modele {
                             "roleUser = '" + unUser.getRoleUser() + "' " +
                             "where idUser = " + unUser.getIdUser() + ";";
         executerRequete(requete);
-    }
-
-    public static ArrayList<User> selectLikeUser(String filtre) {
-        ArrayList<User> lesUsers = new ArrayList<User>();
-        String requete = "select * from user where "
-                + "emailUser like '%" + filtre + "%' or "
-                + "adresseUser like '%" + filtre + "%';";
-        try {
-            uneConnexion.seConnecter();
-            Statement unStat = uneConnexion.getMaConnexion().createStatement();
-            ResultSet lesResultats = unStat.executeQuery(requete);
-            while (lesResultats.next()) {
-                User unUser = new User(
-                        lesResultats.getInt("idUser"),
-                        lesResultats.getString("emailUser"),
-                        lesResultats.getString("mdpUser"),
-                        lesResultats.getString("adresseUser"),
-                        lesResultats.getString("roleUser")
-                );
-                lesUsers.add(unUser);
-            }
-            unStat.close();
-            uneConnexion.seDeConnecter();
-        } catch (SQLException exp) {
-            System.out.println("Erreur d'exécution de la requête : " + requete);
-        }
-        return lesUsers;
-    }
-
-    public static User selectWhereUser(int idUser) {
-        String requete = "select * from user where idUser = " + idUser + ";";
-        User unUser = null;
-        try {
-            uneConnexion.seConnecter();
-            Statement unStat = uneConnexion.getMaConnexion().createStatement();
-            ResultSet unResultat = unStat.executeQuery(requete);
-            if (unResultat.next()) {
-                unUser = new User(
-                        unResultat.getInt("idUser"),
-                        unResultat.getString("emailUser"),
-                        unResultat.getString("mdpUser"),
-                        unResultat.getString("adresseUser"),
-                        unResultat.getString("roleUser")
-                );
-            }
-            unStat.close();
-            uneConnexion.seDeConnecter();
-        } catch (SQLException exp) {
-            System.out.println("Erreur d'exécution de la requête : " + requete);
-        }
-        return unUser;
     }
 
     public static User selectWhereUser(String email, String mdp, String role) {
@@ -161,20 +107,29 @@ public class Modele {
 
 
     /************************ GESTION DES PARTICULIERS **********************/
-    public static void insertParticulier(Particulier unParticulier) {
+    public static String insertParticulier(Particulier unParticulier) {
+        String mdpAleatoire = generateRandomPassword();
+        unParticulier.setMdpUser(mdpAleatoire);
+
         Modele.insertUser(unParticulier);
         int idUser = Modele.selectIdUser();
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String dateUser = dateFormat.format(unParticulier.getDateNaissanceUser());
 
-        String requete =    "insert into particulier values (" +
-                            idUser + ", '" +
-                            unParticulier.getNomUser() + "', '" +
-                            unParticulier.getPrenomUser() + "', '" +
-                            dateUser + "', '" +
-                            unParticulier.getSexeUser() + "');";
-        executerRequete(requete);
+        String requete = "insert into particulier values (" +
+                idUser + ", '" +
+                unParticulier.getNomUser() + "', '" +
+                unParticulier.getPrenomUser() + "', '" +
+                dateUser + "', '" +
+                unParticulier.getSexeUser() + "');";
+
+        try {
+            executerRequete(requete);
+            return "OK:" + mdpAleatoire; // Retourne un message de succès avec le mot de passe généré
+        } catch (Exception e) {
+            return "Erreur lors de l'insertion : " + e.getMessage();
+        }
     }
 
     public static ArrayList<Particulier> selectParticulier() {
@@ -269,80 +224,28 @@ public class Modele {
         return lesParticuliers;
     }
 
-    public static Particulier selectWhereParticulier(int idUser) {
-        String requete = "select * from particulier where idUser = " + idUser + ";";
-        Particulier unParticulier = null;
-        try {
-            uneConnexion.seConnecter();
-            Statement unStat = uneConnexion.getMaConnexion().createStatement();
-            ResultSet unResultat = unStat.executeQuery(requete);
-            if (unResultat.next()) {
-                unParticulier = new Particulier(
-                        unResultat.getInt("idUser"),
-                        unResultat.getString("emailUser"),
-                        unResultat.getString("mdpUser"),
-                        unResultat.getString("adresseUser"),
-                        unResultat.getString("roleUser"),
-                        unResultat.getString("nomUser"),
-                        unResultat.getString("prenomUser"),
-                        unResultat.getDate("dateNaissanceUser"),
-                        unResultat.getString("sexeUser")
-                );
-            }
-            unStat.close();
-            uneConnexion.seDeConnecter();
-        } catch (SQLException exp) {
-            System.out.println("Erreur d'exécution de la requête : " + requete);
-        }
-        return unParticulier;
-    }
-
-    public static Particulier selectWhereParticulier(String email, String mdp) {
-        String requete =    "select u.idUser, u.emailUser, u.mdpUser, u.adresseUser, u.roleUser, p.nomUser, p.prenomUser, p.dateNaissanceUser, p.sexeUser " +
-                            "from user u " +
-                            "left join particulier p " +
-                            "on u.idUser = p.idUser " +
-                            "where u.emailUser = '" + email + "' and u.mdpUser = '" + mdp + "';";
-        Particulier unParticulier = null;
-        try {
-            uneConnexion.seConnecter();
-            Statement unStat = uneConnexion.getMaConnexion().createStatement();
-            ResultSet unResultat = unStat.executeQuery(requete);
-            if(unResultat.next()) {
-                unParticulier = new Particulier(
-                        unResultat.getInt("idUser"),
-                        unResultat.getString("emailUser"),
-                        unResultat.getString("mdpUser"),
-                        unResultat.getString("adresseUser"),
-                        unResultat.getString("roleUser"),
-                        unResultat.getString("nomUser"),
-                        unResultat.getString("prenomUser"),
-                        unResultat.getDate("dateNaissanceUser"),
-                        unResultat.getString("sexeUser")
-                );
-            }
-            unStat.close();
-            uneConnexion.seDeConnecter();
-        }
-        catch(SQLException exp) {
-            System.out.println("Erreur d'execution de la requete : " + requete);
-        }
-        return unParticulier;
-    }
-
 
 
     /************************ GESTION DES ENTREPRISES **********************/
-    public static void insertEntreprise(Entreprise uneEntreprise) {
+    public static String insertEntreprise(Entreprise uneEntreprise) {
+        String mdpAleatoire = generateRandomPassword();
+        uneEntreprise.setMdpUser(mdpAleatoire);
+
         Modele.insertUser(uneEntreprise);
         int idUser = Modele.selectIdUser();
 
-        String requete =    "insert into entreprise values (" +
-                            idUser + ", '" +
-                            uneEntreprise.getSiretUser() + "', '" +
-                            uneEntreprise.getRaisonSocialeUser() + "', " +
-                            uneEntreprise.getCapitalSocialUser() + ");";
-        executerRequete(requete);
+        String requete = "insert into entreprise values (" +
+                idUser + ", '" +
+                uneEntreprise.getSiretUser() + "', '" +
+                uneEntreprise.getRaisonSocialeUser() + "', " +
+                uneEntreprise.getCapitalSocialUser() + ");";
+
+        try {
+            executerRequete(requete);
+            return "OK:" + mdpAleatoire; // Retourne un message de succès avec le mot de passe généré
+        } catch (Exception e) {
+            return "Erreur lors de l'insertion : " + e.getMessage();
+        }
     }
 
     public static ArrayList<Entreprise> selectEntreprise() {
@@ -428,65 +331,6 @@ public class Modele {
             System.out.println("Erreur d'exécution de la requête : " + requete);
         }
         return lesEntreprises;
-    }
-
-    public static Entreprise selectWhereEntreprise(int idUser) {
-        String requete = "select * from entreprise where idUser = " + idUser + ";";
-        Entreprise uneEntreprise = null;
-        try {
-            uneConnexion.seConnecter();
-            Statement unStat = uneConnexion.getMaConnexion().createStatement();
-            ResultSet unResultat = unStat.executeQuery(requete);
-            if (unResultat.next()) {
-                uneEntreprise = new Entreprise(
-                        unResultat.getInt("idUser"),
-                        unResultat.getString("emailUser"),
-                        unResultat.getString("mdpUser"),
-                        unResultat.getString("adresseUser"),
-                        unResultat.getString("roleUser"),
-                        unResultat.getString("siretUser"),
-                        unResultat.getString("raisonSocialeUser"),
-                        unResultat.getFloat("capitalSocialUser")
-                );
-            }
-            unStat.close();
-            uneConnexion.seDeConnecter();
-        } catch (SQLException exp) {
-            System.out.println("Erreur d'exécution de la requête : " + requete);
-        }
-        return uneEntreprise;
-    }
-
-    public static Entreprise selectWhereEntreprise(String email, String mdp) {
-        String requete =    "select u.idUser, u.emailUser, u.mdpUser, u.adresseUser, u.roleUser, " +
-                            "e.siretUser, e.raisonSocialeUser, e.capitalSocialUser " +
-                            "from user u " +
-                            "left join entreprise e " +
-                            "on u.idUser = e.idUser " +
-                            "where u.emailUser = '" + email + "' and u.mdpUser = '" + mdp + "';";
-        Entreprise uneEntreprise = null;
-        try {
-            uneConnexion.seConnecter();
-            Statement unStat = uneConnexion.getMaConnexion().createStatement();
-            ResultSet unResultat = unStat.executeQuery(requete);
-            if(unResultat.next()) {
-                uneEntreprise = new Entreprise(
-                        unResultat.getInt("idUser"),
-                        unResultat.getString("emailUser"),
-                        unResultat.getString("mdpUser"),
-                        unResultat.getString("adresseUser"),
-                        unResultat.getString("roleUser"),
-                        unResultat.getString("siretUser"),
-                        unResultat.getString("raisonSocialeUser"),
-                        unResultat.getFloat("capitalSocialUser")
-                );
-            }
-            unStat.close();
-            uneConnexion.seDeConnecter();
-        } catch(SQLException exp) {
-            System.out.println("Erreur d'execution de la requete : " + requete);
-        }
-        return uneEntreprise;
     }
 
 
@@ -835,29 +679,6 @@ public class Modele {
         return lesCommandes;
     }
 
-    public static LigneCommande selectWhereLigneCommande(int idLigneCommande) {
-        String requete = "select * from lignecommande where idLigneCommande = " + idLigneCommande + ";";
-        LigneCommande uneLigne = null;
-        try {
-            uneConnexion.seConnecter();
-            Statement unStat = uneConnexion.getMaConnexion().createStatement();
-            ResultSet unResultat = unStat.executeQuery(requete);
-            if (unResultat.next()) {
-                uneLigne = new LigneCommande(
-                        unResultat.getInt("idLigneCommande"),
-                        unResultat.getInt("idCommande"),
-                        unResultat.getInt("idLivre"),
-                        unResultat.getInt("quantiteLigneCommande")
-                );
-            }
-            unStat.close();
-            uneConnexion.seDeConnecter();
-        } catch (SQLException exp) {
-            System.out.println("Erreur d'exécution de la requête : " + requete);
-        }
-        return uneLigne;
-    }
-
     public static void insertCommande(Commande uneCommande) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String dateCommande = dateFormat.format(uneCommande.getDateCommande());
@@ -965,62 +786,6 @@ public class Modele {
         }
     }
 
-    public static int selectIdLivre(String nomLivre) {
-        String requete =    "select idLivre " +
-                            "from livre " +
-                            "where nomLivre = '" + nomLivre + "';";
-        try {
-            uneConnexion.seConnecter();
-            Statement unStat = uneConnexion.getMaConnexion().createStatement();
-            ResultSet resultat = unStat.executeQuery(requete);
-            if (resultat.next()) {
-                return resultat.getInt("idLivre");
-            }
-            unStat.close();
-            uneConnexion.seDeConnecter();
-        } catch (SQLException exp) {
-            System.out.println("Erreur d'exécution de la requête : " + requete);
-        }
-        return -1;
-    }
-
-    public static String selectNomLivre(int idLivre) {
-        String requete =    "select nomLivre " +
-                            "from livre " +
-                            "where idLivre = " + idLivre + ";";
-        try {
-            uneConnexion.seConnecter();
-            Statement unStat = uneConnexion.getMaConnexion().createStatement();
-            ResultSet resultat = unStat.executeQuery(requete);
-            if (resultat.next()) {
-                return resultat.getString("nomLivre");
-            }
-            unStat.close();
-            uneConnexion.seDeConnecter();
-        } catch (SQLException exp) {
-            System.out.println("Erreur d'exécution de la requête : " + requete);
-        }
-        return null;
-    }
-
-    public static int selectIdCommande() {
-        int idCommande = 0;
-        String requete = "select max(idCommande) from commande;";
-        try {
-            uneConnexion.seConnecter();
-            Statement unStat = uneConnexion.getMaConnexion().createStatement();
-            ResultSet unResultat = unStat.executeQuery(requete);
-            if (unResultat.next()) {
-                idCommande = unResultat.getInt(1);
-            }
-            unStat.close();
-            uneConnexion.seDeConnecter();
-        } catch (SQLException exp) {
-            System.out.println("Erreur d'exécution de la requête : " + requete);
-        }
-        return idCommande;
-    }
-
 
 
     /************************ GESTION DES ABONNEMENTS ************************/
@@ -1111,6 +876,25 @@ public class Modele {
     }
 
 
+
+    /**************** GESTION DES DONNÉES ***************/
+    public static String sha1Hash(String input) {
+        try {
+            MessageDigest mDigest = MessageDigest.getInstance("SHA1");
+            byte[] result = mDigest.digest(input.getBytes());
+            StringBuilder sb = new StringBuilder();
+            for (byte b : result) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+
     /************************ AUTRES MÉTHODES ************************/
     private static void executerRequete(String requete) {
         try {
@@ -1170,5 +954,16 @@ public class Modele {
             exp.printStackTrace();
         }
         return lesStatsLivres;
+    }
+
+    private static String generateRandomPassword() {
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        StringBuilder sb = new StringBuilder();
+        java.security.SecureRandom random = new java.security.SecureRandom();
+        for (int i = 0; i < 10; i++) {
+            int index = random.nextInt(chars.length());
+            sb.append(chars.charAt(index));
+        }
+        return sb.toString();
     }
 }
