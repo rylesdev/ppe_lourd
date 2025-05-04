@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:8889
--- Généré le : mer. 16 avr. 2025 à 22:16
+-- Généré le : dim. 04 mai 2025 à 01:22
 -- Version du serveur : 8.0.35
 -- Version de PHP : 8.3.9
 
@@ -65,13 +65,57 @@ INSERT INTO `admin` (`idAdmin`, `idUser`, `niveauAdmin`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `archiveCommande`
+--
+
+CREATE TABLE `archiveCommande` (
+  `idCommande` int NOT NULL,
+  `dateCommande` datetime DEFAULT NULL,
+  `statutCommande` varchar(50) DEFAULT NULL,
+  `dateLivraisonCommande` datetime DEFAULT NULL,
+  `idUser` int DEFAULT NULL,
+  `date_archivage` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Archive des commandes';
+
+--
+-- Déchargement des données de la table `archiveCommande`
+--
+
+INSERT INTO `archiveCommande` (`idCommande`, `dateCommande`, `statutCommande`, `dateLivraisonCommande`, `idUser`, `date_archivage`) VALUES
+(454, '2025-02-03 00:00:00', 'en attente', '2025-12-12 00:00:00', 53, '2025-05-04 01:29:35');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `archiveLigneCommande`
+--
+
+CREATE TABLE `archiveLigneCommande` (
+  `idLigneCommande` int NOT NULL,
+  `idCommande` int DEFAULT NULL,
+  `idLivre` int DEFAULT NULL,
+  `quantiteLigneCommande` int DEFAULT NULL,
+  `date_archivage` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Archive des lignes de commande';
+
+--
+-- Déchargement des données de la table `archiveLigneCommande`
+--
+
+INSERT INTO `archiveLigneCommande` (`idLigneCommande`, `idCommande`, `idLivre`, `quantiteLigneCommande`, `date_archivage`) VALUES
+(716, 454, 2, 1, '2025-05-04 01:29:35'),
+(717, 454, 3, 1, '2025-05-04 01:29:35'),
+(718, 454, 13, 1, '2025-05-04 01:29:35');
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `avis`
 --
 
 CREATE TABLE `avis` (
   `idAvis` int NOT NULL,
   `idLivre` int NOT NULL,
-  `nomLivre` varchar(50) NOT NULL,
   `idUser` int NOT NULL,
   `commentaireAvis` text NOT NULL,
   `noteAvis` tinyint NOT NULL,
@@ -82,67 +126,67 @@ CREATE TABLE `avis` (
 -- Déchargement des données de la table `avis`
 --
 
-INSERT INTO `avis` (`idAvis`, `idLivre`, `nomLivre`, `idUser`, `commentaireAvis`, `noteAvis`, `dateAvis`) VALUES
-(1, 1, 'Alcools', 15, 'Poésie complexe mais fascinante', 4, '2025-02-01'),
-(2, 1, 'Alcools', 16, 'Difficile d\'accès', 2, '2025-02-02'),
-(3, 1, 'Alcools', 17, 'Un must de la poésie moderne', 5, '2025-02-03'),
-(4, 2, 'Crime et Chatiment', 18, 'Profondeur psychologique remarquable', 3, '2025-02-04'),
-(5, 2, 'Crime et Chatiment', 19, 'Trop long et lent', 1, '2025-02-05'),
-(6, 2, 'Crime et Chatiment', 20, 'Une œuvre magistrale', 4, '2025-02-06'),
-(7, 3, 'L`Etranger', 21, 'Absurde et génial', 2, '2025-02-07'),
-(8, 3, 'L`Etranger', 22, 'Déprimant mais nécessaire', 5, '2025-02-08'),
-(9, 3, 'L`Etranger', 23, 'Une réflexion sur l\'existence', 3, '2025-02-09'),
-(10, 4, 'L`Odyssée', 24, 'Fondateur de la littérature occidentale', 1, '2025-02-10'),
-(11, 4, 'L`Odyssée', 25, 'Version ancienne peu accessible', 4, '2025-02-11'),
-(12, 4, 'L`Odyssée', 26, 'Indispensable classique', 2, '2025-02-12'),
-(13, 5, 'Les Fleurs du Mal', 27, 'Beauté noire envoûtante', 5, '2025-02-13'),
-(14, 5, 'Les Fleurs du Mal', 28, 'Trop sombre à mon goût', 3, '2025-02-14'),
-(15, 5, 'Les Fleurs du Mal', 29, 'Baudelaire au sommet', 1, '2025-02-15'),
-(16, 6, 'PHP et MySQL pour les nuls', 30, 'Parfait pour débuter', 4, '2025-02-16'),
-(17, 6, 'PHP et MySQL pour les nuls', 31, 'Exemples concrets utiles', 2, '2025-02-17'),
-(18, 6, 'PHP et MySQL pour les nuls', 32, 'Un peu trop basique', 5, '2025-02-18'),
-(19, 7, 'Programmer en Java', 33, 'Guide complet mais dense', 3, '2025-02-19'),
-(20, 7, 'Programmer en Java', 34, 'Approche pédagogique claire', 1, '2025-02-20'),
-(21, 7, 'Programmer en Java', 35, 'Exercices pratiques manquants', 4, '2025-02-21'),
-(22, 8, 'SPQR', 36, 'Histoire romaine captivante', 2, '2025-02-22'),
-(23, 8, 'SPQR', 37, 'Trop académique', 5, '2025-02-23'),
-(24, 8, 'SPQR', 38, 'Une nouvelle perspective', 3, '2025-02-24'),
-(25, 9, 'À la recherche du temps perdu', 39, 'Chef-d\'œuvre de la littérature', 1, '2025-02-25'),
-(26, 9, 'À la recherche du temps perdu', 40, 'Style trop alambiqué', 4, '2025-02-26'),
-(27, 9, 'À la recherche du temps perdu', 41, 'Expérience immersive', 2, '2025-02-27'),
-(28, 10, 'Les Misérables', 42, 'Roman social puissant', 5, '2025-02-28'),
-(29, 10, 'Les Misérables', 43, 'Long mais enrichissant', 3, '2025-03-01'),
-(30, 10, 'Les Misérables', 44, 'Personnages mémorables', 1, '2025-03-02'),
-(31, 11, '1984', 45, 'Vision terrifiante du futur', 4, '2025-03-03'),
-(32, 11, '1984', 46, 'Toujours d\'actualité', 2, '2025-03-04'),
-(33, 11, '1984', 47, 'Un peu angoissant', 5, '2025-03-05'),
-(34, 12, 'L`Art d\'aimer', 48, 'Approche philosophique', 3, '2025-03-06'),
-(35, 12, 'L`Art d\'aimer', 49, 'Intéressant mais daté', 1, '2025-03-07'),
-(36, 12, 'L`Art d\'aimer', 50, 'Une lecture surprenante', 4, '2025-03-08'),
-(37, 13, 'La Peste', 51, 'Allégorie brillante', 2, '2025-03-09'),
-(38, 13, 'La Peste', 52, 'Pertinent en période d\'épidémie', 5, '2025-03-10'),
-(39, 13, 'La Peste', 53, 'Nécessite une relecture', 3, '2025-03-11'),
-(40, 14, 'Les Mémoires d\'Hadrien', 54, 'Écriture sublime', 1, '2025-03-12'),
-(41, 14, 'Les Mémoires d\'Hadrien', 55, 'Rythme trop lent', 4, '2025-03-13'),
-(42, 14, 'Les Mémoires d\'Hadrien', 56, 'Portrait historique vivant', 2, '2025-03-14'),
-(43, 15, 'La Condition humaine', 57, 'Roman profondément humain', 5, '2025-03-15'),
-(44, 15, 'La Condition humaine', 58, 'Passages confus', 3, '2025-03-16'),
-(45, 15, 'La Condition humaine', 59, 'Une réflexion sur l\'engagement', 1, '2025-03-17'),
-(46, 16, 'Le Comte de Monte-Cristo', 60, 'Intrigue palpitante', 4, '2025-03-18'),
-(47, 16, 'Le Comte de Monte-Cristo', 61, 'Trop de rebondissements', 2, '2025-03-19'),
-(48, 16, 'Le Comte de Monte-Cristo', 62, 'Un classique du roman-feuilleton', 5, '2025-03-20'),
-(49, 17, 'Orgueil et Préjugés', 63, 'Ironie sociale délicieuse', 3, '2025-03-21'),
-(50, 17, 'Orgueil et Préjugés', 64, 'Personnages féminins forts', 1, '2025-03-22'),
-(51, 17, 'Orgueil et Préjugés', 65, 'Un peu trop romantique', 4, '2025-03-23'),
-(52, 18, 'Shining', 66, 'Horreur psychologique maîtrisée', 2, '2025-03-24'),
-(53, 18, 'Shining', 67, 'Plus angoissant que le film', 5, '2025-03-25'),
-(54, 18, 'Shining', 68, 'Déception après le film', 3, '2025-03-26'),
-(55, 19, 'Bel-Ami', 69, 'Satire sociale mordante', 1, '2025-03-27'),
-(56, 19, 'Bel-Ami', 70, 'Personnage principal détestable', 4, '2025-03-28'),
-(57, 19, 'Bel-Ami', 71, 'Un Maupassant incontournable', 2, '2025-03-29'),
-(58, 20, 'Fahrenheit 451', 72, 'Vision prophétique', 5, '2025-03-30'),
-(59, 20, 'Fahrenheit 451', 73, 'Surcoté selon moi', 3, '2025-03-31'),
-(60, 20, 'Fahrenheit 451', 74, 'Un avertissement nécessaire', 1, '2025-04-01');
+INSERT INTO `avis` (`idAvis`, `idLivre`, `idUser`, `commentaireAvis`, `noteAvis`, `dateAvis`) VALUES
+(1, 1, 15, 'Poésie complexe mais fascinante', 4, '2025-02-01'),
+(2, 1, 16, 'Difficile d\'accès', 2, '2025-02-02'),
+(3, 1, 17, 'Un must de la poésie moderne', 5, '2025-02-03'),
+(4, 2, 18, 'Profondeur psychologique remarquable', 3, '2025-02-04'),
+(5, 2, 19, 'Trop long et lent', 1, '2025-02-05'),
+(6, 2, 20, 'Une œuvre magistrale', 4, '2025-02-06'),
+(7, 3, 21, 'Absurde et génial', 2, '2025-02-07'),
+(8, 3, 22, 'Déprimant mais nécessaire', 5, '2025-02-08'),
+(9, 3, 23, 'Une réflexion sur l\'existence', 3, '2025-02-09'),
+(10, 4, 24, 'Fondateur de la littérature occidentale', 1, '2025-02-10'),
+(11, 4, 25, 'Version ancienne peu accessible', 4, '2025-02-11'),
+(12, 4, 26, 'Indispensable classique', 2, '2025-02-12'),
+(13, 5, 27, 'Beauté noire envoûtante', 5, '2025-02-13'),
+(14, 5, 28, 'Trop sombre à mon goût', 3, '2025-02-14'),
+(15, 5, 29, 'Baudelaire au sommet', 1, '2025-02-15'),
+(16, 6, 30, 'Parfait pour débuter', 4, '2025-02-16'),
+(17, 6, 31, 'Exemples concrets utiles', 2, '2025-02-17'),
+(18, 6, 32, 'Un peu trop basique', 5, '2025-02-18'),
+(19, 7, 33, 'Guide complet mais dense', 3, '2025-02-19'),
+(20, 7, 34, 'Approche pédagogique claire', 1, '2025-02-20'),
+(21, 7, 35, 'Exercices pratiques manquants', 4, '2025-02-21'),
+(22, 8, 36, 'Histoire romaine captivante', 2, '2025-02-22'),
+(23, 8, 37, 'Trop académique', 5, '2025-02-23'),
+(24, 8, 38, 'Une nouvelle perspective', 3, '2025-02-24'),
+(25, 9, 39, 'Chef-d\'œuvre de la littérature', 1, '2025-02-25'),
+(26, 9, 40, 'Style trop alambiqué', 4, '2025-02-26'),
+(27, 9, 41, 'Expérience immersive', 2, '2025-02-27'),
+(28, 10, 42, 'Roman social puissant', 5, '2025-02-28'),
+(29, 10, 43, 'Long mais enrichissant', 3, '2025-03-01'),
+(30, 10, 44, 'Personnages mémorables', 1, '2025-03-02'),
+(31, 11, 45, 'Vision terrifiante du futur', 4, '2025-03-03'),
+(32, 11, 46, 'Toujours d\'actualité', 2, '2025-03-04'),
+(33, 11, 47, 'Un peu angoissant', 5, '2025-03-05'),
+(34, 12, 48, 'Approche philosophique', 3, '2025-03-06'),
+(35, 12, 49, 'Intéressant mais daté', 1, '2025-03-07'),
+(36, 12, 50, 'Une lecture surprenante', 4, '2025-03-08'),
+(37, 13, 51, 'Allégorie brillante', 2, '2025-03-09'),
+(38, 13, 52, 'Pertinent en période d\'épidémie', 5, '2025-03-10'),
+(39, 13, 53, 'Nécessite une relecture', 3, '2025-03-11'),
+(40, 14, 54, 'Écriture sublime', 1, '2025-03-12'),
+(41, 14, 55, 'Rythme trop lent', 4, '2025-03-13'),
+(42, 14, 56, 'Portrait historique vivant', 2, '2025-03-14'),
+(43, 15, 57, 'Roman profondément humain', 5, '2025-03-15'),
+(44, 15, 58, 'Passages confus', 3, '2025-03-16'),
+(45, 15, 59, 'Une réflexion sur l\'engagement', 1, '2025-03-17'),
+(46, 16, 60, 'Intrigue palpitante', 4, '2025-03-18'),
+(47, 16, 61, 'Trop de rebondissements', 2, '2025-03-19'),
+(48, 16, 62, 'Un classique du roman-feuilleton', 5, '2025-03-20'),
+(49, 17, 63, 'Ironie sociale délicieuse', 3, '2025-03-21'),
+(50, 17, 64, 'Personnages féminins forts', 1, '2025-03-22'),
+(51, 17, 65, 'Un peu trop romantique', 4, '2025-03-23'),
+(52, 18, 66, 'Horreur psychologique maîtrisée', 2, '2025-03-24'),
+(53, 18, 67, 'Plus angoissant que le film', 5, '2025-03-25'),
+(54, 18, 68, 'Déception après le film', 3, '2025-03-26'),
+(55, 19, 69, 'Satire sociale mordante', 1, '2025-03-27'),
+(56, 19, 70, 'Personnage principal détestable', 4, '2025-03-28'),
+(57, 19, 71, 'Un Maupassant incontournable', 2, '2025-03-29'),
+(58, 20, 72, 'Vision prophétique', 5, '2025-03-30'),
+(59, 20, 73, 'Surcoté selon moi', 3, '2025-03-31'),
+(60, 20, 74, 'Un avertissement nécessaire', 1, '2025-04-01');
 
 -- --------------------------------------------------------
 
@@ -184,7 +228,7 @@ CREATE TABLE `commande` (
 --
 
 INSERT INTO `commande` (`idCommande`, `dateCommande`, `statutCommande`, `dateLivraisonCommande`, `idUser`) VALUES
-(301, '2025-01-24', 'expédiée', '2025-01-31', 2),
+(301, '2025-01-24', 'arrivée', '2025-01-31', 2),
 (302, '2025-01-24', 'en attente', '2025-01-31', 2),
 (303, '2025-01-24', 'en attente', '2025-01-31', 2),
 (304, '2025-01-24', 'en attente', '2025-01-31', 2),
@@ -217,142 +261,146 @@ INSERT INTO `commande` (`idCommande`, `dateCommande`, `statutCommande`, `dateLiv
 (331, '2025-01-24', 'en attente', '2025-01-31', 2),
 (332, '2025-01-24', 'en attente', '2025-01-31', 2),
 (333, '2025-01-24', 'en attente', NULL, 2),
-(337, '2025-01-27', 'expédiée', '2025-02-03', 15),
-(338, '2025-01-27', 'expédiée', '2025-02-03', 2),
-(339, '2025-01-28', 'expédiée', '2025-02-04', 15),
-(340, '2025-01-28', 'expédiée', '2025-02-04', 15),
-(341, '2025-01-28', 'expédiée', '2025-02-04', 2),
-(342, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(343, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(344, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(345, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(346, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(347, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(348, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(349, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(350, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(351, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(352, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(353, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(354, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(355, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(356, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(357, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(358, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(359, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(360, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(361, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(362, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(363, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(364, '2025-01-29', 'expédiée', '2025-02-05', 15),
-(365, '2025-01-29', 'expédiée', '2025-02-05', 15),
-(366, '2025-01-29', 'expédiée', '2025-02-05', 15),
-(367, '2025-01-29', 'expédiée', '2025-02-05', 15),
-(368, '2025-01-29', 'expédiée', '2025-02-05', 15),
-(369, '2025-01-29', 'expédiée', '2025-02-05', 15),
-(370, '2025-01-29', 'expédiée', '2025-02-05', 15),
-(371, '2025-01-29', 'expédiée', '2025-02-05', 15),
-(372, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(373, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(374, '2025-01-29', 'expédiée', '2025-02-05', 2),
-(375, '2025-01-29', 'expédiée', '2025-02-05', 15),
-(376, '2025-01-29', 'expédiée', '2025-02-05', 15),
-(377, '2025-01-29', 'expédiée', '2025-02-05', 15),
-(378, '2025-01-29', 'expédiée', '2025-02-05', 15),
-(379, '2025-01-29', 'expédiée', '2025-02-05', 15),
-(380, '2025-01-29', 'expédiée', '2025-02-05', 15),
-(381, '2025-01-29', 'expédiée', '2025-02-05', 15),
-(382, '2025-01-29', 'expédiée', '2025-02-05', 15),
-(383, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(384, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(385, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(386, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(387, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(388, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(389, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(390, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(391, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(392, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(393, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(395, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(396, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(397, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(398, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(399, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(400, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(401, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(402, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(403, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(404, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(405, '2025-01-29', 'expédiée', '2025-02-05', 24),
-(406, '2025-01-30', 'expédiée', '2025-02-06', 2),
-(407, '2025-01-30', 'expédiée', '2025-02-06', 2),
-(408, '2025-01-30', 'expédiée', '2025-02-06', 2),
-(409, '2025-01-30', 'expédiée', '2025-02-06', 15),
-(410, '2025-01-30', 'expédiée', '2025-02-06', 15),
-(411, '2025-01-30', 'expédiée', '2025-02-06', 15),
-(412, '2025-01-30', 'expédiée', '2025-02-06', 15),
-(413, '2025-01-30', 'expédiée', '2025-02-06', 15),
-(414, '2025-01-30', 'expédiée', '2025-02-06', 15),
-(415, '2025-01-30', 'expédiée', '2025-02-06', 15),
-(417, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(418, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(419, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(420, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(421, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(422, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(423, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(424, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(425, '2025-02-02', 'expédiée', '2025-02-09', 24),
-(426, '2025-02-02', 'expédiée', '2025-02-09', 24),
-(427, '2025-02-02', 'expédiée', '2025-02-09', 2),
-(428, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(429, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(430, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(431, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(432, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(433, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(434, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(435, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(436, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(437, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(438, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(439, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(440, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(441, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(442, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(443, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(444, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(445, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(446, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(447, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(448, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(449, '2025-02-02', 'expédiée', '2025-02-09', 15),
-(452, '2025-02-03', 'expédiée', '2025-02-10', 15),
-(453, '2025-02-03', 'expédiée', '2025-02-10', 15),
-(454, '2025-02-03', 'expédiée', '2025-02-10', 15),
+(337, '2025-01-27', 'arrivée', '2025-02-03', 15),
+(338, '2025-01-27', 'arrivée', '2025-02-03', 2),
+(339, '2025-01-28', 'arrivée', '2025-02-04', 15),
+(340, '2025-01-28', 'arrivée', '2025-02-04', 15),
+(341, '2025-01-28', 'arrivée', '2025-02-04', 2),
+(342, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(343, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(344, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(345, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(346, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(347, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(348, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(349, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(350, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(351, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(352, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(353, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(354, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(355, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(356, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(357, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(358, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(359, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(360, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(361, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(362, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(363, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(364, '2025-01-29', 'arrivée', '2025-02-05', 15),
+(365, '2025-01-29', 'arrivée', '2025-02-05', 15),
+(366, '2025-01-29', 'arrivée', '2025-02-05', 15),
+(367, '2025-01-29', 'arrivée', '2025-02-05', 15),
+(368, '2025-01-29', 'arrivée', '2025-02-05', 15),
+(369, '2025-01-29', 'arrivée', '2025-02-05', 15),
+(370, '2025-01-29', 'arrivée', '2025-02-05', 15),
+(371, '2025-01-29', 'arrivée', '2025-02-05', 15),
+(372, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(373, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(374, '2025-01-29', 'arrivée', '2025-02-05', 2),
+(375, '2025-01-29', 'arrivée', '2025-02-05', 15),
+(376, '2025-01-29', 'arrivée', '2025-02-05', 15),
+(377, '2025-01-29', 'arrivée', '2025-02-05', 15),
+(378, '2025-01-29', 'arrivée', '2025-02-05', 15),
+(379, '2025-01-29', 'arrivée', '2025-02-05', 15),
+(380, '2025-01-29', 'arrivée', '2025-02-05', 15),
+(381, '2025-01-29', 'arrivée', '2025-02-05', 15),
+(382, '2025-01-29', 'arrivée', '2025-02-05', 15),
+(383, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(384, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(385, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(386, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(387, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(388, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(389, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(390, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(391, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(392, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(393, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(395, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(396, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(397, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(398, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(399, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(400, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(401, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(402, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(403, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(404, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(405, '2025-01-29', 'arrivée', '2025-02-05', 24),
+(406, '2025-01-30', 'arrivée', '2025-02-06', 2),
+(407, '2025-01-30', 'arrivée', '2025-02-06', 2),
+(408, '2025-01-30', 'arrivée', '2025-02-06', 2),
+(409, '2025-01-30', 'arrivée', '2025-02-06', 15),
+(410, '2025-01-30', 'arrivée', '2025-02-06', 15),
+(411, '2025-01-30', 'arrivée', '2025-02-06', 15),
+(412, '2025-01-30', 'arrivée', '2025-02-06', 15),
+(413, '2025-01-30', 'arrivée', '2025-02-06', 15),
+(414, '2025-01-30', 'arrivée', '2025-02-06', 15),
+(415, '2025-01-30', 'arrivée', '2025-02-06', 15),
+(417, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(418, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(419, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(420, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(421, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(422, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(423, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(424, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(425, '2025-02-02', 'arrivée', '2025-02-09', 24),
+(426, '2025-02-02', 'arrivée', '2025-02-09', 24),
+(427, '2025-02-02', 'arrivée', '2025-02-09', 2),
+(428, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(429, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(430, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(431, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(432, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(433, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(434, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(435, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(436, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(437, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(438, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(439, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(440, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(441, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(442, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(443, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(444, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(445, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(446, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(447, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(448, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(449, '2025-02-02', 'arrivée', '2025-02-09', 15),
+(452, '2025-02-03', 'arrivée', '2025-02-10', 15),
+(453, '2025-02-03', 'arrivée', '2025-02-10', 15),
 (456, '2025-04-10', 'en attente', '2025-04-17', 3),
 (460, '2020-12-12', 'en attente', '2020-12-13', 3),
 (463, '2000-12-10', 'en attente', '2000-12-20', 15),
 (464, '2000-12-20', 'en attente', '2000-12-22', 15),
-(465, '2000-12-12', 'en attente', '2000-12-20', 3);
+(465, '2000-12-12', 'en attente', '2000-12-20', 3),
+(466, '2020-12-12', 'en attente', '2020-12-18', 15),
+(467, '2020-12-12', 'expédiée', '2020-12-12', 15),
+(468, '2020-12-12', 'expédiée', '2020-12-12', 40),
+(469, '2025-05-04', 'expédiée', '2025-05-11', 1),
+(470, '2020-12-12', 'expédiée', '2020-12-20', 1),
+(471, '2020-12-12', 'expédiée', '2020-12-20', 1),
+(472, '2025-12-12', 'expédiée', '2025-12-20', 1),
+(473, '2025-12-12', 'expédiée', '2025-12-20', 1),
+(474, '2025-12-12', 'expédiée', '2025-12-20', 1);
 
 --
 -- Déclencheurs `commande`
 --
 DELIMITER $$
-CREATE TRIGGER `tUpdateStockCommandeExpediee` AFTER UPDATE ON `commande` FOR EACH ROW begin
-    if OLD.statutCommande = 'en attente' and NEW.statutCommande = 'expédiée' then
-        update livre
-        set exemplaireLivre = exemplaireLivre - (
-            select sum(quantiteLigneCommande)
-            from ligneCommande
-            where idCommande = NEW.idCommande
-            and ligneCommande.idLivre = livre.idLivre
-        )
-        where idLivre in (select idLivre from ligneCommande where idCommande = NEW.idCommande);
-    end if;
-end
+CREATE TRIGGER `tUpdateStockCommande` AFTER UPDATE ON `commande` FOR EACH ROW BEGIN
+IF NEW.statutCommande = 'expédiée' THEN
+UPDATE livre l
+JOIN ligneCommande lc ON l.idLivre = lc.idLivre
+SET l.exemplaireLivre = l.exemplaireLivre - lc.quantiteLigneCommande
+WHERE lc.idCommande = NEW.idCommande;
+END IF;
+END
 $$
 DELIMITER ;
 
@@ -543,9 +591,6 @@ INSERT INTO `ligneCommande` (`idLigneCommande`, `idCommande`, `idLivre`, `quanti
 (713, 452, 2, 2),
 (714, 452, 14, 5),
 (715, 453, 2, 5),
-(716, 454, 2, 1),
-(717, 454, 3, 1),
-(718, 454, 13, 1),
 (720, 455, 2, 15),
 (721, 0, 1, 20),
 (722, 459, 1, 20),
@@ -554,41 +599,51 @@ INSERT INTO `ligneCommande` (`idLigneCommande`, `idCommande`, `idLivre`, `quanti
 (725, 463, 13, 20),
 (726, 464, 1, 10),
 (727, 465, 1, 2),
-(728, 465, 3, 10);
+(728, 465, 3, 10),
+(729, 466, 1, 5),
+(730, 467, 1, 6),
+(731, 468, 1, 6),
+(732, 469, 1, 10),
+(733, 470, 1, 10),
+(734, 471, 1, 100),
+(735, 472, 1, 51),
+(736, 473, 1, 21),
+(737, 474, 1, 21);
 
 --
 -- Déclencheurs `ligneCommande`
 --
 DELIMITER $$
-CREATE TRIGGER `tExemplaireLivreLigneCommande` BEFORE INSERT ON `ligneCommande` FOR EACH ROW begin
-    declare existingQuantity int;
-    select lc.quantiteLigneCommande
-    into existingQuantity
-    from ligneCommande lc
-    inner join commande c on lc.idCommande = c.idCommande
-    where lc.idLivre = NEW.idLivre
-      and c.idUser = (select idUser from commande where idCommande = NEW.idCommande LIMIT 1)
-      and c.statutCommande = 'en attente'
-    LIMIT 1;
-    if existingQuantity is not null then
-        SIGNAL SQLSTATE "45000"
-        SET MESSAGE_TEXT = "Erreur : Livre déjà dans le panier de cet utilisateur. Veuillez modifier le nombre d'exemplaires.";
-    end if;
-end
-$$
-DELIMITER ;
-DELIMITER $$
-CREATE TRIGGER `tStockNull` BEFORE INSERT ON `ligneCommande` FOR EACH ROW begin
-declare exemplaireLivreDisponible int;
-select exemplaireLivre
-into exemplaireLivreDisponible
-from livre
-where idLivre = NEW.idLivre;
-if exemplaireLivreDisponible < NEW.quantiteLigneCommande then
-    SIGNAL SQLSTATE '45000'
-    set MESSAGE_TEXT = 'Erreur : Stock insuffisant pour le livre.';
-end IF;
-end
+CREATE TRIGGER `tStockLivre` BEFORE UPDATE ON `ligneCommande` FOR EACH ROW BEGIN
+    DECLARE t_totalQuantite INT;
+    DECLARE t_exemplaireLivre INT;
+    DECLARE t_idUser INT;
+
+    SELECT idUser
+    INTO t_idUser
+    FROM commande
+    WHERE idCommande = NEW.idCommande;
+
+    SELECT SUM(lc.quantiteLigneCommande)
+    INTO t_totalQuantite
+    FROM ligneCommande lc
+    INNER JOIN commande c ON lc.idCommande = c.idCommande
+    WHERE lc.idLivre = NEW.idLivre
+      AND c.idUser = t_idUser
+      and c.statutCommande = 'en attente';
+
+    SET t_totalQuantite = IFNULL(t_totalQuantite, 0) - OLD.quantiteLigneCommande + NEW.quantiteLigneCommande;
+
+    SELECT exemplaireLivre
+    INTO t_exemplaireLivre
+    FROM livre
+    WHERE idLivre = NEW.idLivre;
+
+    IF t_totalQuantite > t_exemplaireLivre THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'La quantité totale dépasse le nombre d'exemplaires disponibles pour ce livre.';
+END IF;
+END
 $$
 DELIMITER ;
 
@@ -615,7 +670,7 @@ CREATE TABLE `livre` (
 --
 
 INSERT INTO `livre` (`idLivre`, `nomLivre`, `auteurLivre`, `imageLivre`, `exemplaireLivre`, `prixLivre`, `idCategorie`, `idMaisonEdition`, `idPromotion`) VALUES
-(1, 'Alcools', 'Apollinaire', 'alcools.png', 76, 12.50, 3, 1, NULL),
+(1, 'Alcools', 'Apollinaire', 'alcools.png', 20, 12.50, 3, 1, NULL),
 (2, 'Crime et Chatiment', 'Dostoïevski', 'crime_et_chatiment.png', 76, 15.00, 1, 2, NULL),
 (3, 'L`Etranger', 'Camus', 'l_etranger.png', 56, 10.00, 1, 3, NULL),
 (4, 'L`Odyssée', 'Homère', 'l_odyssee.png', 89, 13.50, 2, 4, NULL),
@@ -774,6 +829,31 @@ INSERT INTO `user` (`idUser`, `emailUser`, `mdpUser`, `adresseUser`, `roleUser`)
 (39, 'gest@gmail.com', '123', '16 rue des Lilas', 'gestionnaire'),
 (40, 'test', '123', 'test', 'client');
 
+--
+-- Déclencheurs `user`
+--
+DELIMITER $$
+CREATE TRIGGER `tInsertArchive` BEFORE DELETE ON `user` FOR EACH ROW BEGIN
+    INSERT INTO archiveCommande
+    SELECT c.idCommande, c.dateCommande, c.statutCommande, c.dateLivraisonCommande, c.idUser, NOW()
+    FROM commande c
+    WHERE c.idUser = OLD.idUser;
+
+    INSERT INTO archiveLigneCommande
+    SELECT lc.idLigneCommande, lc.idCommande, lc.idLivre, lc.quantiteLigneCommande, NOW()
+    FROM ligneCommande lc
+             JOIN commande c ON lc.idCommande = c.idCommande
+    WHERE c.idUser = OLD.idUser;
+
+    DELETE FROM ligneCommande
+    WHERE idCommande IN (SELECT idCommande FROM commande WHERE idUser = OLD.idUser);
+
+    DELETE FROM commande
+    WHERE idUser = OLD.idUser;
+END
+$$
+DELIMITER ;
+
 -- --------------------------------------------------------
 
 --
@@ -791,10 +871,10 @@ CREATE TABLE `vcommandesenattente` (
 -- (Voir ci-dessous la vue réelle)
 --
 CREATE TABLE `vlivresenstock` (
-`idLivre` int
+`exemplaireLivre` int
+,`idLivre` int
 ,`nomLivre` varchar(50)
 ,`prixLivre` float(10,2)
-,`exemplaireLivre` int
 );
 
 -- --------------------------------------------------------
@@ -829,8 +909,8 @@ CREATE TABLE `vmeilleuresventes` (
 --
 CREATE TABLE `vmeilleursavis` (
 `idLivre` int
-,`nomLivre` varchar(50)
 ,`moyenneNote` decimal(7,4)
+,`nomLivre` varchar(50)
 );
 
 -- --------------------------------------------------------
@@ -888,9 +968,9 @@ CREATE TABLE `vtotallivre` (
 -- (Voir ci-dessous la vue réelle)
 --
 CREATE TABLE `vtotallivreenattente` (
-`idLivre` int
-,`idCommande` int
+`idCommande` int
 ,`idLigneCommande` int
+,`idLivre` int
 ,`idUser` int
 ,`nomLivre` varchar(50)
 ,`prixLivre` float(10,2)
@@ -906,8 +986,8 @@ CREATE TABLE `vtotallivreenattente` (
 --
 CREATE TABLE `vtotallivreexpediee` (
 `idCommande` int
-,`idUser` int
 ,`idLivre` int
+,`idUser` int
 ,`nomLivre` varchar(50)
 ,`prixLivre` float(10,2)
 ,`quantiteLigneCommande` int
@@ -939,7 +1019,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vlivresmieuxnotes`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vlivresmieuxnotes`  AS SELECT `avis`.`idLivre` AS `idLivre`, max(`avis`.`nomLivre`) AS `nomLivre`, round(avg(`avis`.`noteAvis`),2) AS `noteMoyenne` FROM `avis` GROUP BY `avis`.`idLivre` ORDER BY `noteMoyenne` DESC ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vlivresmieuxnotes`  AS SELECT `a`.`idLivre` AS `idLivre`, max(`l`.`nomLivre`) AS `nomLivre`, round(avg(`a`.`noteAvis`),2) AS `noteMoyenne` FROM (`avis` `a` join `livre` `l` on((`a`.`idLivre` = `l`.`idLivre`))) GROUP BY `a`.`idLivre` ORDER BY `noteMoyenne` DESC ;
 
 -- --------------------------------------------------------
 
@@ -1032,6 +1112,22 @@ ALTER TABLE `admin`
   ADD KEY `idUser` (`idUser`);
 
 --
+-- Index pour la table `archiveCommande`
+--
+ALTER TABLE `archiveCommande`
+  ADD PRIMARY KEY (`idCommande`,`date_archivage`),
+  ADD KEY `idx_user` (`idUser`),
+  ADD KEY `idx_date_archivage` (`date_archivage`);
+
+--
+-- Index pour la table `archiveLigneCommande`
+--
+ALTER TABLE `archiveLigneCommande`
+  ADD PRIMARY KEY (`idLigneCommande`,`date_archivage`),
+  ADD KEY `idx_commande` (`idCommande`),
+  ADD KEY `idx_date_archivage` (`date_archivage`);
+
+--
 -- Index pour la table `avis`
 --
 ALTER TABLE `avis`
@@ -1113,13 +1209,13 @@ ALTER TABLE `abonnement`
 -- AUTO_INCREMENT pour la table `commande`
 --
 ALTER TABLE `commande`
-  MODIFY `idCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=466;
+  MODIFY `idCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=475;
 
 --
 -- AUTO_INCREMENT pour la table `ligneCommande`
 --
 ALTER TABLE `ligneCommande`
-  MODIFY `idLigneCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=729;
+  MODIFY `idLigneCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=738;
 
 --
 -- AUTO_INCREMENT pour la table `livre`
@@ -1131,13 +1227,13 @@ ALTER TABLE `livre`
 -- AUTO_INCREMENT pour la table `particulier`
 --
 ALTER TABLE `particulier`
-  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT pour la table `user`
 --
 ALTER TABLE `user`
-  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- Contraintes pour les tables déchargées
@@ -1150,6 +1246,19 @@ ALTER TABLE `livre`
   ADD CONSTRAINT `fk_c` FOREIGN KEY (`idCategorie`) REFERENCES `categorie` (`idCategorie`),
   ADD CONSTRAINT `fk_livre_promotion` FOREIGN KEY (`idPromotion`) REFERENCES `promotion` (`idPromotion`),
   ADD CONSTRAINT `fk_m` FOREIGN KEY (`idMaisonEdition`) REFERENCES `maisonEdition` (`idMaisonEdition`);
+
+DELIMITER $$
+--
+-- Évènements
+--
+CREATE DEFINER=`root`@`localhost` EVENT `eUpdateStatutCommande` ON SCHEDULE EVERY 1 DAY STARTS '2025-05-05 00:00:00' ON COMPLETION NOT PRESERVE ENABLE DO BEGIN
+UPDATE commande
+SET statutCommande = 'arrivée'
+WHERE statutCommande = 'expédiée'
+  AND dateLivraisonCommande < CURDATE();
+END$$
+
+DELIMITER ;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

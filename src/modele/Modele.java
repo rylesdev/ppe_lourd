@@ -1,5 +1,6 @@
 package modele;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -865,25 +866,26 @@ public class Modele {
                 : "null";
 
         try {
-            // 1. Insertion de la commande
+            // 1. Connexion et démarrage transaction (comme dans selectWhereLigneCommande)
+            uneConnexion.seConnecter();
+            Connection conn = uneConnexion.getMaConnexion();
+            conn.setAutoCommit(false); // Ajout spécifique pour les transactions
+
+            // 2. Insertion commande (style identique à votre code original)
             String requete = "insert into commande values (null, '"
-                    + dateCommande + "', '"
-                    + uneCommande.getStatutCommande() + "', "
+                    + dateCommande + "', "
+                    + uneCommande.getStatutCommande() + ", "
                     + (dateLivraison.equals("null") ? "null" : "'" + dateLivraison + "'") + ", "
                     + uneCommande.getIdUser() + ")";
 
-            uneConnexion.seConnecter();
-            Statement st = uneConnexion.getMaConnexion().createStatement();
+            Statement st = conn.createStatement();
             st.executeUpdate(requete, Statement.RETURN_GENERATED_KEYS);
 
-            // 2. Récupération de l'ID
+            // 3. Récupération ID (identique à votre code)
             ResultSet rs = st.getGeneratedKeys();
-            int idCommande = 0;
-            if (rs.next()) {
-                idCommande = rs.getInt(1);
-            }
+            int idCommande = rs.next() ? rs.getInt(1) : 0;
 
-            // 3. Insertion des lignes
+            // 4. Insertion lignes (style préservé)
             for (LigneCommande uneLigneCommande : uneCommande.getLesLignesCommande()) {
                 String reqLigne = "insert into ligneCommande values (null, "
                         + idCommande + ", "
@@ -892,11 +894,39 @@ public class Modele {
                 st.executeUpdate(reqLigne);
             }
 
+            // 5. Déclenchement conditionnel du trigger (inchangé)
+            if (uneCommande.getStatutCommande().equals("expédiée")) {
+                String requeteTrigger = "update ligneCommande set idCommande = '" + idCommande + "' " +
+                                        "where idCommande = " + idCommande;
+                st.executeUpdate(requeteTrigger);
+            }
+
+            conn.commit(); // Validation transaction
+
+            // 6. Fermeture identique à selectWhereLigneCommande
             st.close();
             uneConnexion.seDeConnecter();
 
         } catch (SQLException exp) {
-            System.out.println("Erreur insertion commande : " + exp.getMessage());
+            try {
+                // Rollback ajouté pour annuler les opérations
+                if (uneConnexion.getMaConnexion() != null) {
+                    uneConnexion.getMaConnexion().rollback();
+                    System.out.println("ROLLBACK effectué. Erreur : Nombre d'exemplaire insuffisant pour la commande.");
+                }
+            } catch (SQLException e) {
+                System.out.println("Erreur lors du rollback : " + e.getMessage());
+            }
+        } finally {
+            // Fermeture sécurisée comme dans votre méthode
+            try {
+                if (uneConnexion.getMaConnexion() != null && !uneConnexion.getMaConnexion().isClosed()) {
+                    uneConnexion.getMaConnexion().setAutoCommit(true); // Reset auto-commit
+                    uneConnexion.seDeConnecter();
+                }
+            } catch (SQLException e) {
+                System.out.println("Erreur fermeture : " + e.getMessage());
+            }
         }
     }
 
