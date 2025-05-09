@@ -57,6 +57,9 @@ public class PanelCommande extends PanelPrincipal implements ActionListener, Key
     private ArrayList<LigneCommande> lignesTemporaires = new ArrayList<>();
     private int idCommandeModification = 0;
 
+    // Couleur personnalisée pour les formulaires (100, 140, 180)
+    private Color couleurFormulaire = new Color(100, 140, 180);
+
     public PanelCommande(int idUser) {
         super("Gestion des Commandes");
 
@@ -74,7 +77,7 @@ public class PanelCommande extends PanelPrincipal implements ActionListener, Key
     }
 
     private void initLigneCommande() {
-        this.panelLigneForm.setBackground(Color.cyan);
+        this.panelLigneForm.setBackground(couleurFormulaire);
         this.panelLigneForm.setBounds(30, 100, 350, 150); // Ajustement de la hauteur
         this.panelLigneForm.setLayout(new GridLayout(6, 2));
 
@@ -103,7 +106,7 @@ public class PanelCommande extends PanelPrincipal implements ActionListener, Key
     }
 
     private void initCommande(int idUser) {
-        this.panelCommandeForm.setBackground(Color.cyan);
+        this.panelCommandeForm.setBackground(couleurFormulaire);
         this.panelCommandeForm.setBounds(30, 260, 350, 200); // Ajustement de la hauteur
         this.panelCommandeForm.setLayout(new GridLayout(7, 2));
 
@@ -142,7 +145,7 @@ public class PanelCommande extends PanelPrincipal implements ActionListener, Key
     }
 
     private void initFiltres() {
-        this.panelFiltre.setBackground(Color.cyan);
+        this.panelFiltre.setBackground(couleurFormulaire);
         this.panelFiltre.setBounds(410, 60, 450, 30);
         this.panelFiltre.setLayout(new GridLayout(1, 3));
         this.panelFiltre.add(new JLabel("Filtrer par :"));

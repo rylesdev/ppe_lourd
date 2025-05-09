@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:8889
--- Généré le : dim. 04 mai 2025 à 14:07
+-- Généré le : ven. 09 mai 2025 à 02:46
 -- Version du serveur : 8.0.35
 -- Version de PHP : 8.3.9
 
@@ -41,7 +41,18 @@ CREATE TABLE `abonnement` (
 
 INSERT INTO `abonnement` (`idAbonnement`, `idUser`, `dateDebutAbonnement`, `dateFinAbonnement`, `pointAbonnement`) VALUES
 (1, 2, '2025-01-01', '2025-12-31', 0),
-(3, 23, '2025-01-25', '2025-04-25', 0);
+(2, 15, '2025-02-20', '2025-08-20', 50),
+(3, 23, '2025-01-25', '2025-04-25', 0),
+(7, 13, '2025-01-15', '2026-01-15', 100),
+(8, 15, '2025-02-20', '2025-08-20', 50),
+(9, 24, '2025-03-10', '2026-03-10', 120),
+(10, 27, '2025-01-05', '2025-07-05', 60),
+(11, 32, '2025-04-18', '2026-04-18', 110),
+(12, 36, '2025-02-28', '2025-08-28', 55),
+(13, 39, '2025-03-25', '2026-03-25', 125),
+(14, 54, '2025-05-01', '2026-05-01', 115),
+(15, 57, '2025-04-12', '2025-10-12', 70),
+(16, 59, '2025-03-15', '2026-03-15', 130);
 
 -- --------------------------------------------------------
 
@@ -380,14 +391,16 @@ INSERT INTO `commande` (`idCommande`, `dateCommande`, `statutCommande`, `dateLiv
 (464, '2000-12-20', 'en attente', '2000-12-22', 15),
 (465, '2000-12-12', 'en attente', '2000-12-20', 3),
 (466, '2020-12-12', 'en attente', '2020-12-18', 15),
-(467, '2020-12-12', 'expédiée', '2020-12-12', 15),
-(468, '2020-12-12', 'expédiée', '2020-12-12', 40),
+(467, '2020-12-12', 'arrivée', '2020-12-12', 15),
+(468, '2020-12-12', 'arrivée', '2020-12-12', 40),
 (469, '2025-05-04', 'expédiée', '2025-05-11', 1),
-(470, '2020-12-12', 'expédiée', '2020-12-20', 1),
-(471, '2020-12-12', 'expédiée', '2020-12-20', 1),
+(470, '2020-12-12', 'arrivée', '2020-12-20', 1),
+(471, '2025-09-05', 'en attente', '2025-12-05', 15),
 (472, '2025-12-12', 'expédiée', '2025-12-20', 1),
 (473, '2025-12-12', 'expédiée', '2025-12-20', 1),
-(474, '2025-12-12', 'expédiée', '2025-12-20', 1);
+(474, '2025-12-12', 'expédiée', '2025-12-20', 1),
+(478, '2025-09-09', 'en attente', '2025-12-09', 15),
+(479, '2025-09-09', 'en attente', '2025-12-09', 15);
 
 --
 -- Déclencheurs `commande`
@@ -427,8 +440,7 @@ INSERT INTO `entreprise` (`idUser`, `siretUser`, `raisonSocialeUser`, `capitalSo
 (30, 123123123, 'yasser', 123123120.00),
 (32, 123, '123', 123124.00),
 (33, 123123, '123123', 123123.00),
-(63, 12312312312312, 'azd', 123123.12),
-(66, 12312312312312, 'AZDazdazdaz', 1231231232.00);
+(63, 12312312312312, 'azd', 123123.12);
 
 -- --------------------------------------------------------
 
@@ -609,7 +621,10 @@ INSERT INTO `ligneCommande` (`idLigneCommande`, `idCommande`, `idLivre`, `quanti
 (734, 471, 1, 100),
 (735, 472, 1, 51),
 (736, 473, 1, 21),
-(737, 474, 1, 21);
+(737, 474, 1, 21),
+(744, 478, 1, 1),
+(745, 479, 1, 10),
+(746, 479, 2, 10);
 
 --
 -- Déclencheurs `ligneCommande`
@@ -628,12 +643,13 @@ CREATE TRIGGER `tStockLivre` BEFORE UPDATE ON `ligneCommande` FOR EACH ROW BEGIN
     SELECT SUM(lc.quantiteLigneCommande)
     INTO t_totalQuantite
     FROM ligneCommande lc
-    INNER JOIN commande c ON lc.idCommande = c.idCommande
+             INNER JOIN commande c ON lc.idCommande = c.idCommande
     WHERE lc.idLivre = NEW.idLivre
       AND c.idUser = t_idUser
-      and c.statutCommande = 'en attente';
+      AND c.statutCommande = 'en attente'
+      AND lc.idLigneCommande != OLD.idLigneCommande;
 
-    SET t_totalQuantite = IFNULL(t_totalQuantite, 0) - OLD.quantiteLigneCommande + NEW.quantiteLigneCommande;
+    SET t_totalQuantite = IFNULL(t_totalQuantite, 0) + NEW.quantiteLigneCommande;
 
     SELECT exemplaireLivre
     INTO t_exemplaireLivre
@@ -642,7 +658,7 @@ CREATE TRIGGER `tStockLivre` BEFORE UPDATE ON `ligneCommande` FOR EACH ROW BEGIN
 
     IF t_totalQuantite > t_exemplaireLivre THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'La quantité totale dépasse le nombre d'exemplaires disponibles pour ce livre.';
+		SET MESSAGE_TEXT = 'La quantite totale depasse le nombre exemplaires disponibles pour ce livre';
 END IF;
 END
 $$
@@ -671,8 +687,8 @@ CREATE TABLE `livre` (
 --
 
 INSERT INTO `livre` (`idLivre`, `nomLivre`, `auteurLivre`, `imageLivre`, `exemplaireLivre`, `prixLivre`, `idCategorie`, `idMaisonEdition`, `idPromotion`) VALUES
-(1, 'Alcools', 'Apollinaire', 'alcools.png', 20, 12.50, 3, 1, NULL),
-(2, 'Crime et Chatiment', 'Dostoïevski', 'crime_et_chatiment.png', 76, 15.00, 1, 2, NULL),
+(1, 'Alcools', 'Apollinaire', 'alcools.png', 100, 12.50, 3, 1, NULL),
+(2, 'Crime et Chatiment', 'Dostoïevski', 'crime_et_chatiment.png', 100, 15.00, 1, 2, NULL),
 (3, 'L`Etranger', 'Camus', 'l_etranger.png', 56, 10.00, 1, 3, NULL),
 (4, 'L`Odyssée', 'Homère', 'l_odyssee.png', 89, 13.50, 2, 4, NULL),
 (5, 'Les Fleurs du Mal', 'Baudelaire', 'les_fleurs_du_mal.png', 100, 14.00, 3, 5, NULL),
@@ -821,7 +837,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`idUser`, `emailUser`, `mdpUser`, `adresseUser`, `roleUser`) VALUES
-(1, 'ryles@gmail.com', '123', '321 Rue des lilas', 'admin'),
+(1, 'ryles@gmail.com', '123', '14 Rue des lilas', 'admin'),
 (2, 'jean@gmail.com', '123', '45 Avenue de la République', 'client'),
 (12, 'm', '123', '78 Boulevard Haussmann', 'client'),
 (13, 'klza', '123', '9 Place de la Liberté', 'client'),
@@ -840,7 +856,7 @@ INSERT INTO `user` (`idUser`, `emailUser`, `mdpUser`, `adresseUser`, `roleUser`)
 (36, 'yasser@gmail.com', '123', '63 Place du Marché', 'client'),
 (37, 'part@gmail.com', '123', 'part', 'client'),
 (38, 'uy@gmail.com', '123', 'uy', 'client'),
-(39, 'gest@gmail.com', '123', '61 rue des Lilas', 'gestionnaire'),
+(39, 'gest@gmail.com', '123', '16 rue des Lilas', 'gestionnaire'),
 (40, 'test', '123', 'test', 'client'),
 (54, 'azd@gmail.com', 'd43affcc277ee52980fc4ecea523730f28d6405b', 'azd', 'client'),
 (55, 'mlk@gmail.com', 'd43affcc277ee52980fc4ecea523730f28d6405b', 'mlk', 'client'),
@@ -854,10 +870,10 @@ INSERT INTO `user` (`idUser`, `emailUser`, `mdpUser`, `adresseUser`, `roleUser`)
 (63, 'entr12h@gmail.com', '5ee9f001562f0311b1e2084cd5953b5e3bf9ae89', 'entr12h', 'client'),
 (64, 'ryles@gmail.com', '55eacda73040413f44453f53c4292daeeefdee89', 'ryles', 'client'),
 (65, 'testaiojzadaz@gmail.com', '8f82cb800fdbe25533f00ec6b2505059c6cfdccd', '123', 'client'),
-(66, 'testaiazdazdazd@gmail.com', '143d848d07d4b4fea895e673db6e38df09125ab7', 'testaiojzadaz@gmail.com', 'client'),
 (67, 'testaiojzadazazd@gmail.com', '14b39fe9e9a3a77fa0f4290a2ec54ba89769bc00', '123', 'client'),
 (68, 'testaiojzaazdazddazazd@gmail.com', '5cbe14105823c8f6e8ddc23246ffbd04d564f678', '123', 'client'),
-(69, 'jhghjgjh@gmail.com', '6354409966349dd4d290a148e49a2b4e177b1c0c', 'jhghjgjh', 'client');
+(69, 'jhghjgjh@gmail.com', '6354409966349dd4d290a148e49a2b4e177b1c0c', 'jhghjgjh', 'client'),
+(71, 'azdadazd@gmail.com', 'b3a3c556dbdb148be75849b46bc3ee6f6325edf6', 'azdazd', 'client');
 
 --
 -- Déclencheurs `user`
@@ -901,10 +917,10 @@ CREATE TABLE `vcommandesenattente` (
 -- (Voir ci-dessous la vue réelle)
 --
 CREATE TABLE `vlivresenstock` (
-`exemplaireLivre` int
-,`idLivre` int
+`idLivre` int
 ,`nomLivre` varchar(50)
 ,`prixLivre` float(10,2)
+,`exemplaireLivre` int
 );
 
 -- --------------------------------------------------------
@@ -939,8 +955,8 @@ CREATE TABLE `vmeilleuresventes` (
 --
 CREATE TABLE `vmeilleursavis` (
 `idLivre` int
-,`moyenneNote` decimal(7,4)
 ,`nomLivre` varchar(50)
+,`moyenneNote` decimal(7,4)
 );
 
 -- --------------------------------------------------------
@@ -998,9 +1014,9 @@ CREATE TABLE `vtotallivre` (
 -- (Voir ci-dessous la vue réelle)
 --
 CREATE TABLE `vtotallivreenattente` (
-`idCommande` int
+`idLivre` int
+,`idCommande` int
 ,`idLigneCommande` int
-,`idLivre` int
 ,`idUser` int
 ,`nomLivre` varchar(50)
 ,`prixLivre` float(10,2)
@@ -1016,8 +1032,8 @@ CREATE TABLE `vtotallivreenattente` (
 --
 CREATE TABLE `vtotallivreexpediee` (
 `idCommande` int
-,`idLivre` int
 ,`idUser` int
+,`idLivre` int
 ,`nomLivre` varchar(50)
 ,`prixLivre` float(10,2)
 ,`quantiteLigneCommande` int
@@ -1233,37 +1249,37 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT pour la table `abonnement`
 --
 ALTER TABLE `abonnement`
-  MODIFY `idAbonnement` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `idAbonnement` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT pour la table `commande`
 --
 ALTER TABLE `commande`
-  MODIFY `idCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=475;
+  MODIFY `idCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=480;
 
 --
 -- AUTO_INCREMENT pour la table `ligneCommande`
 --
 ALTER TABLE `ligneCommande`
-  MODIFY `idLigneCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=738;
+  MODIFY `idLigneCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=747;
 
 --
 -- AUTO_INCREMENT pour la table `livre`
 --
 ALTER TABLE `livre`
-  MODIFY `idLivre` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `idLivre` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
 
 --
 -- AUTO_INCREMENT pour la table `particulier`
 --
 ALTER TABLE `particulier`
-  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
+  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
 
 --
 -- AUTO_INCREMENT pour la table `user`
 --
 ALTER TABLE `user`
-  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
+  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 
 --
 -- Contraintes pour les tables déchargées

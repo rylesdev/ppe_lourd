@@ -48,7 +48,8 @@ public class PanelEntreprise extends PanelPrincipal implements ActionListener, K
     public PanelEntreprise() {
         super("");
 
-        this.panelForm.setBackground(Color.cyan);
+        Color customColor = new Color(100, 140, 180);
+        this.panelForm.setBackground(customColor);
         this.panelForm.setBounds(30, 40, 300, 250);
         this.panelForm.setLayout(new GridLayout(8, 2));
 
@@ -92,7 +93,7 @@ public class PanelEntreprise extends PanelPrincipal implements ActionListener, K
         uneScroll.setBounds(360, 40, 480, 250);
         this.add(uneScroll);
 
-        this.panelFiltre.setBackground(Color.cyan);
+        this.panelFiltre.setBackground(customColor);
         this.panelFiltre.setBounds(370, 0, 450, 30);
         this.panelFiltre.setLayout(new GridLayout(1, 3));
         this.panelFiltre.add(new JLabel("Filtrer par :"));

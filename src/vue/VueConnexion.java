@@ -27,7 +27,7 @@ public class VueConnexion extends JFrame implements ActionListener, KeyListener 
         this.setTitle("PPE Client Lourd Ryles");
         this.setBounds(100, 100, 600, 300);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.getContentPane().setBackground(new Color(81, 66, 62));
+        this.getContentPane().setBackground(new Color(100, 140, 180));
         this.setLayout(null);
         this.setResizable(false);
 
@@ -36,7 +36,7 @@ public class VueConnexion extends JFrame implements ActionListener, KeyListener 
         leLogo.setBounds(20, 20, 250, 250);
         this.add(leLogo);
 
-        this.panelForm.setBackground(new Color(81, 66, 62));
+        this.panelForm.setBackground(new Color(100, 140, 180));
         this.panelForm.setLayout(new GridLayout(3, 2));
         this.panelForm.setBounds(300, 40, 280, 160);
 
@@ -48,7 +48,7 @@ public class VueConnexion extends JFrame implements ActionListener, KeyListener 
 
         this.panelForm.add(new JLabel("Rôle : "));
         JPanel rolePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        rolePanel.setBackground(new Color(81, 66, 62));
+        rolePanel.setBackground(new Color(100, 140, 180));
         rolePanel.add(this.rbAdmin);
         rolePanel.add(this.rbGestionnaire);
         this.panelForm.add(rolePanel);

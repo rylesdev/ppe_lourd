@@ -1,15 +1,9 @@
 A Faire :
-- Mettre le logo sr la page Profil.
-
-- Changer la couleur de fond.
-
-- Mettre plus d'enregistrements dans les champs des tables (notamment la table abonnement).
-
-- Faire une dernière vérification de toutes les fonctionnalitées (insert, update, gestion des erreurs, role admin / gestionnaire, etc...).
+- Vérifier que tous les triggers fonctionnent
 
 
 
-
+// - Vérification générale
 // - Vérifier que la classe "LigneCommande" et que le "PanelCommande" fonctionne bien
 // - Corriger le bug d'affichage de "idLigneCommande" dans le tableau, ou sinon supprimer l'affichage de ligneCommande
 

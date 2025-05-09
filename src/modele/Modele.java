@@ -694,8 +694,8 @@ public class Modele {
 
             // 2. Insertion commande (style identique à votre code original)
             String requete = "insert into commande values (null, '"
-                    + dateCommande + "', "
-                    + uneCommande.getStatutCommande() + ", "
+                    + dateCommande + "', '"
+                    + uneCommande.getStatutCommande() + "', "
                     + (dateLivraison.equals("null") ? "null" : "'" + dateLivraison + "'") + ", "
                     + uneCommande.getIdUser() + ")";
 
@@ -733,7 +733,7 @@ public class Modele {
                 // Rollback ajouté pour annuler les opérations
                 if (uneConnexion.getMaConnexion() != null) {
                     uneConnexion.getMaConnexion().rollback();
-                    System.out.println("ROLLBACK effectué. Erreur : Nombre d'exemplaire insuffisant pour la commande.");
+                    System.out.println("ROLLBACK effectué. Erreur: " + exp.getMessage());
                 }
             } catch (SQLException e) {
                 System.out.println("Erreur lors du rollback : " + e.getMessage());

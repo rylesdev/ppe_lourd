@@ -26,13 +26,17 @@ public class PanelUser extends PanelPrincipal implements ActionListener {
 
         // Configuration du layout principal
         this.setLayout(new BorderLayout());
-        this.setBackground(Color.CYAN);
+        Color customColor = new Color(100, 140, 180);
+        this.setBackground(customColor);
 
         // Création du panel titre avec police taille 30
         JPanel panelTitre = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        panelTitre.setBackground(Color.CYAN);
+        panelTitre.setBackground(customColor); // Appliquer la couleur de fond au panelTitre
         titreLabel = new JLabel("Gestion des Utilisateurs");
         titreLabel.setFont(new Font("Arial", Font.BOLD, 25));
+        titreLabel.setForeground(Color.BLACK); // Définir la couleur du texte en noir
+        titreLabel.setBackground(customColor); // Définir le fond du JLabel avec la couleur personnalisée
+        titreLabel.setOpaque(true); // Rendre le JLabel opaque pour que le fond soit visible
         panelTitre.add(titreLabel);
         this.add(panelTitre, BorderLayout.NORTH);
 
@@ -43,7 +47,7 @@ public class PanelUser extends PanelPrincipal implements ActionListener {
 
         // Panel boutons
         JPanel panelBoutons = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
-        panelBoutons.setBackground(Color.CYAN);
+        panelBoutons.setBackground(customColor);
 
         btParticulier.setPreferredSize(new Dimension(150, 40));
         btEntreprise.setPreferredSize(new Dimension(150, 40));
@@ -65,11 +69,13 @@ public class PanelUser extends PanelPrincipal implements ActionListener {
 
         if(e.getSource() == btParticulier) {
             cl.show(contentPanel, "Particulier");
-            titreLabel.setText("Gestion des Particuliers"); // Modification du titre
+            titreLabel.setText("Gestion des Particuliers");
+            titreLabel.setForeground(Color.BLACK); // Définir la couleur du texte en noir
         }
         else if(e.getSource() == btEntreprise) {
             cl.show(contentPanel, "Entreprise");
-            titreLabel.setText("Gestion des Entreprises"); // Modification cohérente pour l'autre bouton
+            titreLabel.setText("Gestion des Entreprises");
+            titreLabel.setForeground(Color.BLACK); // Définir la couleur du texte en noir
         }
     }
 }

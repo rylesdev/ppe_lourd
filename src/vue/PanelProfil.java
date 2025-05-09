@@ -3,13 +3,7 @@ package vue;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import controleur.Controleur;
@@ -33,17 +27,36 @@ public class PanelProfil extends PanelPrincipal implements ActionListener {
     private JButton btAnnuler = new JButton("Annuler");
     private JButton btValider = new JButton("Valider");
 
+    private JLabel lblLogo = new JLabel();
+
     public PanelProfil() {
         super("Gestion du Profil");
 
         // Configuration initiale
         configurerPanelForm();
         configurerTxtInfos();
+        configurerLogo();
         ajouterBoutonsEtEcouteurs();
 
         // Ne pas charger de profil au démarrage
         viderAffichage();
         this.setVisible(true);
+    }
+
+
+    private void configurerLogo() {
+        ImageIcon icon = new ImageIcon(getClass().getResource("/images/livre.png"));
+        int largeurEcran = Toolkit.getDefaultToolkit().getScreenSize().width;
+        int tailleLogo = largeurEcran / 8; // Réduction de la taille du logo
+
+        Image image = icon.getImage();
+        Image newImg = image.getScaledInstance(tailleLogo, tailleLogo, Image.SCALE_SMOOTH);
+        icon = new ImageIcon(newImg);
+
+        lblLogo.setIcon(icon);
+        lblLogo.setBounds(700, 30, tailleLogo, tailleLogo);
+        lblLogo.setOpaque(false);
+        this.add(lblLogo);
     }
 
     private void viderAffichage() {
@@ -65,16 +78,17 @@ public class PanelProfil extends PanelPrincipal implements ActionListener {
         viderChampsFormulaire();
     }
 
-
     private void configurerPanelForm() {
-        this.panelForm.setBackground(Color.cyan);
-        this.panelForm.setBounds(400, 100, 350, 250);
-        this.panelForm.setLayout(new BorderLayout()); // Utiliser BorderLayout pour plus de flexibilité
+        Color customColor = new Color(100, 140, 180);
+
+        this.panelForm.setBackground(customColor);
+        this.panelForm.setBounds(370, 100, 300, 250);
+        this.panelForm.setLayout(new BorderLayout());
 
         // Panel pour les labels et champs
         JPanel panelLabelsFields = new JPanel();
         panelLabelsFields.setLayout(new GridLayout(5, 2));
-        panelLabelsFields.setBackground(Color.cyan);
+        panelLabelsFields.setBackground(customColor);
 
         panelLabelsFields.add(new JLabel("Email:"));
         panelLabelsFields.add(this.txtEmail);
@@ -90,12 +104,12 @@ public class PanelProfil extends PanelPrincipal implements ActionListener {
         this.panelForm.add(panelLabelsFields, BorderLayout.CENTER);
 
         // Panel pour les boutons
-        this.panelBoutons.setBackground(Color.cyan);
+        this.panelBoutons.setBackground(customColor);
         this.panelBoutons.setLayout(new GridLayout(1, 2));
         this.panelBoutons.add(this.btAnnuler);
         this.panelBoutons.add(this.btValider);
 
-        this.panelForm.add(this.panelBoutons, BorderLayout.SOUTH); // Ajouter les boutons en bas
+        this.panelForm.add(this.panelBoutons, BorderLayout.SOUTH);
 
         this.add(this.panelForm);
         this.panelForm.setVisible(false);
@@ -104,20 +118,23 @@ public class PanelProfil extends PanelPrincipal implements ActionListener {
     private JPanel createTextFieldPanel(JTextField textField) {
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(1, 1));
-        panel.setBorder(new EmptyBorder(5, 5, 5, 5)); // Ajoute des marges autour du JTextField
+        panel.setBorder(new EmptyBorder(5, 5, 5, 5));
         panel.add(textField);
         return panel;
     }
 
     private void configurerTxtInfos() {
-        this.txtInfos.setBounds(50, 100, 300, 240); // Positionnement décalé pour laisser de la place
-        this.txtInfos.setBackground(Color.cyan);
+        Color customColor = new Color(100, 140, 180);
+        this.panelForm.setBackground(customColor);
+
+        this.txtInfos.setBounds(50, 100, 300, 240);
+        this.txtInfos.setBackground(customColor);
         this.txtInfos.setEditable(false);
         this.add(this.txtInfos);
     }
 
     private void ajouterBoutonsEtEcouteurs() {
-        this.btModifier.setBounds(50, 360, 200, 40); // Positionnement à gauche
+        this.btModifier.setBounds(50, 360, 200, 40);
         this.add(this.btModifier);
         this.btAnnuler.addActionListener(this);
         this.btValider.addActionListener(this);
@@ -159,19 +176,18 @@ public class PanelProfil extends PanelPrincipal implements ActionListener {
             this.txtMdp1.setText("");
             this.txtMdp2.setText("");
             this.panelForm.setVisible(true);
-            this.panelBoutons.setVisible(true); // Assurez-vous que cette ligne est présente
+            this.panelBoutons.setVisible(true);
         } else if (e.getSource() == this.btAnnuler) {
             viderChampsFormulaire();
             afficherInfosUtilisateur(currentUser);
-            this.panelBoutons.setVisible(false); // Optionnel : masquer les boutons après annulation
+            this.panelBoutons.setVisible(false);
         } else if (e.getSource() == this.btValider) {
             if (validerFormulaire(currentUser)) {
                 validerModifications(currentUser);
-                this.panelBoutons.setVisible(false); // Optionnel : masquer après validation
+                this.panelBoutons.setVisible(false);
             }
         }
     }
-
 
     private boolean validerFormulaire(User currentUser) {
         String email = this.txtEmail.getText().trim();
@@ -180,7 +196,6 @@ public class PanelProfil extends PanelPrincipal implements ActionListener {
         String mdp1 = new String(this.txtMdp1.getPassword());
         String mdp2 = new String(this.txtMdp2.getPassword());
 
-        // Vérification des champs vides
         if (email.isEmpty() || adresse.isEmpty() || role.isEmpty() || mdp1.isEmpty() || mdp2.isEmpty()) {
             JOptionPane.showMessageDialog(this,
                     "Tous les champs doivent être remplis.",
@@ -188,7 +203,6 @@ public class PanelProfil extends PanelPrincipal implements ActionListener {
             return false;
         }
 
-        // Vérification du format de l'email
         if (!email.matches("^[^@]+@[^@]+\\.[^@]+$")) {
             JOptionPane.showMessageDialog(this,
                     "L'email doit contenir un '@' et un '.' (ex: exemple@domaine.com)",
@@ -196,7 +210,6 @@ public class PanelProfil extends PanelPrincipal implements ActionListener {
             return false;
         }
 
-        // Vérification de la correspondance des mots de passe
         if (!mdp1.equals(mdp2)) {
             JOptionPane.showMessageDialog(this,
                     "Les mots de passe ne correspondent pas.",
@@ -204,8 +217,7 @@ public class PanelProfil extends PanelPrincipal implements ActionListener {
             return false;
         }
 
-        // Vérification du rôle utilisateur
-        String[] roles = {"admin", "client", "gestionnaire"}; // Exemple de rôles possibles
+        String[] roles = {"admin", "client", "gestionnaire"};
         boolean roleValide = false;
         for (String r : roles) {
             if (r.equals(role)) {

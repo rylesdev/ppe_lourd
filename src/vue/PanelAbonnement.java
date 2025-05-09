@@ -48,9 +48,12 @@ public class PanelAbonnement extends PanelPrincipal implements ActionListener, K
         super("Gestion des Abonnements");
 
         // Initialisation de l'interface
-        this.panelForm.setBackground(Color.cyan);
+        Color customColor = new Color(100, 140, 180);
+        this.setBackground(customColor);
+
         this.panelForm.setBounds(30, 100, 300, 250);
         this.panelForm.setLayout(new GridLayout(10, 2));
+        this.panelForm.setBackground(customColor); // Définir la couleur de fond du formulaire
 
         this.panelForm.add(new JLabel("Id User :"));
         this.panelForm.add(this.txtIdUser);
@@ -81,12 +84,28 @@ public class PanelAbonnement extends PanelPrincipal implements ActionListener, K
         String entetes[] = {"Id", "Id User", "Date Début Abonnement", "Date Fin Abonnement", "Points"};
         this.tableauAbonnements = new Tableau(this.obtenirDonnees(""), entetes);
         this.tableAbonnements = new JTable(this.tableauAbonnements);
+
+        // Définir la couleur de fond du tableau sur blanc
+        this.tableAbonnements.setBackground(Color.WHITE);
+
+        // Définir la couleur de fond des cellules du tableau sur blanc
+        this.tableAbonnements.setDefaultRenderer(Object.class, new javax.swing.table.DefaultTableCellRenderer() {
+            @Override
+            public java.awt.Component getTableCellRendererComponent(
+                    JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                java.awt.Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                c.setBackground(Color.WHITE);
+                return c;
+            }
+        });
+
         JScrollPane uneScroll = new JScrollPane(this.tableAbonnements);
         uneScroll.setBounds(360, 100, 480, 250);
+        uneScroll.getViewport().setBackground(customColor); // Définir la couleur de fond pour le JScrollPane
         this.add(uneScroll);
 
         // Initialisation du filtre
-        this.panelFiltre.setBackground(Color.cyan);
+        this.panelFiltre.setBackground(customColor);
         this.panelFiltre.setBounds(370, 60, 450, 30);
         this.panelFiltre.setLayout(new GridLayout(1, 3));
         this.panelFiltre.add(new JLabel("Filtrer par :"));

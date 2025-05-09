@@ -118,12 +118,13 @@ BEGIN
     SELECT SUM(lc.quantiteLigneCommande)
     INTO t_totalQuantite
     FROM ligneCommande lc
-    INNER JOIN commande c ON lc.idCommande = c.idCommande
+             INNER JOIN commande c ON lc.idCommande = c.idCommande
     WHERE lc.idLivre = NEW.idLivre
       AND c.idUser = t_idUser
-      and c.statutCommande = 'en attente';
+      AND c.statutCommande = 'en attente'
+      AND lc.idLigneCommande != OLD.idLigneCommande;
 
-    SET t_totalQuantite = IFNULL(t_totalQuantite, 0) - OLD.quantiteLigneCommande + NEW.quantiteLigneCommande;
+    SET t_totalQuantite = IFNULL(t_totalQuantite, 0) + NEW.quantiteLigneCommande;
 
     SELECT exemplaireLivre
     INTO t_exemplaireLivre
@@ -132,7 +133,7 @@ BEGIN
 
     IF t_totalQuantite > t_exemplaireLivre THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'La quantité totale dépasse le nombre d''exemplaires disponibles pour ce livre.';
+		SET MESSAGE_TEXT = 'La quantite totale depasse le nombre exemplaires disponibles pour ce livre';
 END IF;
 END$$
 DELIMITER ;

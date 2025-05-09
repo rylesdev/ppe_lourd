@@ -48,9 +48,12 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, KeyLis
         super("Gestion des Livres");
 
         // Initialisation de l'interface
-        this.panelForm.setBackground(Color.cyan);
+        Color customColor = new Color(100, 140, 180);
+        this.setBackground(customColor);
+
         this.panelForm.setBounds(30, 100, 300, 300);
         this.panelForm.setLayout(new GridLayout(11, 2));
+        this.panelForm.setBackground(customColor); // Définir la couleur de fond pour le panelForm
 
         this.panelForm.add(new JLabel("Nom :"));
         this.panelForm.add(this.txtNom);
@@ -95,10 +98,11 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, KeyLis
         this.tableLivres = new JTable(this.tableauLivres);
         JScrollPane uneScroll = new JScrollPane(this.tableLivres);
         uneScroll.setBounds(360, 100, 480, 250);
+        uneScroll.getViewport().setBackground(customColor); // Définir la couleur de fond pour le JScrollPane
         this.add(uneScroll);
 
         // Initialisation du filtre
-        this.panelFiltre.setBackground(Color.cyan);
+        this.panelFiltre.setBackground(customColor);
         this.panelFiltre.setBounds(370, 60, 450, 30);
         this.panelFiltre.setLayout(new GridLayout(1, 3));
         this.panelFiltre.add(new JLabel("Filtrer par :"));

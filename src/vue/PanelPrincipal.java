@@ -10,7 +10,9 @@ public abstract class PanelPrincipal extends JPanel {
     private JLabel lbTitre = new JLabel();
 
     public PanelPrincipal(String titre) {
-        this.setBackground(Color.cyan);
+        Color customColor = new Color(100, 140, 180);
+
+        this.setBackground(customColor);
         this.setBounds(50, 80, 900, 440);
 
         this.lbTitre.setText(titre);
