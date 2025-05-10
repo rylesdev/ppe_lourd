@@ -425,6 +425,38 @@ public class Modele {
         return lesLivres;
     }
 
+    public static Livre selectLivreByNom(String nomLivre) {
+        String requete = "SELECT * FROM livre WHERE nomLivre = '" + nomLivre + "'";
+        Livre unLivre = null;
+
+        try {
+            uneConnexion.seConnecter();
+            Statement unStat = uneConnexion.getMaConnexion().createStatement();
+            ResultSet unResultat = unStat.executeQuery(requete);
+
+            if (unResultat.next()) {
+                unLivre = new Livre(
+                        unResultat.getInt("idLivre"),
+                        unResultat.getString("nomLivre"),
+                        unResultat.getString("auteurLivre"),
+                        unResultat.getString("imageLivre"),
+                        unResultat.getInt("exemplaireLivre"),
+                        unResultat.getFloat("prixLivre"),
+                        unResultat.getInt("idCategorie"),
+                        unResultat.getInt("idMaisonEdition"),
+                        unResultat.getInt("idPromotion")
+                );
+            }
+
+            unStat.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException exp) {
+            System.out.println("Erreur d'exécution de la requête : " + requete);
+            exp.printStackTrace();
+        }
+        return unLivre;
+    }
+
     public static void insertLivre(Livre livre) {
         String requete = "insert into livre values (null,'"
                 + livre.getNomLivre() + "', '"
@@ -455,6 +487,57 @@ public class Modele {
                             "idPromotion = " + unLivre.getIdPromotion() + " " +
                             "where idLivre = " + unLivre.getIdLivre() + ";";
         executerRequete(requete);
+    }
+
+    public static void updateCategorieLivre(Livre unLivre) {
+        String requete = "UPDATE livre SET idCategorie = " + unLivre.getIdCategorie() + " WHERE idLivre = " + unLivre.getIdLivre();
+
+        try {
+            uneConnexion.seConnecter();
+            Statement unStat = uneConnexion.getMaConnexion().createStatement();
+            unStat.executeUpdate(requete);
+
+            unStat.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException exp) {
+            System.out.println("Erreur d'exécution de la requête : " + requete);
+            exp.printStackTrace();
+        }
+    }
+
+    public static void updateMaisonEditionLivre(Livre unLivre) {
+        String requete = "UPDATE livre SET idMaisonEdition = " + unLivre.getIdMaisonEdition() + " WHERE idLivre = " + unLivre.getIdLivre();
+
+        try {
+            uneConnexion.seConnecter();
+            Statement unStat = uneConnexion.getMaConnexion().createStatement();
+            unStat.executeUpdate(requete);
+
+            unStat.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException exp) {
+            System.out.println("Erreur d'exécution de la requête : " + requete);
+            exp.printStackTrace();
+        }
+    }
+
+    public static boolean updatePromotionLivre(Livre unLivre) {
+        String requete = String.format(
+                "UPDATE livre SET idPromotion = %d WHERE idLivre = %d",
+                unLivre.getIdPromotion(), unLivre.getIdLivre()
+        );
+
+        try {
+            uneConnexion.seConnecter();
+            Statement stmt = uneConnexion.getMaConnexion().createStatement();
+            int nbLignes = stmt.executeUpdate(requete);
+            stmt.close();
+            uneConnexion.seDeConnecter();
+            return nbLignes > 0;
+        } catch (SQLException exp) {
+            System.out.println("Erreur lors de la mise à jour de la promotion du livre : " + exp.getMessage());
+            return false;
+        }
     }
 
     public static int selectIdCategorie(String nomCategorie) {
@@ -569,6 +652,491 @@ public class Modele {
             System.out.println("Erreur d'exécution de la requête : " + requete);
         }
         return null;
+    }
+
+
+
+    /************************ GESTION DES CATEGORIES ************************/
+    public static ArrayList<Categorie> selectCategorie() {
+        String requete = "SELECT c.*, l.idLivre, l.nomLivre " +
+                "FROM categorie c " +
+                "INNER JOIN livre l ON l.idCategorie = c.idCategorie";
+        ArrayList<Categorie> lesCategories = new ArrayList<>();
+
+        try {
+            uneConnexion.seConnecter();
+            Statement unStat = uneConnexion.getMaConnexion().createStatement();
+            ResultSet unResultat = unStat.executeQuery(requete);
+
+            while (unResultat.next()) {
+                Categorie uneCategorie = new Categorie(
+                        unResultat.getInt("idCategorie"),
+                        unResultat.getString("nomCategorie")
+                );
+                int idLivre = unResultat.getInt("idLivre");
+                String nomLivre = unResultat.getString("nomLivre");
+
+                lesCategories.add(uneCategorie);
+            }
+            unStat.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException exp) {
+            System.out.println("Erreur d'exécution de la requête : " + requete);
+            exp.printStackTrace();
+        }
+        return lesCategories;
+    }
+
+
+    public static ArrayList<Categorie> selectLikeCategorie(String filtre) {
+        String requete = "SELECT * FROM categorie WHERE nomCategorie LIKE '%" + filtre + "%'";
+        ArrayList<Categorie> lesCategories = new ArrayList<>();
+
+        try {
+            uneConnexion.seConnecter();
+            Statement unStat = uneConnexion.getMaConnexion().createStatement();
+            ResultSet unResultat = unStat.executeQuery(requete);
+
+            while (unResultat.next()) {
+                Categorie uneCategorie = new Categorie(
+                        unResultat.getInt("idCategorie"),
+                        unResultat.getString("nomCategorie")
+                        // Ajoutez d'autres champs si nécessaire
+                );
+                lesCategories.add(uneCategorie);
+            }
+
+            unStat.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException exp) {
+            System.out.println("Erreur d'exécution de la requête : " + requete);
+            exp.printStackTrace();
+        }
+        return lesCategories;
+    }
+
+
+    public static Categorie selectCategorieByNom(String nomCategorie) {
+        String requete = "SELECT * FROM categorie WHERE nomCategorie = '" + nomCategorie + "'";
+        Categorie uneCategorie = null;
+
+        try {
+            uneConnexion.seConnecter();
+            Statement unStat = uneConnexion.getMaConnexion().createStatement();
+            ResultSet unResultat = unStat.executeQuery(requete);
+
+            if (unResultat.next()) {
+                uneCategorie = new Categorie(
+                        unResultat.getInt("idCategorie"),
+                        unResultat.getString("nomCategorie")
+                        // Ajoutez d'autres champs si nécessaire
+                );
+            }
+
+            unStat.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException exp) {
+            System.out.println("Erreur d'exécution de la requête : " + requete);
+            exp.printStackTrace();
+        }
+        return uneCategorie;
+    }
+
+    public static Categorie selectCategorieById(int idCategorie) {
+        String requete = "SELECT * FROM categorie WHERE idCategorie = " + idCategorie;
+        Categorie uneCategorie = null;
+
+        try {
+            uneConnexion.seConnecter();
+            Statement unStat = uneConnexion.getMaConnexion().createStatement();
+            ResultSet unResultat = unStat.executeQuery(requete);
+
+            if (unResultat.next()) {
+                uneCategorie = new Categorie(
+                        unResultat.getInt("idCategorie"),
+                        unResultat.getString("nomCategorie")
+                        // Ajoutez d'autres champs si nécessaire
+                );
+            }
+
+            unStat.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException exp) {
+            System.out.println("Erreur d'exécution de la requête : " + requete);
+            exp.printStackTrace();
+        }
+        return uneCategorie;
+    }
+
+    public static void insertCategorie(Categorie uneCategorie) {
+        String requete =    "insert into categorie values (null,'" +
+                            uneCategorie.getNomCategorie() + "');";
+        executerRequete(requete);
+    }
+
+    public static void updateCategorie(Categorie uneCategorie) {
+        String requete =    "update categorie set " +
+                            "nomCategorie = '" + uneCategorie.getNomCategorie() + "' " +
+                            "where idCategorie = " + uneCategorie.getIdCategorie() + ";";
+        executerRequete(requete);
+    }
+
+    public static void deleteCategorie(int idCategorie) {
+        String requete = "delete from categorie where idCategorie = " + idCategorie + ";";
+        executerRequete(requete);
+    }
+
+
+
+    /************************ GESTION DES MAISON D'EDITION ******************/
+    public static ArrayList<MaisonEdition> selectMaisonEdition() {
+        String requete =    "SELECT m.*, l.idLivre, l.nomLivre " +
+                            "FROM maisonEdition m " +
+                            "INNER JOIN livre l ON l.idMaisonEdition = m.idMaisonEdition;";
+        ArrayList<MaisonEdition> lesMaisonEditions = new ArrayList<>();
+
+        try {
+            uneConnexion.seConnecter();
+            Statement unStat = uneConnexion.getMaConnexion().createStatement();
+            ResultSet rs = unStat.executeQuery(requete);
+
+            while (rs.next()) {
+                MaisonEdition uneMaisonEdition = new MaisonEdition(
+                        rs.getInt("idMaisonEdition"),
+                        rs.getString("nomMaisonEdition")
+                );
+                int idLivre = rs.getInt("idLivre");
+                String nomLivre = rs.getString("nomLivre");
+
+                lesMaisonEditions.add(uneMaisonEdition);
+            }
+            unStat.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException e) {
+            System.out.println("Erreur SQL lors de la récupération des maisons d'édition : " + e.getMessage());
+            e.printStackTrace();
+        }
+        return lesMaisonEditions;
+    }
+
+    public static ArrayList<MaisonEdition> selectLikeMaisonEdition(String filtre) {
+        String requete = "SELECT * FROM maisonedition WHERE nomMaisonEdition LIKE '%" + filtre + "%'";
+        ArrayList<MaisonEdition> lesMaisonEditions = new ArrayList<>();
+
+        try {
+            uneConnexion.seConnecter();
+            Statement unStat = uneConnexion.getMaConnexion().createStatement();
+            ResultSet rs = unStat.executeQuery(requete);
+
+            while (rs.next()) {
+                MaisonEdition uneMaisonEdition = new MaisonEdition(
+                        rs.getInt("idMaisonEdition"),
+                        rs.getString("nomMaisonEdition")
+                );
+                lesMaisonEditions.add(uneMaisonEdition);
+            }
+
+            unStat.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException e) {
+            System.out.println("Erreur SQL lors de la récupération des maisons d'édition par filtre : " + e.getMessage());
+            e.printStackTrace();
+        }
+        return lesMaisonEditions;
+    }
+
+    public static void insertMaisonEdition(MaisonEdition maisonEdition) {
+        String requete = "INSERT INTO maisonedition (nomMaisonEdition) VALUES ('" + maisonEdition.getNomMaisonEdition() + "')";
+
+        try {
+            uneConnexion.seConnecter();
+            Statement unStat = uneConnexion.getMaConnexion().createStatement();
+            unStat.executeUpdate(requete);
+
+            unStat.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException e) {
+            System.out.println("Erreur SQL lors de l'insertion de la maison d'édition : " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public static void updateMaisonEdition(MaisonEdition maisonEdition) {
+        String requete = "UPDATE maisonedition SET nomMaisonEdition = '" + maisonEdition.getNomMaisonEdition() + "' WHERE idMaisonEdition = " + maisonEdition.getIdMaisonEdition();
+
+        try {
+            uneConnexion.seConnecter();
+            Statement unStat = uneConnexion.getMaConnexion().createStatement();
+            unStat.executeUpdate(requete);
+
+            unStat.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException e) {
+            System.out.println("Erreur SQL lors de la mise à jour de la maison d'édition : " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteMaisonEdition(int idMaisonEdition) {
+        String requeteMAJ = "UPDATE livre SET idMaisonEdition = NULL WHERE idMaisonEdition = " + idMaisonEdition;
+        String requete = "DELETE FROM maisonedition WHERE idMaisonEdition = " + idMaisonEdition;
+
+        try {
+            uneConnexion.seConnecter();
+            Statement unStat = uneConnexion.getMaConnexion().createStatement();
+
+            unStat.executeUpdate(requeteMAJ);
+            unStat.executeUpdate(requete);
+
+            unStat.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException e) {
+            System.out.println("Erreur SQL lors de la suppression de la maison d'édition : " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public static MaisonEdition selectMaisonEditionById(int idMaisonEdition) {
+        String requete = "SELECT * FROM maisonedition WHERE idMaisonEdition = " + idMaisonEdition;
+        MaisonEdition maisonEdition = null;
+
+        try {
+            uneConnexion.seConnecter();
+            Statement unStat = uneConnexion.getMaConnexion().createStatement();
+            ResultSet rs = unStat.executeQuery(requete);
+
+            if (rs.next()) {
+                maisonEdition = new MaisonEdition(
+                        rs.getInt("idMaisonEdition"),
+                        rs.getString("nomMaisonEdition")
+                );
+            }
+
+            unStat.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException e) {
+            System.out.println("Erreur SQL lors de la récupération de la maison d'édition par ID : " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return maisonEdition;
+    }
+
+    public static MaisonEdition selectMaisonEditionByNom(String nomMaisonEdition) {
+        String requete = "SELECT * FROM maisonedition WHERE nomMaisonEdition = '" + nomMaisonEdition + "'";
+        MaisonEdition maisonEdition = null;
+
+        try {
+            uneConnexion.seConnecter();
+            Statement unStat = uneConnexion.getMaConnexion().createStatement();
+            ResultSet rs = unStat.executeQuery(requete);
+
+            if (rs.next()) {
+                maisonEdition = new MaisonEdition(
+                        rs.getInt("idMaisonEdition"),
+                        rs.getString("nomMaisonEdition")
+                );
+            }
+
+            unStat.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException e) {
+            System.out.println("Erreur SQL lors de la récupération de la maison d'édition par nom : " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return maisonEdition;
+    }
+
+
+
+    /************************ GESTION DES PROMOTIONS ***********************/
+    public static boolean insertPromotion(Promotion unePromotion) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String dateDebut = sdf.format(unePromotion.getDateDebutPromotion());
+        String dateFin = sdf.format(unePromotion.getDateFinPromotion());
+
+        String requete = String.format(
+                "INSERT INTO promotion (nomPromotion, dateDebutPromotion, dateFinPromotion, reductionPromotion) " +
+                        "VALUES ('%s', '%s', '%s', %d)",
+                unePromotion.getNomPromotion(), dateDebut, dateFin, unePromotion.getReductionPromotion()
+        );
+
+        try {
+            uneConnexion.seConnecter();
+            Statement stmt = uneConnexion.getMaConnexion().createStatement();
+            int nbLignes = stmt.executeUpdate(requete);
+            stmt.close();
+            uneConnexion.seDeConnecter();
+            return nbLignes > 0;
+        } catch (SQLException exp) {
+            System.out.println("Erreur d'insertion promotion : " + exp.getMessage());
+            return false;
+        }
+    }
+
+    public static boolean updatePromotion(Promotion unePromotion) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String dateDebut = sdf.format(unePromotion.getDateDebutPromotion());
+        String dateFin = sdf.format(unePromotion.getDateFinPromotion());
+
+        String requete = String.format(
+                "UPDATE promotion SET nomPromotion = '%s', dateDebutPromotion = '%s', " +
+                        "dateFinPromotion = '%s', reductionPromotion = %d WHERE idPromotion = %d",
+                unePromotion.getNomPromotion(), dateDebut, dateFin,
+                unePromotion.getReductionPromotion(), unePromotion.getIdPromotion()
+        );
+
+        try {
+            uneConnexion.seConnecter();
+            Statement stmt = uneConnexion.getMaConnexion().createStatement();
+            int nbLignes = stmt.executeUpdate(requete);
+            stmt.close();
+            uneConnexion.seDeConnecter();
+            return nbLignes > 0;
+        } catch (SQLException exp) {
+            System.out.println("Erreur de mise à jour promotion : " + exp.getMessage());
+            return false;
+        }
+    }
+
+    public static boolean deletePromotion(int idPromotion) {
+        // Avant de supprimer, mettre à NULL les références dans la table livre
+        String requeteNullRef = "UPDATE livre SET idPromotion = NULL WHERE idPromotion = " + idPromotion;
+
+        // Suppression de la promotion
+        String requete = "DELETE FROM promotion WHERE idPromotion = " + idPromotion;
+
+        try {
+            uneConnexion.seConnecter();
+            Statement stmt = uneConnexion.getMaConnexion().createStatement();
+            stmt.executeUpdate(requeteNullRef);
+            int nbLignes = stmt.executeUpdate(requete);
+            stmt.close();
+            uneConnexion.seDeConnecter();
+            return nbLignes > 0;
+        } catch (SQLException exp) {
+            System.out.println("Erreur de suppression promotion : " + exp.getMessage());
+            return false;
+        }
+    }
+
+    public static Promotion selectPromotionByNom(String nomPromotion) {
+        String requete = "SELECT * FROM promotion WHERE nomPromotion = '" + nomPromotion + "'";
+        Promotion unePromotion = null;
+
+        try {
+            uneConnexion.seConnecter();
+            Statement stmt = uneConnexion.getMaConnexion().createStatement();
+            ResultSet rs = stmt.executeQuery(requete);
+
+            if (rs.next()) {
+                unePromotion = new Promotion(
+                        rs.getInt("idPromotion"),
+                        rs.getString("nomPromotion"),
+                        rs.getDate("dateDebutPromotion"),
+                        rs.getDate("dateFinPromotion"),
+                        rs.getInt("reductionPromotion")
+                );
+            }
+
+            stmt.close();
+            rs.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException exp) {
+            System.out.println("Erreur lors de la recherche de promotion par nom : " + exp.getMessage());
+        }
+
+        return unePromotion;
+    }
+
+    public static Promotion selectPromotionById(int idPromotion) {
+        String requete = "SELECT * FROM promotion WHERE idPromotion = " + idPromotion;
+        Promotion unePromotion = null;
+
+        try {
+            uneConnexion.seConnecter();
+            Statement stmt = uneConnexion.getMaConnexion().createStatement();
+            ResultSet rs = stmt.executeQuery(requete);
+
+            if (rs.next()) {
+                unePromotion = new Promotion(
+                        rs.getInt("idPromotion"),
+                        rs.getString("nomPromotion"),
+                        rs.getDate("dateDebutPromotion"),
+                        rs.getDate("dateFinPromotion"),
+                        rs.getInt("reductionPromotion")
+                );
+            }
+
+            stmt.close();
+            rs.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException exp) {
+            System.out.println("Erreur lors de la recherche de promotion par id : " + exp.getMessage());
+        }
+
+        return unePromotion;
+    }
+
+    public static ArrayList<Promotion> selectPromotion() {
+        String requete = "SELECT * FROM promotion ORDER BY nomPromotion";
+        ArrayList<Promotion> lesPromotions = new ArrayList<>();
+
+        try {
+            uneConnexion.seConnecter();
+            Statement stmt = uneConnexion.getMaConnexion().createStatement();
+            ResultSet rs = stmt.executeQuery(requete);
+
+            while (rs.next()) {
+                Promotion unePromotion = new Promotion(
+                        rs.getInt("idPromotion"),
+                        rs.getString("nomPromotion"),
+                        rs.getDate("dateDebutPromotion"),
+                        rs.getDate("dateFinPromotion"),
+                        rs.getInt("reductionPromotion")
+                );
+                lesPromotions.add(unePromotion);
+            }
+
+            stmt.close();
+            rs.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException exp) {
+            System.out.println("Erreur lors de la récupération des promotions : " + exp.getMessage());
+        }
+
+        return lesPromotions;
+    }
+
+    public static ArrayList<Promotion> selectLikePromotion(String filtre) {
+        String requete = "SELECT * FROM promotion WHERE nomPromotion LIKE '%" + filtre + "%' ORDER BY nomPromotion";
+        ArrayList<Promotion> lesPromotions = new ArrayList<>();
+
+        try {
+            uneConnexion.seConnecter();
+            Statement stmt = uneConnexion.getMaConnexion().createStatement();
+            ResultSet rs = stmt.executeQuery(requete);
+
+            while (rs.next()) {
+                Promotion unePromotion = new Promotion(
+                        rs.getInt("idPromotion"),
+                        rs.getString("nomPromotion"),
+                        rs.getDate("dateDebutPromotion"),
+                        rs.getDate("dateFinPromotion"),
+                        rs.getInt("reductionPromotion")
+                );
+                lesPromotions.add(unePromotion);
+            }
+
+            stmt.close();
+            rs.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException exp) {
+            System.out.println("Erreur lors de la recherche de promotions par filtre : " + exp.getMessage());
+        }
+
+        return lesPromotions;
     }
 
 

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:8889
--- Généré le : ven. 09 mai 2025 à 02:46
+-- Généré le : sam. 10 mai 2025 à 02:27
 -- Version du serveur : 8.0.35
 -- Version de PHP : 8.3.9
 
@@ -721,7 +721,7 @@ INSERT INTO `livre` (`idLivre`, `nomLivre`, `auteurLivre`, `imageLivre`, `exempl
 (49, 'La Seconde Guerre mondiale', 'Beevor', 'la_seconde_guerre_mondiale.png', 100, 19.99, 2, 8, NULL),
 (50, 'Napoléon : Une ambition française', 'Tulard', 'napoleon_une_ambition_francaise.png', 100, 20.99, 2, 8, NULL),
 (51, 'dimanche', 'dimanche', 'dimanche.png', 180, 7.20, 3, 3, NULL),
-(52, 'cate', 'cate', 'cate.png', 12, 12.00, 3, 3, NULL);
+(52, 'cate', 'cate', 'cate.png', 12, 12.00, 1, 3, NULL);
 
 -- --------------------------------------------------------
 
@@ -746,7 +746,9 @@ INSERT INTO `maisonEdition` (`idMaisonEdition`, `nomMaisonEdition`) VALUES
 (5, 'Le Livre de Poche'),
 (6, 'First Interactive'),
 (7, 'Eyrolles'),
-(8, 'Perrin');
+(8, 'Perrin'),
+(9, 'azd'),
+(10, 'azd');
 
 -- --------------------------------------------------------
 
@@ -1252,6 +1254,12 @@ ALTER TABLE `abonnement`
   MODIFY `idAbonnement` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
+-- AUTO_INCREMENT pour la table `categorie`
+--
+ALTER TABLE `categorie`
+  MODIFY `idCategorie` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT pour la table `commande`
 --
 ALTER TABLE `commande`
@@ -1270,10 +1278,22 @@ ALTER TABLE `livre`
   MODIFY `idLivre` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
 
 --
+-- AUTO_INCREMENT pour la table `maisonEdition`
+--
+ALTER TABLE `maisonEdition`
+  MODIFY `idMaisonEdition` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
 -- AUTO_INCREMENT pour la table `particulier`
 --
 ALTER TABLE `particulier`
   MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
+
+--
+-- AUTO_INCREMENT pour la table `promotion`
+--
+ALTER TABLE `promotion`
+  MODIFY `idPromotion` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT pour la table `user`

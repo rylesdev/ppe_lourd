@@ -93,6 +93,10 @@ public class Controleur {
         return Modele.selectLikeLivre(filtre);
     }
 
+    public static Livre selectLivreByNom(String nomLivre) {
+        return Modele.selectLivreByNom(nomLivre);
+    }
+
     public static void insertLivre(Livre livre) {
         Modele.insertLivre(livre);
     }
@@ -103,6 +107,18 @@ public class Controleur {
 
     public static void updateLivre(Livre unLivre) {
         Modele.updateLivre(unLivre);
+    }
+
+    public static void updateCategorieLivre(Livre unLivre) {
+        Modele.updateCategorieLivre(unLivre);
+    }
+
+    public static void updateMaisonEditionLivre(Livre unLivre) {
+        Modele.updateMaisonEditionLivre(unLivre);
+    }
+
+    public static void updatePromotionLivre(Livre unLivre) {
+        Modele.updatePromotionLivre(unLivre);
     }
 
     public static int selectIdCategorie(String nomCategorie) {
@@ -127,6 +143,99 @@ public class Controleur {
 
     public static String selectNomPromotion(int idPromotion) {
         return Modele.selectNomPromotion(idPromotion);
+    }
+
+
+
+    /**************** GESTION DES CATEGORIES ****************/
+    public static ArrayList<Categorie> selectCategorie() {
+        return Modele.selectCategorie();
+    }
+
+    public static ArrayList<Categorie> selectLikeCategorie(String filtre) {
+        return Modele.selectLikeCategorie(filtre);
+    }
+
+    public static Categorie selectCategorieByNom(String nomCategorie) {
+        return Modele.selectCategorieByNom(nomCategorie);
+    }
+
+    public static Categorie selectCategorieById(int idCategorie) {
+        return Modele.selectCategorieById(idCategorie);
+    }
+
+    public static void insertCategorie(Categorie uneCategorie) {
+        Modele.insertCategorie(uneCategorie);
+    }
+
+    public static void updateCategorie(Categorie uneCategorie) {
+        Modele.updateCategorie(uneCategorie);
+    }
+
+    public static void deleteCategorie(int idCategorie) {
+        Modele.deleteCategorie(idCategorie);
+    }
+
+
+
+    /**************** GESTION DES MAISON D'EDITION ****************/
+    public static ArrayList<MaisonEdition> selectMaisonEdition() {
+        return Modele.selectMaisonEdition();
+    }
+
+    public static ArrayList<MaisonEdition> selectLikeMaisonEdition(String filtre) {
+        return Modele.selectLikeMaisonEdition(filtre);
+    }
+
+    public static void insertMaisonEdition(MaisonEdition uneMaisonEdition) {
+        Modele.insertMaisonEdition(uneMaisonEdition);
+    }
+
+    public static void updateMaisonEdition(MaisonEdition uneMaisonEdition) {
+        Modele.updateMaisonEdition(uneMaisonEdition);
+    }
+
+    public static void deleteMaisonEdition(int idMaisonEdition) {
+        Modele.deleteMaisonEdition(idMaisonEdition);
+    }
+
+    public static MaisonEdition selectMaisonEditionById(int idMaisonEdition) {
+        return Modele.selectMaisonEditionById(idMaisonEdition);
+    }
+
+    public static MaisonEdition selectMaisonEditionByNom(String nomMaisonEdition) {
+        return Modele.selectMaisonEditionByNom(nomMaisonEdition);
+    }
+
+
+
+    /**************** GESTION DES PROMOTIONS ****************/
+    public static boolean insertPromotion(Promotion unePromotion) {
+        return Modele.insertPromotion(unePromotion);
+    }
+
+    public static boolean updatePromotion(Promotion unePromotion) {
+        return Modele.updatePromotion(unePromotion);
+    }
+
+    public static boolean deletePromotion(int idPromotion) {
+        return Modele.deletePromotion(idPromotion);
+    }
+
+    public static Promotion selectPromotionByNom(String nomPromotion) {
+        return Modele.selectPromotionByNom(nomPromotion);
+    }
+
+    public static Promotion selectPromotionById(int idPromotion) {
+        return Modele.selectPromotionById(idPromotion);
+    }
+
+    public static ArrayList<Promotion> selectPromotion() {
+        return Modele.selectPromotion();
+    }
+
+    public static ArrayList<Promotion> selectLikePromotion(String filtre) {
+        return Modele.selectLikePromotion(filtre);
     }
 
 
