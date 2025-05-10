@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:8889
--- Généré le : sam. 10 mai 2025 à 16:14
+-- Généré le : sam. 10 mai 2025 à 17:01
 -- Version du serveur : 8.0.35
 -- Version de PHP : 8.3.9
 
@@ -993,10 +993,10 @@ CREATE TABLE `vcommandesenattente` (
 -- (Voir ci-dessous la vue réelle)
 --
 CREATE TABLE `vlivresenstock` (
-`idLivre` int
+`exemplaireLivre` int
+,`idLivre` int
 ,`nomLivre` varchar(50)
 ,`prixLivre` float(10,2)
-,`exemplaireLivre` int
 );
 
 -- --------------------------------------------------------
@@ -1031,8 +1031,8 @@ CREATE TABLE `vmeilleuresventes` (
 --
 CREATE TABLE `vmeilleursavis` (
 `idLivre` int
-,`nomLivre` varchar(50)
 ,`moyenneNote` decimal(7,4)
+,`nomLivre` varchar(50)
 );
 
 -- --------------------------------------------------------
@@ -1090,9 +1090,9 @@ CREATE TABLE `vtotallivre` (
 -- (Voir ci-dessous la vue réelle)
 --
 CREATE TABLE `vtotallivreenattente` (
-`idLivre` int
-,`idCommande` int
+`idCommande` int
 ,`idLigneCommande` int
+,`idLivre` int
 ,`idUser` int
 ,`nomLivre` varchar(50)
 ,`prixLivre` float(10,2)
@@ -1108,8 +1108,8 @@ CREATE TABLE `vtotallivreenattente` (
 --
 CREATE TABLE `vtotallivreexpediee` (
 `idCommande` int
-,`idUser` int
 ,`idLivre` int
+,`idUser` int
 ,`nomLivre` varchar(50)
 ,`prixLivre` float(10,2)
 ,`quantiteLigneCommande` int
