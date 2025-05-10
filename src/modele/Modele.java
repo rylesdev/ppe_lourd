@@ -60,7 +60,9 @@ public class Modele {
     }
 
     public static User selectWhereUser(String email, String mdp, String role) {
-        String requete = "select * from user where emailUser = '" + email + "' and mdpUser = '" + mdp + "' and roleUser = '" + role + "';";
+        String requete =    "select u.*, a.*  from user u " +
+                            "inner join admin a on u.idUser=a.idUser " +
+                            "where u.emailUser = '" + email + "' and u.mdpUser = '" + mdp + "' and a.niveauAdmin = '" + role + "';";
         User unUser = null;
         try {
             uneConnexion.seConnecter();

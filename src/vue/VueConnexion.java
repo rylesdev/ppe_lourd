@@ -87,7 +87,7 @@ public class VueConnexion extends JFrame implements ActionListener, KeyListener 
     private void traitement() {
         String email = this.txtEmail.getText();
         String mdp = new String(this.txtMdp.getPassword());
-        String role = this.rbAdmin.isSelected() ? "admin" : "gestionnaire";
+        String role = this.rbAdmin.isSelected() ? "principal" : "gestionnaire";
         User unUser = Controleur.selectWhereUser(email, mdp, role);
         if (unUser == null) {
             JOptionPane.showMessageDialog(this, "Veuillez vérifier vos identifiants.");

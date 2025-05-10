@@ -1,5 +1,9 @@
 A Faire :
-- Vérifier que toutes les méthodes des Panel Catégorie ; MaisonEdition ; Promotion ; fonctionnent.
+- Dans toutes les pages, modifier les droits de "admin" en mettant à la place "principal".
+(- Implémenter une foncionntalité pour que le gestionnaire puisse uniquement voir les vues admin ?)
+- Dans toutes les pages, modifier les champs "client" en mettant à la place "particulier" ou "entreprise".
+
+- Vérifier que toutes les méthodes des Panel "Catégorie ; MaisonEdition ; Promotion" fonctionnent.
 
 - Vérifier que tous les triggers fonctionnent
 
