@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:8889
--- Généré le : sam. 10 mai 2025 à 02:27
+-- Généré le : sam. 10 mai 2025 à 09:53
 -- Version du serveur : 8.0.35
 -- Version de PHP : 8.3.9
 
@@ -691,30 +691,30 @@ INSERT INTO `livre` (`idLivre`, `nomLivre`, `auteurLivre`, `imageLivre`, `exempl
 (2, 'Crime et Chatiment', 'Dostoïevski', 'crime_et_chatiment.png', 100, 15.00, 1, 2, NULL),
 (3, 'L`Etranger', 'Camus', 'l_etranger.png', 56, 10.00, 1, 3, NULL),
 (4, 'L`Odyssée', 'Homère', 'l_odyssee.png', 89, 13.50, 2, 4, NULL),
-(5, 'Les Fleurs du Mal', 'Baudelaire', 'les_fleurs_du_mal.png', 100, 14.00, 3, 5, NULL),
+(5, 'Les Fleurs du Mal', 'Baudelaire', 'les_fleurs_du_mal.png', 100, 14.00, 3, 5, 19),
 (6, 'PHP et MySQL pour les nuls', 'Valade', 'php_et_mysql_pour_les_nuls.png', 79, 22.00, 4, 6, NULL),
 (7, 'Programmer en Java', 'Delannoy', 'programmer_en_java.png', 100, 25.00, 4, 7, NULL),
 (8, 'SPQR', 'Beard', 'spqr.png', 99, 18.00, 2, 8, NULL),
 (9, 'À la recherche du temps perdu', 'Proust', 'a_la_recherche_du_temps_perdu.png', 96, 0.00, 1, 1, NULL),
-(10, 'Les Misérables', 'Hugo', 'les_miserables_I.png', 98, 0.00, 1, 2, 10),
+(10, 'Les Misérables', 'Hugo', 'les_miserables_I.png', 98, 0.00, 1, 2, 12),
 (11, '1984', 'Orwell', '1984.png', 95, 0.00, 1, 3, NULL),
 (12, 'L`Art d\'aimer', 'Ovide', 'l_art_d_aimer', 92, 0.00, 1, 4, NULL),
-(13, 'La Peste', 'Camus', 'la_peste.png', 98, 15.99, 1, 1, NULL),
+(13, 'La Peste', 'Camus', 'la_peste.png', 98, 15.99, 1, 1, 17),
 (14, 'Les Mémoires d\'Hadrien', 'Yourcenar', 'les_memoires_d_hadrien.png', 95, 12.99, 1, 1, NULL),
 (15, 'La Condition humaine', 'Malraux', 'la_condition_humaine.png', 100, 14.99, 1, 1, NULL),
 (16, 'Le Comte de Monte-Cristo', 'Dumas', 'le_comte_de_monte_cristo.png', 100, 9.99, 1, 2, NULL),
 (17, 'Orgueil et Préjugés', 'Austen', 'orgueil_et_prejuges.png', 100, 8.99, 1, 2, NULL),
-(18, 'Shining', 'King', 'shining.png', 100, 10.99, 1, 2, NULL),
+(18, 'Shining', 'King', 'shining.png', 100, 10.99, 1, 2, 9),
 (19, 'Bel-Ami', 'Maupassant', 'bel_ami.png', 100, 11.99, 1, 3, NULL),
 (20, 'Fahrenheit 451', 'Bradbury', 'fahrenheit_451.png', 100, 9.99, 1, 3, NULL),
 (21, 'La Nuit des temps', 'Barjavel', 'la_nuit_des_temps.png', 100, 12.99, 1, 3, NULL),
 (22, 'L`Énéide', 'Virgile', 'l_eneide.png', 100, 19.99, 3, 4, NULL),
-(23, 'Les Pensées', 'Aurèle', 'les_pensees.png', 100, 18.99, 3, 4, NULL),
+(23, 'Les Pensées', 'Aurèle', 'les_pensees.png', 100, 18.99, 3, 4, 15),
 (24, 'Les Métamorphoses', 'Ovide', 'les_metamorphoses.png', 100, 20.99, 3, 4, NULL),
 (25, 'Le Petit Livre des citations latines', 'Delamaire', 'le_petit_livre_des_citations_latines.png', 100, 7.99, 3, 6, NULL),
 (43, 'Le Petit Livre des grandes coïncidences', 'Chiflet', 'le_petit_livre_des_grandes_coincidences.png', 100, 7.99, 3, 6, NULL),
 (44, 'Le Petit Livre des gros mensonges', 'Chiflet', 'le_petit_livre_des_gros_mensonges.png', 100, 7.99, 3, 6, NULL),
-(45, 'L`Art de la guerre', 'Sun', 'l_art_de_la_guerre.png', 100, 12.99, 2, 7, NULL),
+(45, 'L`Art de la guerre', 'Sun', 'l_art_de_la_guerre.png', 100, 12.99, 2, 7, 7),
 (46, 'Apprendre à dessiner', 'Edwards', 'apprendre_a_dessiner.png', 100, 14.99, 4, 7, NULL),
 (47, 'Le Lean Startup', 'Ries', 'le_lean_startup.png', 100, 16.99, 4, 7, NULL),
 (48, 'Les Templiers', 'Demurger', 'les_templiers.png', 100, 18.99, 2, 8, NULL),
@@ -746,9 +746,7 @@ INSERT INTO `maisonEdition` (`idMaisonEdition`, `nomMaisonEdition`) VALUES
 (5, 'Le Livre de Poche'),
 (6, 'First Interactive'),
 (7, 'Eyrolles'),
-(8, 'Perrin'),
-(9, 'azd'),
-(10, 'azd');
+(8, 'Perrin');
 
 -- --------------------------------------------------------
 
@@ -809,16 +807,26 @@ CREATE TABLE `promotion` (
 --
 
 INSERT INTO `promotion` (`idPromotion`, `nomPromotion`, `dateDebutPromotion`, `dateFinPromotion`, `reductionPromotion`) VALUES
-(1, '10%', '2025-01-05', '2025-01-20', 10),
-(2, '20%', '2025-02-01', '2025-02-15', 20),
-(3, '30%', '2025-03-01', '2025-03-10', 30),
-(4, '40%', '2025-03-26', '2026-12-12', 40),
-(5, '50%', '2025-03-26', '2026-12-12', 50),
-(6, '60%', '2025-02-02', '2025-02-10', 60),
-(7, '70%', '2025-03-26', '2026-12-12', 70),
-(8, '80%', '2025-03-26', '2026-12-12', 80),
-(9, '90%', '2025-04-11', '2025-12-31', 90),
-(10, 'Aucune Promotion', '2025-04-11', '2025-12-31', 0);
+(1, 'Promo Été 2023', '2023-07-02', '2023-07-31', 10),
+(2, 'Promo Hiver 2023', '2023-12-01', '2023-12-31', 15),
+(3, 'Promo Printemps 2024', '2024-04-01', '2024-04-30', 20),
+(4, 'Promo Automne 2024', '2024-10-01', '2024-10-31', 25),
+(5, 'Promo Spéciale Été', '2023-08-01', '2023-08-31', 30),
+(6, 'Promo Spéciale Hiver', '2023-11-01', '2023-11-30', 35),
+(7, 'Promo Spéciale Printemps', '2024-05-01', '2024-05-31', 40),
+(8, 'Promo Spéciale Automne', '2024-09-01', '2024-09-30', 45),
+(9, 'Promo Été Flash', '2023-07-15', '2023-07-20', 50),
+(10, 'Promo Hiver Flash', '2023-12-15', '2023-12-20', 55),
+(11, 'Promo Printemps Flash', '2024-04-15', '2024-04-20', 60),
+(12, 'Promo Automne Flash', '2024-10-15', '2024-10-21', 65),
+(13, 'Promo Été Mega', '2023-07-01', '2023-07-10', 10),
+(14, 'Promo Hiver Mega', '2023-12-01', '2023-12-10', 15),
+(15, 'Promo Printemps Mega', '2024-04-01', '2024-04-10', 20),
+(16, 'Promo Automne Mega', '2024-10-01', '2024-10-10', 25),
+(17, 'Promo Été Super', '2023-07-20', '2023-07-31', 30),
+(18, 'Promo Hiver Super', '2023-12-20', '2023-12-31', 35),
+(19, 'Promo Printemps Super', '2024-04-20', '2024-04-30', 40),
+(20, 'Promo Automne Super', '2024-10-20', '2024-10-31', 45);
 
 -- --------------------------------------------------------
 
@@ -1293,7 +1301,7 @@ ALTER TABLE `particulier`
 -- AUTO_INCREMENT pour la table `promotion`
 --
 ALTER TABLE `promotion`
-  MODIFY `idPromotion` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `idPromotion` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT pour la table `user`

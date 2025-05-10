@@ -1,7 +1,6 @@
 package vue;
 
-import java.awt.Color;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -44,11 +43,11 @@ public class PanelMaisonEdition extends PanelPrincipal implements ActionListener
     private JLabel lbNbLivresMaisonEditions = new JLabel();
 
     private JPanel panelFiltre = new JPanel();
-    private JTextField txtFiltre = new JTextField();
+    private JTextField txtFiltre = new JTextField(7);
     private JButton btFiltrer = new JButton("Filtrer");
 
     private JPanel panelFiltreLivres = new JPanel();
-    private JTextField txtFiltreLivres = new JTextField();
+    private JTextField txtFiltreLivres = new JTextField(7);
     private JButton btFiltrerLivres = new JButton("Filtrer");
 
     // Données temporaires et état
@@ -91,7 +90,7 @@ public class PanelMaisonEdition extends PanelPrincipal implements ActionListener
 
     private void initLivreMaisonEdition() {
         this.panelLivreMaisonEditionForm.setBackground(couleurFormulaire);
-        this.panelLivreMaisonEditionForm.setBounds(30, 400, 350, 150);
+        this.panelLivreMaisonEditionForm.setBounds(30, 240, 350, 150);
         this.panelLivreMaisonEditionForm.setLayout(new GridLayout(4, 2));
 
         this.panelLivreMaisonEditionForm.add(new JLabel("Nom Livre:"));
@@ -110,7 +109,7 @@ public class PanelMaisonEdition extends PanelPrincipal implements ActionListener
         this.tableauMaisonEditions = new Tableau(this.obtenirDonneesMaisonEditions(""), entetesMaisonEditions);
         this.tableMaisonEditions = new JTable(this.tableauMaisonEditions);
         JScrollPane uneScrollMaisonEditions = new JScrollPane(this.tableMaisonEditions);
-        uneScrollMaisonEditions.setBounds(400, 100, 600, 150);
+        uneScrollMaisonEditions.setBounds(400, 100, 220, 250);
         this.add(uneScrollMaisonEditions);
 
         // Gestion de la sélection dans le tableau des maisons d'édition
@@ -127,7 +126,7 @@ public class PanelMaisonEdition extends PanelPrincipal implements ActionListener
         this.tableauLivresMaisonEditions = new Tableau(this.obtenirDonneesLivresMaisonEditions(""), entetesLivresMaisonEd);
         this.tableLivresMaisonEditions = new JTable(this.tableauLivresMaisonEditions);
         JScrollPane uneScrollLivresMaisonEd = new JScrollPane(this.tableLivresMaisonEditions);
-        uneScrollLivresMaisonEd.setBounds(400, 300, 600, 200);
+        uneScrollLivresMaisonEd.setBounds(630, 100, 260, 250);
         this.add(uneScrollLivresMaisonEd);
 
         // Gestion de la sélection dans le tableau des livres et maisons d'édition
@@ -141,27 +140,35 @@ public class PanelMaisonEdition extends PanelPrincipal implements ActionListener
     private void initFiltres() {
         // Filtre pour le tableau des maisons d'édition
         this.panelFiltre.setBackground(couleurFormulaire);
-        this.panelFiltre.setBounds(410, 60, 550, 30);
-        this.panelFiltre.setLayout(new GridLayout(1, 3));
-        this.panelFiltre.add(new JLabel("Filtrer maisons d'édition par :"));
+        this.panelFiltre.setBounds(400, 60, 320, 30);
+        this.panelFiltre.setLayout(new FlowLayout(FlowLayout.LEFT));
+
+        JLabel labelFiltre = new JLabel("Filtrer :");
+        labelFiltre.setPreferredSize(new Dimension(50, 20));
+        this.panelFiltre.add(labelFiltre);
+        this.txtFiltre.setPreferredSize(new Dimension(75, 20));
         this.panelFiltre.add(this.txtFiltre);
         this.panelFiltre.add(this.btFiltrer);
         this.add(this.panelFiltre);
 
-        this.lbNbMaisonEditions.setBounds(450, 260, 400, 20);
+        this.lbNbMaisonEditions.setBounds(400, 360, 400, 20);
         this.add(this.lbNbMaisonEditions);
         this.lbNbMaisonEditions.setText("Nombre de maisons d'édition : " + this.tableauMaisonEditions.getRowCount());
 
         // Filtre pour le tableau des livres et maisons d'édition
         this.panelFiltreLivres.setBackground(couleurFormulaire);
-        this.panelFiltreLivres.setBounds(410, 260, 550, 30);
-        this.panelFiltreLivres.setLayout(new GridLayout(1, 3));
-        this.panelFiltreLivres.add(new JLabel("Filtrer livres par :"));
+        this.panelFiltreLivres.setBounds(650, 60, 320, 30);
+        this.panelFiltreLivres.setLayout(new FlowLayout(FlowLayout.LEFT));
+
+        JLabel labelFiltreLivres = new JLabel("Filtrer :");
+        labelFiltreLivres.setPreferredSize(new Dimension(50, 20));
+        this.panelFiltreLivres.add(labelFiltreLivres);
+        this.txtFiltreLivres.setPreferredSize(new Dimension(75, 20));
         this.panelFiltreLivres.add(this.txtFiltreLivres);
         this.panelFiltreLivres.add(this.btFiltrerLivres);
         this.add(this.panelFiltreLivres);
 
-        this.lbNbLivresMaisonEditions.setBounds(450, 510, 400, 20);
+        this.lbNbLivresMaisonEditions.setBounds(630, 360, 400, 20);
         this.add(this.lbNbLivresMaisonEditions);
         this.lbNbLivresMaisonEditions.setText("Nombre de livres : " + this.tableauLivresMaisonEditions.getRowCount());
     }

@@ -1,7 +1,7 @@
 A Faire :
-- Vérifier que tous les triggers fonctionnent
-
 - Vérifier que toutes les méthodes des Panel Catégorie ; MaisonEdition ; Promotion ; fonctionnent.
+
+- Vérifier que tous les triggers fonctionnent
 
 
 

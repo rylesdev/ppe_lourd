@@ -1,7 +1,6 @@
 package vue;
 
-import java.awt.Color;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -50,11 +49,11 @@ public class PanelPromotion extends PanelPrincipal implements ActionListener, Ke
     private JLabel lbNbLivresPromotions = new JLabel();
 
     private JPanel panelFiltre = new JPanel();
-    private JTextField txtFiltre = new JTextField();
+    private JTextField txtFiltre = new JTextField(7);
     private JButton btFiltrer = new JButton("Filtrer");
 
     private JPanel panelFiltreLivres = new JPanel();
-    private JTextField txtFiltreLivres = new JTextField();
+    private JTextField txtFiltreLivres = new JTextField(7);
     private JButton btFiltrerLivres = new JButton("Filtrer");
 
     // Données temporaires et état
@@ -83,7 +82,7 @@ public class PanelPromotion extends PanelPrincipal implements ActionListener, Ke
 
     private void initPromotion() {
         this.panelPromotionForm.setBackground(couleurFormulaire);
-        this.panelPromotionForm.setBounds(30, 100, 350, 180);
+        this.panelPromotionForm.setBounds(30, 100, 350, 150);
         this.panelPromotionForm.setLayout(new GridLayout(6, 2));
 
         this.panelPromotionForm.add(new JLabel("Nom Promotion:"));
@@ -103,7 +102,7 @@ public class PanelPromotion extends PanelPrincipal implements ActionListener, Ke
 
     private void initLivrePromotion() {
         this.panelLivrePromotionForm.setBackground(couleurFormulaire);
-        this.panelLivrePromotionForm.setBounds(30, 400, 350, 150);
+        this.panelLivrePromotionForm.setBounds(30, 240, 350, 150);
         this.panelLivrePromotionForm.setLayout(new GridLayout(4, 2));
 
         this.panelLivrePromotionForm.add(new JLabel("Nom Livre:"));
@@ -122,7 +121,7 @@ public class PanelPromotion extends PanelPrincipal implements ActionListener, Ke
         this.tableauPromotions = new Tableau(this.obtenirDonneesPromotions(""), entetesPromotions);
         this.tablePromotions = new JTable(this.tableauPromotions);
         JScrollPane uneScrollPromotions = new JScrollPane(this.tablePromotions);
-        uneScrollPromotions.setBounds(400, 100, 600, 150);
+        uneScrollPromotions.setBounds(400, 100, 260, 250);
         this.add(uneScrollPromotions);
 
         // Gestion de la sélection dans le tableau des promotions
@@ -139,7 +138,7 @@ public class PanelPromotion extends PanelPrincipal implements ActionListener, Ke
         this.tableauLivresPromotions = new Tableau(this.obtenirDonneesLivresPromotions(""), entetesLivresPromotions);
         this.tableLivresPromotions = new JTable(this.tableauLivresPromotions);
         JScrollPane uneScrollLivresPromotions = new JScrollPane(this.tableLivresPromotions);
-        uneScrollLivresPromotions.setBounds(400, 300, 600, 200);
+        uneScrollLivresPromotions.setBounds(670, 100, 220, 250);
         this.add(uneScrollLivresPromotions);
 
         // Gestion de la sélection dans le tableau des livres et promotions
@@ -153,27 +152,35 @@ public class PanelPromotion extends PanelPrincipal implements ActionListener, Ke
     private void initFiltres() {
         // Filtre pour le tableau des promotions
         this.panelFiltre.setBackground(couleurFormulaire);
-        this.panelFiltre.setBounds(410, 60, 550, 30);
-        this.panelFiltre.setLayout(new GridLayout(1, 3));
-        this.panelFiltre.add(new JLabel("Filtrer promotions par :"));
+        this.panelFiltre.setBounds(400, 60, 320, 30);
+        this.panelFiltre.setLayout(new FlowLayout(FlowLayout.LEFT));
+
+        JLabel labelFiltre = new JLabel("Filtrer :");
+        labelFiltre.setPreferredSize(new Dimension(50, 20));
+        this.panelFiltre.add(labelFiltre);
+        this.txtFiltre.setPreferredSize(new Dimension(75, 20));
         this.panelFiltre.add(this.txtFiltre);
         this.panelFiltre.add(this.btFiltrer);
         this.add(this.panelFiltre);
 
-        this.lbNbPromotions.setBounds(450, 260, 400, 20);
+        this.lbNbPromotions.setBounds(400, 360, 400, 20);
         this.add(this.lbNbPromotions);
         this.lbNbPromotions.setText("Nombre de promotions : " + this.tableauPromotions.getRowCount());
 
         // Filtre pour le tableau des livres et promotions
         this.panelFiltreLivres.setBackground(couleurFormulaire);
-        this.panelFiltreLivres.setBounds(410, 260, 550, 30);
-        this.panelFiltreLivres.setLayout(new GridLayout(1, 3));
-        this.panelFiltreLivres.add(new JLabel("Filtrer livres par :"));
+        this.panelFiltreLivres.setBounds(650, 60, 320, 30);
+        this.panelFiltreLivres.setLayout(new FlowLayout(FlowLayout.LEFT));
+
+        JLabel labelFiltreLivres = new JLabel("Filtrer :");
+        labelFiltreLivres.setPreferredSize(new Dimension(50, 20));
+        this.panelFiltreLivres.add(labelFiltreLivres);
+        this.txtFiltreLivres.setPreferredSize(new Dimension(75, 20));
         this.panelFiltreLivres.add(this.txtFiltreLivres);
         this.panelFiltreLivres.add(this.btFiltrerLivres);
         this.add(this.panelFiltreLivres);
 
-        this.lbNbLivresPromotions.setBounds(450, 510, 400, 20);
+        this.lbNbLivresPromotions.setBounds(630, 360, 400, 20);
         this.add(this.lbNbLivresPromotions);
         this.lbNbLivresPromotions.setText("Nombre de livres : " + this.tableauLivresPromotions.getRowCount());
     }

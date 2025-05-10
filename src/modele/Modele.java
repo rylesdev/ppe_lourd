@@ -658,9 +658,7 @@ public class Modele {
 
     /************************ GESTION DES CATEGORIES ************************/
     public static ArrayList<Categorie> selectCategorie() {
-        String requete = "SELECT c.*, l.idLivre, l.nomLivre " +
-                "FROM categorie c " +
-                "INNER JOIN livre l ON l.idCategorie = c.idCategorie";
+        String requete = "SELECT * from categorie;";
         ArrayList<Categorie> lesCategories = new ArrayList<>();
 
         try {
@@ -673,9 +671,6 @@ public class Modele {
                         unResultat.getInt("idCategorie"),
                         unResultat.getString("nomCategorie")
                 );
-                int idLivre = unResultat.getInt("idLivre");
-                String nomLivre = unResultat.getString("nomLivre");
-
                 lesCategories.add(uneCategorie);
             }
             unStat.close();
@@ -790,9 +785,7 @@ public class Modele {
 
     /************************ GESTION DES MAISON D'EDITION ******************/
     public static ArrayList<MaisonEdition> selectMaisonEdition() {
-        String requete =    "SELECT m.*, l.idLivre, l.nomLivre " +
-                            "FROM maisonEdition m " +
-                            "INNER JOIN livre l ON l.idMaisonEdition = m.idMaisonEdition;";
+        String requete =    "SELECT * from maisonEdition;";
         ArrayList<MaisonEdition> lesMaisonEditions = new ArrayList<>();
 
         try {
@@ -805,9 +798,6 @@ public class Modele {
                         rs.getInt("idMaisonEdition"),
                         rs.getString("nomMaisonEdition")
                 );
-                int idLivre = rs.getInt("idLivre");
-                String nomLivre = rs.getString("nomLivre");
-
                 lesMaisonEditions.add(uneMaisonEdition);
             }
             unStat.close();
@@ -1080,7 +1070,7 @@ public class Modele {
     }
 
     public static ArrayList<Promotion> selectPromotion() {
-        String requete = "SELECT * FROM promotion ORDER BY nomPromotion";
+        String requete = "SELECT * FROM promotion;";
         ArrayList<Promotion> lesPromotions = new ArrayList<>();
 
         try {
@@ -1105,7 +1095,6 @@ public class Modele {
         } catch (SQLException exp) {
             System.out.println("Erreur lors de la récupération des promotions : " + exp.getMessage());
         }
-
         return lesPromotions;
     }
 

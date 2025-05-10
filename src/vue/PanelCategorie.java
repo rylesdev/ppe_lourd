@@ -1,7 +1,6 @@
 package vue;
 
-import java.awt.Color;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -44,11 +43,11 @@ public class PanelCategorie extends PanelPrincipal implements ActionListener, Ke
     private JLabel lbNbLivresCategories = new JLabel();
 
     private JPanel panelFiltre = new JPanel();
-    private JTextField txtFiltre = new JTextField();
+    private JTextField txtFiltre = new JTextField(7); // Réduction à la moitié
     private JButton btFiltrer = new JButton("Filtrer");
 
     private JPanel panelFiltreLivres = new JPanel();
-    private JTextField txtFiltreLivres = new JTextField();
+    private JTextField txtFiltreLivres = new JTextField(7); // Réduction à la moitié
     private JButton btFiltrerLivres = new JButton("Filtrer");
 
     // Données temporaires et état
@@ -91,7 +90,7 @@ public class PanelCategorie extends PanelPrincipal implements ActionListener, Ke
 
     private void initLivreCategorie() {
         this.panelLivreCategorieForm.setBackground(couleurFormulaire);
-        this.panelLivreCategorieForm.setBounds(30, 400, 350, 150);
+        this.panelLivreCategorieForm.setBounds(30, 240, 350, 150);
         this.panelLivreCategorieForm.setLayout(new GridLayout(4, 2));
 
         this.panelLivreCategorieForm.add(new JLabel("Nom Livre:"));
@@ -110,7 +109,7 @@ public class PanelCategorie extends PanelPrincipal implements ActionListener, Ke
         this.tableauCategories = new Tableau(this.obtenirDonneesCategories(""), entetesCategories);
         this.tableCategories = new JTable(this.tableauCategories);
         JScrollPane uneScrollCategories = new JScrollPane(this.tableCategories);
-        uneScrollCategories.setBounds(400, 100, 600, 150);
+        uneScrollCategories.setBounds(400, 100, 220, 250);
         this.add(uneScrollCategories);
 
         // Gestion de la sélection dans le tableau des catégories
@@ -127,7 +126,7 @@ public class PanelCategorie extends PanelPrincipal implements ActionListener, Ke
         this.tableauLivresCategories = new Tableau(this.obtenirDonneesLivresCategories(""), entetesLivresCat);
         this.tableLivresCategories = new JTable(this.tableauLivresCategories);
         JScrollPane uneScrollLivresCat = new JScrollPane(this.tableLivresCategories);
-        uneScrollLivresCat.setBounds(400, 300, 600, 200);
+        uneScrollLivresCat.setBounds(630, 100, 260, 250);
         this.add(uneScrollLivresCat);
 
         // Gestion de la sélection dans le tableau des livres et catégories
@@ -141,27 +140,35 @@ public class PanelCategorie extends PanelPrincipal implements ActionListener, Ke
     private void initFiltres() {
         // Filtre pour le tableau des catégories
         this.panelFiltre.setBackground(couleurFormulaire);
-        this.panelFiltre.setBounds(410, 60, 550, 30);
-        this.panelFiltre.setLayout(new GridLayout(1, 3));
-        this.panelFiltre.add(new JLabel("Filtrer catégories par :"));
+        this.panelFiltre.setBounds(400, 60, 320, 30); // Augmenté la largeur
+        this.panelFiltre.setLayout(new FlowLayout(FlowLayout.LEFT));
+
+        JLabel labelFiltre = new JLabel("Filtrer :");
+        labelFiltre.setPreferredSize(new Dimension(50, 20));
+        this.panelFiltre.add(labelFiltre);
+        this.txtFiltre.setPreferredSize(new Dimension(75, 20)); // Taille réduite de moitié
         this.panelFiltre.add(this.txtFiltre);
         this.panelFiltre.add(this.btFiltrer);
         this.add(this.panelFiltre);
 
-        this.lbNbCategories.setBounds(450, 260, 400, 20);
+        this.lbNbCategories.setBounds(400, 360, 400, 20);
         this.add(this.lbNbCategories);
         this.lbNbCategories.setText("Nombre de catégories : " + this.tableauCategories.getRowCount());
 
         // Filtre pour le tableau des livres et catégories
         this.panelFiltreLivres.setBackground(couleurFormulaire);
-        this.panelFiltreLivres.setBounds(410, 260, 550, 30);
-        this.panelFiltreLivres.setLayout(new GridLayout(1, 3));
-        this.panelFiltreLivres.add(new JLabel("Filtrer livres par :"));
+        this.panelFiltreLivres.setBounds(650, 60, 320, 30); // Augmenté la largeur
+        this.panelFiltreLivres.setLayout(new FlowLayout(FlowLayout.LEFT));
+
+        JLabel labelFiltreLivres = new JLabel("Filtrer :");
+        labelFiltreLivres.setPreferredSize(new Dimension(50, 20));
+        this.panelFiltreLivres.add(labelFiltreLivres);
+        this.txtFiltreLivres.setPreferredSize(new Dimension(75, 20)); // Taille réduite de moitié
         this.panelFiltreLivres.add(this.txtFiltreLivres);
         this.panelFiltreLivres.add(this.btFiltrerLivres);
         this.add(this.panelFiltreLivres);
 
-        this.lbNbLivresCategories.setBounds(450, 510, 400, 20);
+        this.lbNbLivresCategories.setBounds(630, 360, 400, 20);
         this.add(this.lbNbLivresCategories);
         this.lbNbLivresCategories.setText("Nombre de livres : " + this.tableauLivresCategories.getRowCount());
     }
