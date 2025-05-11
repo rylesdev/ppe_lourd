@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:8889
--- Généré le : sam. 10 mai 2025 à 17:01
+-- Généré le : dim. 11 mai 2025 à 16:16
 -- Version du serveur : 8.0.35
 -- Version de PHP : 8.3.9
 
@@ -96,6 +96,8 @@ CREATE TABLE `archiveCommande` (
 --
 
 INSERT INTO `archiveCommande` (`idCommande`, `dateCommande`, `statutCommande`, `dateLivraisonCommande`, `idUser`, `date_archivage`) VALUES
+(3, '2025-04-12 00:00:00', 'arrivée', '2025-04-18 00:00:00', 3, '2025-05-11 13:44:40'),
+(4, '2025-04-12 00:00:00', 'en attente', NULL, 4, '2025-05-11 16:07:16'),
 (301, '2025-01-24 00:00:00', 'arrivée', '2025-01-31 00:00:00', 2, '2025-05-10 13:00:57'),
 (302, '2025-01-24 00:00:00', 'en attente', '2025-01-31 00:00:00', 2, '2025-05-10 13:00:57'),
 (303, '2025-01-24 00:00:00', 'en attente', '2025-01-31 00:00:00', 2, '2025-05-10 13:00:57'),
@@ -255,15 +257,18 @@ INSERT INTO `archiveCommande` (`idCommande`, `dateCommande`, `statutCommande`, `
 (473, '2025-12-12 00:00:00', 'expédiée', '2025-12-20 00:00:00', 1, '2025-05-10 17:48:51'),
 (474, '2025-12-12 00:00:00', 'expédiée', '2025-12-20 00:00:00', 1, '2025-05-10 17:48:51'),
 (478, '2025-09-09 00:00:00', 'en attente', '2025-12-09 00:00:00', 15, '2025-05-10 17:48:51'),
-(479, '2025-09-09 00:00:00', 'en attente', '2025-12-09 00:00:00', 15, '2025-05-10 17:48:51');
+(479, '2025-09-09 00:00:00', 'en attente', '2025-12-09 00:00:00', 15, '2025-05-10 17:48:51'),
+(480, '2025-09-05 00:00:00', 'expédiée', '2025-09-05 00:00:00', 3, '2025-05-11 13:44:40'),
+(481, '2025-12-12 00:00:00', 'expédiée', '2025-12-12 00:00:00', 3, '2025-05-11 13:44:40'),
+(485, '2025-12-12 00:00:00', 'expédiée', '2025-12-12 00:00:00', 3, '2025-05-11 13:44:40');
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `archivelignecommande`
+-- Structure de la table `archiveLigneCommande`
 --
 
-CREATE TABLE `archivelignecommande` (
+CREATE TABLE `archiveLigneCommande` (
   `idLigneCommande` int NOT NULL,
   `idCommande` int DEFAULT NULL,
   `idLivre` int DEFAULT NULL,
@@ -272,10 +277,12 @@ CREATE TABLE `archivelignecommande` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Archive des lignes de commande';
 
 --
--- Déchargement des données de la table `archivelignecommande`
+-- Déchargement des données de la table `archiveLigneCommande`
 --
 
-INSERT INTO `archivelignecommande` (`idLigneCommande`, `idCommande`, `idLivre`, `quantiteLigneCommande`, `date_archivage`) VALUES
+INSERT INTO `archiveLigneCommande` (`idLigneCommande`, `idCommande`, `idLivre`, `quantiteLigneCommande`, `date_archivage`) VALUES
+(3, 3, 8, 3, '2025-05-11 13:44:40'),
+(4, 4, 6, 1, '2025-05-11 16:07:16'),
 (546, 301, 1, 3, '2025-05-10 13:00:57'),
 (547, 302, 2, 3, '2025-05-10 13:00:57'),
 (548, 303, 3, 3, '2025-05-10 13:00:57'),
@@ -414,7 +421,11 @@ INSERT INTO `archivelignecommande` (`idLigneCommande`, `idCommande`, `idLivre`, 
 (737, 474, 1, 21, '2025-05-10 17:48:51'),
 (744, 478, 1, 1, '2025-05-10 17:48:51'),
 (745, 479, 1, 10, '2025-05-10 17:48:51'),
-(746, 479, 2, 10, '2025-05-10 17:48:51');
+(746, 479, 2, 10, '2025-05-10 17:48:51'),
+(747, 480, 1, 12, '2025-05-11 13:44:40'),
+(748, 480, 2, 5, '2025-05-11 13:44:40'),
+(749, 481, 1, 99, '2025-05-11 13:44:40'),
+(753, 485, 1, 99, '2025-05-11 13:44:40');
 
 -- --------------------------------------------------------
 
@@ -539,8 +550,6 @@ CREATE TABLE `commande` (
 INSERT INTO `commande` (`idCommande`, `dateCommande`, `statutCommande`, `dateLivraisonCommande`, `idUser`) VALUES
 (1, '2025-04-10', 'en attente', '2025-04-15', 1),
 (2, '2025-04-11', 'expédiée', '2025-04-16', 2),
-(3, '2025-04-12', 'arrivée', '2025-04-18', 3),
-(4, '2025-04-12', 'en attente', NULL, 4),
 (5, '2025-04-13', 'expédiée', '2025-04-17', 5),
 (6, '2025-04-14', 'arrivée', '2025-04-19', 6),
 (7, '2025-04-15', 'expédiée', '2025-04-20', 7),
@@ -566,18 +575,21 @@ INSERT INTO `commande` (`idCommande`, `dateCommande`, `statutCommande`, `dateLiv
 (27, '2025-04-30', 'arrivée', '2025-05-05', 27),
 (28, '2025-05-01', 'expédiée', '2025-05-06', 28),
 (29, '2025-05-02', 'arrivée', '2025-05-07', 29),
-(30, '2025-05-03', 'en attente', NULL, 30);
+(30, '2025-05-09', 'en attente', '2025-05-12', 30),
+(486, '2025-12-12', 'expédiée', '2025-12-12', 1),
+(487, '2025-12-12', 'expédiée', '2025-12-12', 1),
+(490, '2025-12-12', 'expédiée', '2025-12-12', 3);
 
 --
 -- Déclencheurs `commande`
 --
 DELIMITER $$
 CREATE TRIGGER `tUpdateStockCommande` AFTER UPDATE ON `commande` FOR EACH ROW BEGIN
-IF NEW.statutCommande = 'expédiée' THEN
-UPDATE livre l
-JOIN ligneCommande lc ON l.idLivre = lc.idLivre
-SET l.exemplaireLivre = l.exemplaireLivre - lc.quantiteLigneCommande
-WHERE lc.idCommande = NEW.idCommande;
+    IF NEW.statutCommande = 'expédiée' THEN
+    UPDATE livre l
+        INNER JOIN ligneCommande lc ON l.idLivre = lc.idLivre
+        SET l.exemplaireLivre = l.exemplaireLivre - lc.quantiteLigneCommande
+    WHERE lc.idCommande = NEW.idCommande;
 END IF;
 END
 $$
@@ -624,8 +636,7 @@ INSERT INTO `entreprise` (`idUser`, `siretUser`, `raisonSocialeUser`, `capitalSo
 (46, 83294012200014, 'La Poste', 10000000.00),
 (47, 75829347200013, 'CMA CGM', 5300000.00),
 (48, 73582019300012, 'BNP Paribas', 9000000.00),
-(49, 62938472000011, 'Société Générale', 9500000.00),
-(50, 84937203900017, 'Crédit Agricole', 11000000.00);
+(49, 62938472000011, 'Société Générale', 9500000.00);
 
 -- --------------------------------------------------------
 
@@ -647,8 +658,6 @@ CREATE TABLE `ligneCommande` (
 INSERT INTO `ligneCommande` (`idLigneCommande`, `idCommande`, `idLivre`, `quantiteLigneCommande`) VALUES
 (1, 1, 3, 2),
 (2, 2, 5, 1),
-(3, 3, 8, 3),
-(4, 4, 6, 1),
 (5, 5, 10, 4),
 (6, 6, 12, 2),
 (7, 7, 7, 1),
@@ -674,7 +683,10 @@ INSERT INTO `ligneCommande` (`idLigneCommande`, `idCommande`, `idLivre`, `quanti
 (27, 27, 8, 4),
 (28, 28, 10, 2),
 (29, 29, 4, 1),
-(30, 30, 9, 3);
+(30, 30, 9, 3),
+(754, 486, 1, 2),
+(755, 487, 1, 99),
+(757, 490, 1, 19);
 
 --
 -- Déclencheurs `ligneCommande`
@@ -693,13 +705,12 @@ CREATE TRIGGER `tStockLivre` BEFORE UPDATE ON `ligneCommande` FOR EACH ROW BEGIN
     SELECT SUM(lc.quantiteLigneCommande)
     INTO t_totalQuantite
     FROM ligneCommande lc
-             INNER JOIN commande c ON lc.idCommande = c.idCommande
+    INNER JOIN commande c ON lc.idCommande = c.idCommande
     WHERE lc.idLivre = NEW.idLivre
-      AND c.idUser = t_idUser
-      AND c.statutCommande = 'en attente'
-      AND lc.idLigneCommande != OLD.idLigneCommande;
+    AND c.idUser = t_idUser
+    and c.statutCommande = 'en attente';
 
-    SET t_totalQuantite = IFNULL(t_totalQuantite, 0) + NEW.quantiteLigneCommande;
+    SET t_totalQuantite = IFNULL(t_totalQuantite, 0) - OLD.quantiteLigneCommande + NEW.quantiteLigneCommande;
 
     SELECT exemplaireLivre
     INTO t_exemplaireLivre
@@ -708,8 +719,8 @@ CREATE TRIGGER `tStockLivre` BEFORE UPDATE ON `ligneCommande` FOR EACH ROW BEGIN
 
     IF t_totalQuantite > t_exemplaireLivre THEN
         SIGNAL SQLSTATE '45000'
-		SET MESSAGE_TEXT = 'La quantite totale depasse le nombre exemplaires disponibles pour ce livre';
-END IF;
+        SET MESSAGE_TEXT = 'La quantité totale dépasse le nombre d'exemplaires disponibles pour ce livre.';
+    END IF;
 END
 $$
 DELIMITER ;
@@ -739,14 +750,14 @@ CREATE TABLE `livre` (
 INSERT INTO `livre` (`idLivre`, `nomLivre`, `auteurLivre`, `imageLivre`, `exemplaireLivre`, `prixLivre`, `idCategorie`, `idMaisonEdition`, `idPromotion`) VALUES
 (1, 'Alcools', 'Apollinaire', 'alcools.png', 100, 12.50, 3, 1, NULL),
 (2, 'Crime et Chatiment', 'Dostoïevski', 'crime_et_chatiment.png', 100, 15.00, 1, 2, NULL),
-(3, 'L`Etranger', 'Camus', 'l_etranger.png', 56, 10.00, 1, 3, NULL),
+(3, 'L`Etranger', 'Camus', 'l_etranger.png', 52, 10.00, 1, 3, NULL),
 (4, 'L`Odyssée', 'Homère', 'l_odyssee.png', 89, 13.50, 2, 4, NULL),
 (5, 'Les Fleurs du Mal', 'Baudelaire', 'les_fleurs_du_mal.png', 100, 14.00, 3, 5, 19),
 (6, 'PHP et MySQL pour les nuls', 'Valade', 'php_et_mysql_pour_les_nuls.png', 79, 22.00, 4, 6, NULL),
 (7, 'Programmer en Java', 'Delannoy', 'programmer_en_java.png', 100, 25.00, 4, 7, NULL),
 (8, 'SPQR', 'Beard', 'spqr.png', 99, 18.00, 2, 8, NULL),
-(9, 'À la recherche du temps perdu', 'Proust', 'a_la_recherche_du_temps_perdu.png', 96, 0.00, 1, 1, NULL),
-(10, 'Les Misérables', 'Hugo', 'les_miserables_I.png', 98, 0.00, 1, 2, 12),
+(9, 'À la recherche du temps perdu', 'Proust', 'a_la_recherche_du_temps_perdu.png', 90, 0.00, 1, 1, NULL),
+(10, 'Les Misérables', 'Hugo', 'les_miserables_I.png', 94, 0.00, 1, 2, 12),
 (11, '1984', 'Orwell', '1984.png', 95, 0.00, 1, 3, NULL),
 (12, 'L`Art d\'aimer', 'Ovide', 'l_art_d_aimer', 92, 0.00, 1, 4, NULL),
 (13, 'La Peste', 'Camus', 'la_peste.png', 98, 15.99, 1, 1, 17),
@@ -762,16 +773,31 @@ INSERT INTO `livre` (`idLivre`, `nomLivre`, `auteurLivre`, `imageLivre`, `exempl
 (23, 'Les Pensées', 'Aurèle', 'les_pensees.png', 100, 18.99, 3, 4, 15),
 (24, 'Les Métamorphoses', 'Ovide', 'les_metamorphoses.png', 100, 20.99, 3, 4, NULL),
 (25, 'Le Petit Livre des citations latines', 'Delamaire', 'le_petit_livre_des_citations_latines.png', 100, 7.99, 3, 6, NULL),
-(43, 'Le Petit Livre des grandes coïncidences', 'Chiflet', 'le_petit_livre_des_grandes_coincidences.png', 100, 7.99, 3, 6, NULL),
-(44, 'Le Petit Livre des gros mensonges', 'Chiflet', 'le_petit_livre_des_gros_mensonges.png', 100, 7.99, 3, 6, NULL),
-(45, 'L`Art de la guerre', 'Sun', 'l_art_de_la_guerre.png', 100, 12.99, 2, 7, 7),
-(46, 'Apprendre à dessiner', 'Edwards', 'apprendre_a_dessiner.png', 100, 14.99, 4, 7, NULL),
-(47, 'Le Lean Startup', 'Ries', 'le_lean_startup.png', 100, 16.99, 4, 7, NULL),
-(48, 'Les Templiers', 'Demurger', 'les_templiers.png', 100, 18.99, 2, 8, NULL),
-(49, 'La Seconde Guerre mondiale', 'Beevor', 'la_seconde_guerre_mondiale.png', 100, 19.99, 2, 8, NULL),
-(50, 'Napoléon : Une ambition française', 'Tulard', 'napoleon_une_ambition_francaise.png', 100, 20.99, 2, 8, NULL),
-(51, 'dimanche', 'dimanche', 'dimanche.png', 180, 7.20, 3, 3, NULL),
-(52, 'cate', 'cate', 'cate.png', 12, 12.00, 1, 3, NULL);
+(26, 'Le Petit Livre des grandes coïncidences', 'Chiflet', 'le_petit_livre_des_grandes_coincidences.png', 100, 7.99, 3, 6, NULL),
+(27, 'Le Petit Livre des gros mensonges', 'Chiflet', 'le_petit_livre_des_gros_mensonges.png', 100, 7.99, 3, 6, NULL),
+(28, 'L`Art de la guerre', 'Sun', 'l_art_de_la_guerre.png', 100, 12.99, 2, 7, 7),
+(29, 'Apprendre à dessiner', 'Edwards', 'apprendre_a_dessiner.png', 100, 14.99, 4, 7, NULL),
+(30, 'Le Lean Startup', 'Ries', 'le_lean_startup.png', 100, 16.99, 4, 7, NULL),
+(31, 'Les Templiers', 'Demurger', 'les_templiers.png', 100, 18.99, 2, 8, NULL),
+(32, 'La Seconde Guerre mondiale', 'Beevor', 'la_seconde_guerre_mondiale.png', 100, 19.99, 2, 8, NULL),
+(33, 'Napoléon : Une ambition française', 'Tulard', 'napoleon_une_ambition_francaise.png', 100, 20.99, 2, 8, NULL),
+(34, 'Le Zéro et l\'Infini', 'Koestler', 'le_zero_et_l_infini.png', 88, 13.90, 1, 2, NULL),
+(35, 'Le Dieu des Petits Riens', 'Roy', 'le_dieu_des_petits_riens.png', 62, 14.00, 2, 5, 7),
+(36, 'Les Dépossédés', 'Le Guin', 'les_depossedes.png', 100, 11.49, 1, 4, 19),
+(37, 'Ne tirez pas sur l\'oiseau moqueur', 'Lee', 'oiseau_moqueur.png', 85, 10.00, 2, 6, 5),
+(38, 'La Promesse de l\'aube', 'Gary', 'promesse_de_l_aube.png', 73, 13.49, 3, 1, NULL),
+(39, 'La Vie mode d\'emploi', 'Perec', 'vie_mode_d_emploi.png', 78, 18.50, 3, 8, 16),
+(40, 'Les Racines du ciel', 'Gary', 'les_racines_du_ciel.png', 91, 17.00, 3, 3, 10),
+(41, 'La Théorie du chaos', 'Gleick', 'theorie_du_chaos.png', 100, 15.99, 4, 7, NULL),
+(42, 'Le Mythe de Sisyphe', 'Camus', 'mythe_de_sisyphe.png', 70, 9.49, 3, 2, 6),
+(43, 'Kafka sur le rivage', 'Murakami', 'kafka_sur_le_rivage.png', 95, 16.99, 1, 2, 4),
+(44, 'La Route', 'McCarthy', 'la_route.png', 85, 13.49, 2, 3, 8),
+(45, 'Siddhartha', 'Hesse', 'siddhartha.png', 90, 9.99, 1, 1, NULL),
+(46, 'Brave New World', 'Huxley', 'brave_new_world.png', 100, 12.99, 2, 4, 18),
+(47, 'La Formule de Dieu', 'Rodrigues dos Santos', 'formule_de_dieu.png', 88, 17.90, 4, 5, 9),
+(48, 'L\'Homme-dé', 'Rheinheart', 'homme_de.png', 70, 11.50, 3, 6, 14),
+(49, 'Les Particules élémentaires', 'Houellebecq', 'particules_elementaires.png', 92, 15.00, 3, 2, NULL),
+(50, 'La Horde du Contrevent', 'Damasio', 'horde_du_contrevent.png', 100, 18.99, 2, 7, 12);
 
 -- --------------------------------------------------------
 
@@ -817,8 +843,6 @@ CREATE TABLE `particulier` (
 --
 
 INSERT INTO `particulier` (`idUser`, `nomUser`, `prenomUser`, `dateNaissanceUser`, `sexeUser`) VALUES
-(3, 'Nguyen', 'Kevin', '1995-06-12', 'M'),
-(4, 'Diop', 'Fatou', '1993-11-05', 'F'),
 (5, 'Morel', 'Hugo', '1992-08-21', 'M'),
 (6, 'Karim', 'Zineb', '1994-04-17', 'F'),
 (7, 'Lam', 'Pierre', '1990-01-03', 'M'),
@@ -900,56 +924,53 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`idUser`, `emailUser`, `mdpUser`, `adresseUser`, `roleUser`) VALUES
-(1, 'ryles@gmail.com', '123', '12 rue Victor Hugo, Lyon', 'admin'),
-(2, 'jean@gmail.com', '123', '98 avenue République, Toulouse', 'admin'),
-(3, 'kevin.nguyen@example.com', 'azerty1', '5 rue des Lilas, Paris', 'particulier'),
-(4, 'fatou.diop@example.com', 'qwerty2', '42 boulevard Gambetta, Lille', 'particulier'),
-(5, 'hugo.morel@example.com', 'motdepasse', '7 place de l’Horloge, Avignon', 'particulier'),
-(6, 'zineb.karim@example.com', 'z1n3b!', '31 rue Nationale, Tours', 'particulier'),
-(7, 'pierre.lam@example.com', 'lam345', '3 chemin du Lac, Annecy', 'particulier'),
-(8, 'leila.ait@example.com', 'leilapass', '76 rue Colbert, Reims', 'particulier'),
-(9, 'david.schwarz@example.com', 'passw0rd', '11 rue Mozart, Strasbourg', 'particulier'),
-(10, 'meryem.elhadi@example.com', 'mehadi', '19 rue Clémenceau, Dijon', 'particulier'),
-(11, 'julien.rossi@example.com', 'jrossi', '24 avenue des Alpes, Grenoble', 'particulier'),
-(12, 'hanae.tanaka@example.com', 'tokyo75', '9 rue des Acacias, Paris', 'particulier'),
-(13, 'samba.konate@example.com', 'sambapass', '66 rue de Rennes, Rennes', 'particulier'),
-(14, 'chloe.meyer@example.com', 'cmeyer8', '102 boulevard Haussmann, Paris', 'particulier'),
-(15, 'mehdi.youssef@example.com', 'my1234', '5 rue des Jardins, Montpellier', 'particulier'),
-(16, 'ines.dubois@example.com', 'dubines', '1 rue Michelet, Nantes', 'particulier'),
-(17, 'karl.hernandez@example.com', 'karlo123', '7 impasse Soleil, Nice', 'particulier'),
-(18, 'yasmin.abdi@example.com', 'yas1234', '23 rue Lafayette, Bordeaux', 'particulier'),
-(19, 'jean.bako@example.com', 'jbako', '44 rue Croix-Rousse, Lyon', 'particulier'),
-(20, 'sarah.fernandez@example.com', 'sfe2025', '28 boulevard Jaurès, Saint-Étienne', 'particulier'),
-(21, 'omar.chaoui@example.com', 'oc@2024', '3 rue du Port, Brest', 'particulier'),
-(22, 'claire.brunet@example.com', 'clbr12', '22 rue des Vignes, Angers', 'particulier'),
-(23, 'hicham.elmansouri@example.com', 'he123', '60 avenue du Midi, Perpignan', 'particulier'),
-(24, 'lina.popescu@example.com', 'linapo', '10 rue Sainte-Catherine, Bordeaux', 'particulier'),
-(25, 'sebastien.giraud@example.com', 'sgiraud', '18 avenue Mistral, Toulon', 'particulier'),
-(26, 'contact@capgemini.com', 'cg2024', '11 rue de Tilsitt, Paris', 'entreprise'),
-(27, 'contact@dassault-systemes.com', 'ds3d2024', '10 rue Marcel Dassault, Vélizy', 'entreprise'),
-(28, 'info@airbus.com', 'airb1234', '1 rond-point Maurice Bellonte, Blagnac', 'entreprise'),
-(29, 'hr@thalesgroup.com', 'thpass', '45 avenue Carnot, Courbevoie', 'entreprise'),
-(30, 'contact@ubisoft.com', 'ubi!game', '28 rue Armand Carrel, Montreuil', 'entreprise'),
-(31, 'support@ovhcloud.com', 'ovh2024', '2 rue Kellermann, Roubaix', 'entreprise'),
-(32, 'recrutement@atos.net', 'atosnet', '80 quai Voltaire, Bezons', 'entreprise'),
-(33, 'rh@soprasteria.com', 'sopra22', '9 avenue de l’Europe, Annecy', 'entreprise'),
-(34, 'support@orange-business.com', 'obs2024', '78 rue Olivier de Serres, Paris', 'entreprise'),
-(35, 'contact@groupeadp.fr', 'adp!@paris', '1 rue de France, Tremblay-en-France', 'entreprise'),
-(36, 'siege@carrefour.com', 'carf2024', '93 avenue de Paris, Massy', 'entreprise'),
-(37, 'recrutement@lvmh.fr', 'luxury75', '22 avenue Montaigne, Paris', 'entreprise'),
-(38, 'contact@renault.fr', 'renault!v', '13 quai Alphonse Le Gallo, Boulogne-Billancourt', 'entreprise'),
-(39, 'recrutement@bouyguestelecom.fr', 'btel99', '37-39 rue Boissière, Paris', 'entreprise'),
-(40, 'contact@sncf.fr', 'sncftrain', '2 place aux Étoiles, Saint-Denis', 'entreprise'),
-(41, 'rh@edf.fr', 'edf2024', '1 avenue du Général de Gaulle, Courbevoie', 'entreprise'),
-(42, 'support@veolia.com', 'veo!2024', '30 rue Madeleine Vionnet, Aubervilliers', 'entreprise'),
-(43, 'contact@danone.com', 'danone21', '15 rue du Helder, Paris', 'entreprise'),
-(44, 'recrutement@accor.com', 'accor2024', '82 rue Henri Farman, Issy-les-Moulineaux', 'entreprise'),
-(45, 'rh@engie.com', 'engie75', '1 place Samuel de Champlain, La Défense', 'entreprise'),
-(46, 'info@laposte.fr', 'poste2025', '9 rue du Colonel Pierre Avia, Paris', 'entreprise'),
-(47, 'info@cmacgm.com', 'cma2024', '4 quai d’Arenc, Marseille', 'entreprise'),
-(48, 'contact@bnpparibas.com', 'bnpbank', '16 boulevard des Italiens, Paris', 'entreprise'),
-(49, 'recrutement@societegenerale.fr', 'sgbank', '29 boulevard Haussmann, Paris', 'entreprise'),
-(50, 'support@credit-agricole.fr', 'credagri', '12 place des États-Unis, Montrouge', 'entreprise');
+(1, 'ryles@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '12 rue Victor Hugo, Lyon', 'admin'),
+(2, 'jean@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', '96 avenue République, Toulouse', 'admin'),
+(5, 'hugo.morel@example.com', '940c0f26fd5a30775bb1cbd1f6840398d39bb813', '7 place de l’Horloge, Avignon', 'particulier'),
+(6, 'zineb.karim@example.com', '57bd7463edb86d2c470dcbdf384eaa862c4a4616', '31 rue Nationale, Tours', 'particulier'),
+(7, 'pierre.lam@example.com', '0ee68bb2d824a19d2c287f6b6fd6d2f7b0e6c3a5', '3 chemin du Lac, Annecy', 'particulier'),
+(8, 'leila.ait@example.com', '875cd1b74693d5ea276728b4868b6cfacb42f176', '76 rue Colbert, Reims', 'particulier'),
+(9, 'david.schwarz@example.com', '7c6a61c68ef8b9b6b061b28c348bc1ed7921cb53', '11 rue Mozart, Strasbourg', 'particulier'),
+(10, 'meryem.elhadi@example.com', '071714e4f586f36f60ca37fa5cbf67b18fd09360', '19 rue Clémenceau, Dijon', 'particulier'),
+(11, 'julien.rossi@example.com', '6ae3f0e8df3c50b2aa030a40fec458af6e52c910', '24 avenue des Alpes, Grenoble', 'particulier'),
+(12, 'hanae.tanaka@example.com', '0a43c6b5c6385ceec3664a28e9b62d815e49c628', '9 rue des Acacias, Paris', 'particulier'),
+(13, 'samba.konate@example.com', '1ab3e68ea4063fd2f9c3423b702c404d9c573991', '66 rue de Rennes, Rennes', 'particulier'),
+(14, 'chloe.meyer@example.com', 'c045c455857bcc3ce1ad57da1b9c905fa5563f9c', '102 boulevard Haussmann, Paris', 'particulier'),
+(15, 'mehdi.youssef@example.com', '63238b5f854dc6df87375819cea268e860e3ab40', '5 rue des Jardins, Montpellier', 'particulier'),
+(16, 'ines.dubois@example.com', '3df8d5224f305582a7e5c912e99846d589f112b5', '1 rue Michelet, Nantes', 'particulier'),
+(17, 'karl.hernandez@example.com', '201a9f33c15499ea69ec2e2c7a0d201acc1e071c', '7 impasse Soleil, Nice', 'particulier'),
+(18, 'yasmin.abdi@example.com', '6b033c6bfba834ca27810589d714f19808795fd4', '23 rue Lafayette, Bordeaux', 'particulier'),
+(19, 'jean.bako@example.com', 'a05bd05420a771229652dbda917f71baca37ad35', '44 rue Croix-Rousse, Lyon', 'particulier'),
+(20, 'sarah.fernandez@example.com', '9bf40f8eb838030e49f4e86d0b5fceddc4c4dfcc', '28 boulevard Jaurès, Saint-Étienne', 'particulier'),
+(21, 'omar.chaoui@example.com', '1fc5feb952ca1a8f4e81cfe68cc8f77dbcf07fe6', '3 rue du Port, Brest', 'particulier'),
+(22, 'claire.brunet@example.com', 'b3f668a6ee4653695424e7a3d06ebeb075d58fa9', '22 rue des Vignes, Angers', 'particulier'),
+(23, 'hicham.elmansouri@example.com', '31b19438ed107972e1f31a5807eddfad8e3fe123', '60 avenue du Midi, Perpignan', 'particulier'),
+(24, 'lina.popescu@example.com', 'b9849635a2f8f05458e3d0b4374c92a7ab7ad367', '10 rue Sainte-Catherine, Bordeaux', 'particulier'),
+(25, 'sebastien.giraud@example.com', '958a78d0ae15a5ac16b44206fd8578c31a85e155', '18 avenue Mistral, Toulon', 'particulier'),
+(26, 'contact@capgemini.com', 'ea4e497635f694a6170b2cab7d75320eed16250d', '11 rue de Tilsitt, Paris', 'entreprise'),
+(27, 'contact@dassault-systemes.com', 'd22c83af4b9be2256e81d72073cc99e0fa0a8352', '10 rue Marcel Dassault, Vélizy', 'entreprise'),
+(28, 'info@airbus.com', '6cd2bcf10ba271afb458f2aa43efddff3b666226', '1 rond-point Maurice Bellonte, Blagnac', 'entreprise'),
+(29, 'hr@thalesgroup.com', '5385c9472857a2dd4a7f393aaa68609fad2d2138', '45 avenue Carnot, Courbevoie', 'entreprise'),
+(30, 'contact@ubisoft.com', 'bca1091cf296b5f81eeae91b38b36c0074a50211', '28 rue Armand Carrel, Montreuil', 'entreprise'),
+(31, 'support@ovhcloud.com', '68aff54a9f156ee42bdd00f1533eaf9b6ecab8bb', '2 rue Kellermann, Roubaix', 'entreprise'),
+(32, 'recrutement@atos.net', 'c27cee130fc032a59efa80647b678ebcdac687cf', '80 quai Voltaire, Bezons', 'entreprise'),
+(33, 'rh@soprasteria.com', '3dac7843461bfdf3e2b1c89a74ee1a33b32218fe', '9 avenue de l’Europe, Annecy', 'entreprise'),
+(34, 'support@orange-business.com', '6467b4d380c7a475164a4a1e36c4aaa2041d62b8', '78 rue Olivier de Serres, Paris', 'entreprise'),
+(35, 'contact@groupeadp.fr', 'c0b21899e3202cf55a18a51fedbb6446f804193d', '1 rue de France, Tremblay-en-France', 'entreprise'),
+(36, 'siege@carrefour.com', 'ab3d136f05f0900d013c68af686d3ddedafddba4', '93 avenue de Paris, Massy', 'entreprise'),
+(37, 'recrutement@lvmh.fr', '94a8d6bcbc6973cd60c0005ca79e48aae33e423a', '22 avenue Montaigne, Paris', 'entreprise'),
+(38, 'contact@renault.fr', '0e6a2b774fb8b3bb359bc418e1be9c7157abc901', '13 quai Alphonse Le Gallo, Boulogne-Billancourt', 'entreprise'),
+(39, 'recrutement@bouyguestelecom.fr', '0d29cc24bdab9bc5814794a061576d444dab00d7', '37-39 rue Boissière, Paris', 'entreprise'),
+(40, 'contact@sncf.fr', '204d9eca49278ccff364938d4590e166bb049f57', '2 place aux Étoiles, Saint-Denis', 'entreprise'),
+(41, 'rh@edf.fr', '50fa04d1d175171898f00e8a9d3a987a12a6e63e', '1 avenue du Général de Gaulle, Courbevoie', 'entreprise'),
+(42, 'support@veolia.com', 'd9176a24e9ea6ef84a3e96b50a00fda8e2a5d343', '30 rue Madeleine Vionnet, Aubervilliers', 'entreprise'),
+(43, 'contact@danone.com', 'ff9dab5cf9c17d2a218037711a3483f4c23d4365', '15 rue du Helder, Paris', 'entreprise'),
+(44, 'recrutement@accor.com', 'a89dca7f3d34a276d559f5bb3445bcf626ab90d9', '82 rue Henri Farman, Issy-les-Moulineaux', 'entreprise'),
+(45, 'rh@engie.com', '8fd23962f9d6cdbe93ec014b06184a4c9e03eb53', '1 place Samuel de Champlain, La Défense', 'entreprise'),
+(46, 'info@laposte.fr', 'e5792e537eff8433d0a7cc70b6c450754b2c080d', '9 rue du Colonel Pierre Avia, Paris', 'entreprise'),
+(47, 'info@cmacgm.com', 'e4baa845e5e294fa73d538c95b72024363e506db', '4 quai d’Arenc, Marseille', 'entreprise'),
+(48, 'contact@bnpparibas.com', '68cd24bc93f167fff1df3f58f3838a7def593aaa', '16 boulevard des Italiens, Paris', 'entreprise'),
+(49, 'recrutement@societegenerale.fr', '8f85696d4c2a5be10157976aebe367141d1ceb89', '29 boulevard Haussmann, Paris', 'entreprise');
 
 --
 -- Déclencheurs `user`
@@ -993,10 +1014,10 @@ CREATE TABLE `vcommandesenattente` (
 -- (Voir ci-dessous la vue réelle)
 --
 CREATE TABLE `vlivresenstock` (
-`exemplaireLivre` int
-,`idLivre` int
+`idLivre` int
 ,`nomLivre` varchar(50)
 ,`prixLivre` float(10,2)
+,`exemplaireLivre` int
 );
 
 -- --------------------------------------------------------
@@ -1031,8 +1052,8 @@ CREATE TABLE `vmeilleuresventes` (
 --
 CREATE TABLE `vmeilleursavis` (
 `idLivre` int
-,`moyenneNote` decimal(7,4)
 ,`nomLivre` varchar(50)
+,`moyenneNote` decimal(7,4)
 );
 
 -- --------------------------------------------------------
@@ -1090,9 +1111,9 @@ CREATE TABLE `vtotallivre` (
 -- (Voir ci-dessous la vue réelle)
 --
 CREATE TABLE `vtotallivreenattente` (
-`idCommande` int
+`idLivre` int
+,`idCommande` int
 ,`idLigneCommande` int
-,`idLivre` int
 ,`idUser` int
 ,`nomLivre` varchar(50)
 ,`prixLivre` float(10,2)
@@ -1108,8 +1129,8 @@ CREATE TABLE `vtotallivreenattente` (
 --
 CREATE TABLE `vtotallivreexpediee` (
 `idCommande` int
-,`idLivre` int
 ,`idUser` int
+,`idLivre` int
 ,`nomLivre` varchar(50)
 ,`prixLivre` float(10,2)
 ,`quantiteLigneCommande` int
@@ -1242,9 +1263,9 @@ ALTER TABLE `archiveCommande`
   ADD KEY `idx_date_archivage` (`date_archivage`);
 
 --
--- Index pour la table `archivelignecommande`
+-- Index pour la table `archiveLigneCommande`
 --
-ALTER TABLE `archivelignecommande`
+ALTER TABLE `archiveLigneCommande`
   ADD PRIMARY KEY (`idLigneCommande`,`date_archivage`),
   ADD KEY `idx_commande` (`idCommande`),
   ADD KEY `idx_date_archivage` (`date_archivage`),
@@ -1326,7 +1347,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT pour la table `abonnement`
 --
 ALTER TABLE `abonnement`
-  MODIFY `idAbonnement` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `idAbonnement` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT pour la table `admin`
@@ -1338,58 +1359,58 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT pour la table `categorie`
 --
 ALTER TABLE `categorie`
-  MODIFY `idCategorie` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `idCategorie` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT pour la table `commande`
 --
 ALTER TABLE `commande`
-  MODIFY `idCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=480;
+  MODIFY `idCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=491;
 
 --
 -- AUTO_INCREMENT pour la table `ligneCommande`
 --
 ALTER TABLE `ligneCommande`
-  MODIFY `idLigneCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=747;
+  MODIFY `idLigneCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=758;
 
 --
 -- AUTO_INCREMENT pour la table `livre`
 --
 ALTER TABLE `livre`
-  MODIFY `idLivre` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+  MODIFY `idLivre` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 
 --
 -- AUTO_INCREMENT pour la table `maisonEdition`
 --
 ALTER TABLE `maisonEdition`
-  MODIFY `idMaisonEdition` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `idMaisonEdition` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT pour la table `particulier`
 --
 ALTER TABLE `particulier`
-  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
+  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
 
 --
 -- AUTO_INCREMENT pour la table `promotion`
 --
 ALTER TABLE `promotion`
-  MODIFY `idPromotion` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `idPromotion` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT pour la table `user`
 --
 ALTER TABLE `user`
-  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
+  MODIFY `idUser` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
 
 --
 -- Contraintes pour les tables déchargées
 --
 
 --
--- Contraintes pour la table `archivelignecommande`
+-- Contraintes pour la table `archiveLigneCommande`
 --
-ALTER TABLE `archivelignecommande`
+ALTER TABLE `archiveLigneCommande`
   ADD CONSTRAINT `fk_idLivre_archivelignecommande` FOREIGN KEY (`idLivre`) REFERENCES `livre` (`idLivre`);
 
 --

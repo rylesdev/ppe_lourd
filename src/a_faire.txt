@@ -1,11 +1,10 @@
 A Faire :
-- Vérifier que la date dans l'insertion d'une commande fonctionne.
+- Corriger le problème du trigger tUpdateStockCommande.
 
 - Vérifier que tous les triggers fonctionnent :
-    - tInsertArchive : Non (ça insère par dans archiveCommande et archiveInsertCommande après avoir delete un user)
-    - tStockLivre : Oui (ça empêche l'insertCommande si le stock est >= 0 "after insert on commande")
+    - tInsertArchive : Oui
+    - tStockLivre : Oui
     - tUpdateStockCommande : Non (ça ne met pas à jour le stock du livre après une commande)
-
 
 
 

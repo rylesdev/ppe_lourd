@@ -264,6 +264,7 @@ public class PanelCommande extends PanelPrincipal implements ActionListener, Key
             lbNbLignes.setText("Nombre de lignes: 0");
 
             if (resultInsertCommande == 2) {
+                // Ce message s'affiche dans un mauvais cas
                 JOptionPane.showMessageDialog(this, "Erreur: La quantite totale depasse le nombre exemplaires disponibles pour ce livre", "Erreur", JOptionPane.ERROR_MESSAGE);
             } else if (resultInsertCommande == 3) {
                 JOptionPane.showMessageDialog(this, "Erreur: Réessayez", "Erreur", JOptionPane.ERROR_MESSAGE);

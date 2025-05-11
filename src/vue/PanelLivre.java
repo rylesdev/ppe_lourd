@@ -141,7 +141,7 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, KeyLis
             txtMaisonEdition.setText(tableauLivres.getValueAt(numLigne, 7).toString());
             Object promotionValue = tableauLivres.getValueAt(numLigne, 8);
             txtPromotion.setText(promotionValue == null || promotionValue.toString().trim().isEmpty() ?
-                    "Aucune promotion" : promotionValue.toString());
+                    "Non définie" : promotionValue.toString());
 
             btSupprimer.setVisible(true);
             btValider.setText("Modifier");
@@ -206,7 +206,7 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, KeyLis
         }
 
         // Vérification si la promotion existe (seulement si une promotion est spécifiée)
-        if (!promotion.equals("Aucune promotion") && !promotion.isEmpty()) {
+        if (!promotion.equals("Non définie") && !promotion.isEmpty()) {
             int idPromotion = Controleur.selectIdPromotion(promotion);
             if (idPromotion <= 0) {
                 JOptionPane.showMessageDialog(this,
@@ -252,8 +252,8 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, KeyLis
         float prix = Float.parseFloat(prixStr);
         int idCategorie = Controleur.selectIdCategorie(categorie);
         int idMaisonEdition = Controleur.selectIdMaisonEdition(maisonEdition);
-        int idPromotion = promotion.equals("Aucune promotion") || promotion.isEmpty() ?
-                0 : Controleur.selectIdPromotion(promotion);
+        Integer idPromotion = promotion.equals("Non définie") || promotion.isEmpty() ?
+                null : Controleur.selectIdPromotion(promotion);
 
         ArrayList<String> lesChamps = new ArrayList<>();
         lesChamps.add(nom);
@@ -316,8 +316,7 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, KeyLis
             float prixLivre = Float.parseFloat(prixStr);
             int idCategorie = Controleur.selectIdCategorie(categorie);
             int idMaisonEdition = Controleur.selectIdMaisonEdition(maisonEdition);
-            int idPromotion = promotion.equals("Aucune promotion") || promotion.isEmpty() ?
-                    0 : Controleur.selectIdPromotion(promotion);
+            Integer idPromotion = Controleur.selectIdPromotion(promotion);
 
             ArrayList<String> lesChamps = new ArrayList<>();
             lesChamps.add(nomLivre);

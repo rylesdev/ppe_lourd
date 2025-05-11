@@ -545,6 +545,12 @@ public class Modele {
     }
 
     public static void updateLivre(Livre unLivre) {
+        Integer idPromotion = null;
+        if (unLivre.getIdPromotion() == -1) {
+            idPromotion = null;
+        } else {
+            idPromotion = unLivre.getIdPromotion();
+        }
         String requete =    "update livre set " +
                             "nomLivre = '" + unLivre.getNomLivre() + "', " +
                             "auteurLivre = '" + unLivre.getAuteurLivre() + "', " +
@@ -553,7 +559,7 @@ public class Modele {
                             "prixLivre = " + unLivre.getPrixLivre() + ", " +
                             "idCategorie = " + unLivre.getIdCategorie() + ", " +
                             "idMaisonEdition = " + unLivre.getIdMaisonEdition() + ", " +
-                            "idPromotion = " + unLivre.getIdPromotion() + " " +
+                            "idPromotion = " + idPromotion + " " +
                             "where idLivre = " + unLivre.getIdLivre() + ";";
         executerRequete(requete);
     }
@@ -1322,26 +1328,22 @@ public class Modele {
                 : "null";
 
         try {
-            // 1. Connexion et démarrage transaction (comme dans selectWhereLigneCommande)
             uneConnexion.seConnecter();
             Connection conn = uneConnexion.getMaConnexion();
-            conn.setAutoCommit(false); // Ajout spécifique pour les transactions
+            conn.setAutoCommit(false);
 
-            // 2. Insertion commande (style identique à votre code original)
             String requete = "insert into commande values (null, '"
                     + dateCommande + "', '"
-                    + uneCommande.getStatutCommande() + "', "
-                    + (dateLivraison.equals("null") ? "null" : "'" + dateLivraison + "'") + ", "
-                    + uneCommande.getIdUser() + ")";
+                    + "en attente', '"
+                    + dateLivraison + "', "
+                    + uneCommande.getIdUser() + ");";
 
             Statement st = conn.createStatement();
             st.executeUpdate(requete, Statement.RETURN_GENERATED_KEYS);
 
-            // 3. Récupération ID (identique à votre code)
             ResultSet rs = st.getGeneratedKeys();
             int idCommande = rs.next() ? rs.getInt(1) : 0;
 
-            // 4. Insertion lignes (style préservé)
             for (LigneCommande uneLigneCommande : uneCommande.getLesLignesCommande()) {
                 String reqLigne = "insert into ligneCommande values (null, "
                         + idCommande + ", "
@@ -1350,23 +1352,27 @@ public class Modele {
                 st.executeUpdate(reqLigne);
             }
 
-            // 5. Déclenchement conditionnel du trigger (inchangé)
+            // Update qui sert uniquement à activer le trigger "tUpdateStockCommande"
             if (uneCommande.getStatutCommande().equals("expédiée")) {
-                String requeteTrigger = "update ligneCommande set idCommande = '" + idCommande + "' " +
-                                        "where idCommande = " + idCommande;
-                st.executeUpdate(requeteTrigger);
+                String requeteTriggerCommande = "update ligneCommande l inner join commande c " +
+                                                "on l.idCommande=c.idCommande " +
+                                                "set c.statutCommande = 'expédiée' where c.idCommande = " + idCommande + ";";
+
+                String requeteTriggerLigneCommande =    "update ligneCommande l inner join commande c " +
+                                                        "on l.idCommande=c.idCommande " +
+                                                        "set l.idLivre = l.idLivre where c.idCommande = " + idCommande + ";";
+                st.executeUpdate(requeteTriggerCommande);
+                st.executeUpdate(requeteTriggerLigneCommande);
             }
 
-            conn.commit(); // Validation transaction
+            conn.commit();
 
-            // 6. Fermeture identique à selectWhereLigneCommande
             st.close();
             uneConnexion.seDeConnecter();
 
             result = 1;
         } catch (SQLException exp) {
             try {
-                // Rollback ajouté pour annuler les opérations
                 if (uneConnexion.getMaConnexion() != null) {
                     uneConnexion.getMaConnexion().rollback();
                     System.out.println("ROLLBACK effectué. Erreur: " + exp.getMessage());
@@ -1377,7 +1383,6 @@ public class Modele {
                 result = 3;
             }
         } finally {
-            // Fermeture sécurisée comme dans votre méthode
             try {
                 if (uneConnexion.getMaConnexion() != null && !uneConnexion.getMaConnexion().isClosed()) {
                     uneConnexion.getMaConnexion().setAutoCommit(true); // Reset auto-commit
