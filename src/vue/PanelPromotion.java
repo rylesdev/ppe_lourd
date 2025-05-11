@@ -22,6 +22,7 @@ import controleur.Tableau;
 import controleur.Livre;
 
 public class PanelPromotion extends PanelPrincipal implements ActionListener, KeyListener {
+    private String niveauAdmin;
     // Panel pour les promotions
     private JPanel panelPromotionForm = new JPanel();
     private JTextField txtNomPromotion = new JTextField();
@@ -66,6 +67,7 @@ public class PanelPromotion extends PanelPrincipal implements ActionListener, Ke
     public PanelPromotion() {
         super("Gestion des Promotions");
 
+        this.niveauAdmin = Controleur.selectNiveauAdminByIdUser(Controleur.getUserConnecte().getIdUser());
         // Initialisation des panels
         initPromotion();
         initLivrePromotion();
@@ -209,7 +211,7 @@ public class PanelPromotion extends PanelPrincipal implements ActionListener, Ke
     }
 
     private void validerPromotion() {
-        if (!Controleur.getRoleUserConnecte().equals("admin")) {
+        if (!this.niveauAdmin.equals("principal")) {
             JOptionPane.showMessageDialog(this,
                     "Accès refusé : Seuls les administrateurs peuvent ajouter des promotions",
                     "Droits insuffisants", JOptionPane.WARNING_MESSAGE);
@@ -271,7 +273,7 @@ public class PanelPromotion extends PanelPrincipal implements ActionListener, Ke
     }
 
     private void supprimerPromotion() {
-        if (!Controleur.getRoleUserConnecte().equals("admin")) {
+        if (!this.niveauAdmin.equals("principal")) {
             JOptionPane.showMessageDialog(this,
                     "Accès refusé : Seuls les administrateurs peuvent supprimer des promotions",
                     "Droits insuffisants", JOptionPane.WARNING_MESSAGE);
@@ -299,7 +301,7 @@ public class PanelPromotion extends PanelPrincipal implements ActionListener, Ke
     }
 
     private void validerLivrePromotion() {
-        if (!Controleur.getRoleUserConnecte().equals("admin")) {
+        if (!this.niveauAdmin.equals("principal")) {
             JOptionPane.showMessageDialog(this,
                     "Accès refusé : Seuls les administrateurs peuvent modifier les promotions des livres",
                     "Droits insuffisants", JOptionPane.WARNING_MESSAGE);
@@ -307,9 +309,12 @@ public class PanelPromotion extends PanelPrincipal implements ActionListener, Ke
         }
 
         String nomLivre = txtNomLivre.getText();
+        if ("Non définie".equals(nomLivre)) {
+            nomLivre = null;
+        }
         String nomPromotion = txtNomPromotionLivre.getText();
 
-        if (nomLivre.isEmpty() || nomPromotion.isEmpty()) {
+        if (nomLivre == null || nomPromotion.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Veuillez entrer un nom de livre et une promotion", "Erreur", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -317,9 +322,14 @@ public class PanelPromotion extends PanelPrincipal implements ActionListener, Ke
         Livre livre = Controleur.selectLivreByNom(nomLivre);
         Promotion promotion = Controleur.selectPromotionByNom(nomPromotion);
 
-        if (livre != null && promotion != null) {
-            livre.setIdPromotion(promotion.getIdPromotion());
-            Controleur.updatePromotionLivre(livre);
+        if (livre != null) {
+            if (promotion != null) {
+                livre.setIdPromotion(promotion.getIdPromotion());
+                Controleur.updatePromotionLivre(livre);
+            } else {
+                livre.setIdPromotion(null);
+                Controleur.updatePromotionLivre(livre);
+            }
             JOptionPane.showMessageDialog(this, "Promotion du livre mise à jour avec succès", "Succès", JOptionPane.INFORMATION_MESSAGE);
 
             // Mise à jour du tableau après l'association
@@ -327,7 +337,7 @@ public class PanelPromotion extends PanelPrincipal implements ActionListener, Ke
             majNbLivresPromotions();
             viderChampsLivrePromotion();
         } else {
-            JOptionPane.showMessageDialog(this, "Livre ou promotion introuvable", "Erreur", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Livre introuvable", "Erreur", JOptionPane.ERROR_MESSAGE);
         }
     }
 

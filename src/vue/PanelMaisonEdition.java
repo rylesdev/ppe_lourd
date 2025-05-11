@@ -19,6 +19,7 @@ import controleur.Tableau;
 import controleur.Livre;
 
 public class PanelMaisonEdition extends PanelPrincipal implements ActionListener, KeyListener {
+    private String niveauAdmin;
     // Panel pour les maisons d'édition
     private JPanel panelMaisonEditionForm = new JPanel();
     private JTextField txtNomMaisonEdition = new JTextField();
@@ -60,6 +61,7 @@ public class PanelMaisonEdition extends PanelPrincipal implements ActionListener
     public PanelMaisonEdition() {
         super("Gestion des Maisons d'Edition");
 
+        this.niveauAdmin = Controleur.selectNiveauAdminByIdUser(Controleur.getUserConnecte().getIdUser());
         // Initialisation des panels
         initMaisonEdition();
         initLivreMaisonEdition();
@@ -194,7 +196,7 @@ public class PanelMaisonEdition extends PanelPrincipal implements ActionListener
     }
 
     private void validerMaisonEdition() {
-        if (!Controleur.getRoleUserConnecte().equals("admin")) {
+        if (!this.niveauAdmin.equals("principal")) {
             JOptionPane.showMessageDialog(this,
                     "Accès refusé : Seuls les administrateurs peuvent ajouter des maisons d'édition",
                     "Droits insuffisants", JOptionPane.WARNING_MESSAGE);
@@ -228,7 +230,7 @@ public class PanelMaisonEdition extends PanelPrincipal implements ActionListener
     }
 
     private void supprimerMaisonEdition() {
-        if (!Controleur.getRoleUserConnecte().equals("admin")) {
+        if (!this.niveauAdmin.equals("principal")) {
             JOptionPane.showMessageDialog(this,
                     "Accès refusé : Seuls les administrateurs peuvent supprimer des maisons d'édition",
                     "Droits insuffisants", JOptionPane.WARNING_MESSAGE);
@@ -255,7 +257,7 @@ public class PanelMaisonEdition extends PanelPrincipal implements ActionListener
     }
 
     private void validerLivreMaisonEdition() {
-        if (!Controleur.getRoleUserConnecte().equals("admin")) {
+        if (!this.niveauAdmin.equals("principal")) {
             JOptionPane.showMessageDialog(this,
                     "Accès refusé : Seuls les administrateurs peuvent modifier les maisons d'édition des livres",
                     "Droits insuffisants", JOptionPane.WARNING_MESSAGE);

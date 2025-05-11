@@ -17,7 +17,7 @@ public class VueConnexion extends JFrame implements ActionListener, KeyListener 
     private JButton btSeConnecter = new JButton("Se Connecter");
     private JTextField txtEmail = new JTextField("ryles@gmail.com");
     private JPasswordField txtMdp = new JPasswordField("123");
-    private JRadioButton rbAdmin = new JRadioButton("Administrateur");
+    private JRadioButton rbAdmin = new JRadioButton("Principal");
     private JRadioButton rbGestionnaire = new JRadioButton("Gestionnaire");
     private ButtonGroup bgRole = new ButtonGroup();
 
@@ -86,7 +86,8 @@ public class VueConnexion extends JFrame implements ActionListener, KeyListener 
 
     private void traitement() {
         String email = this.txtEmail.getText();
-        String mdp = new String(this.txtMdp.getPassword());
+        String unMdp = new String(this.txtMdp.getPassword());
+        String mdp = Controleur.sha1Hash(unMdp);
         String role = this.rbAdmin.isSelected() ? "principal" : "gestionnaire";
         User unUser = Controleur.selectWhereUser(email, mdp, role);
         if (unUser == null) {

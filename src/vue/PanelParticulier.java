@@ -21,6 +21,7 @@ import controleur.Controleur;
 import controleur.Tableau;
 
 public class PanelParticulier extends PanelPrincipal implements ActionListener, KeyListener {
+    private String niveauAdmin;
     private JPanel panelForm = new JPanel();
 
     private JTextField txtEmail = new JTextField();
@@ -48,6 +49,7 @@ public class PanelParticulier extends PanelPrincipal implements ActionListener, 
     public PanelParticulier() {
         super("");
 
+        this.niveauAdmin = Controleur.selectNiveauAdminByIdUser(Controleur.getUserConnecte().getIdUser());
         Color customColor = new Color(100, 140, 180);
         this.panelForm.setBackground(customColor);
         this.panelForm.setBounds(30, 40, 300, 250);
@@ -187,7 +189,7 @@ public class PanelParticulier extends PanelPrincipal implements ActionListener, 
     }
 
     private void insererParticulier() {
-        if (!Controleur.getRoleUserConnecte().equals("admin")) {
+        if (!this.niveauAdmin.equals("principal")) {
             JOptionPane.showMessageDialog(this,
                     "Accès refusé : Seuls les administrateurs peuvent ajouter des particuliers",
                     "Droits insuffisants", JOptionPane.WARNING_MESSAGE);
@@ -227,7 +229,7 @@ public class PanelParticulier extends PanelPrincipal implements ActionListener, 
         }
 
         // Vérification du rôle utilisateur
-        String[] roles = {"admin", "client", "gestionnaire"}; // Exemple de rôles possibles
+        String[] roles = {"admin", "particulier", "entreprise"};
         boolean roleValide = false;
         for (String r : roles) {
             if (r.equals(role)) {
@@ -279,7 +281,7 @@ public class PanelParticulier extends PanelPrincipal implements ActionListener, 
     }
 
     private void modifierParticulier() {
-        if (!Controleur.getRoleUserConnecte().equals("admin")) {
+        if (!this.niveauAdmin.equals("principal")) {
             JOptionPane.showMessageDialog(this,
                     "Accès refusé : Seuls les administrateurs peuvent modifier des particuliers",
                     "Droits insuffisants", JOptionPane.WARNING_MESSAGE);
@@ -343,7 +345,7 @@ public class PanelParticulier extends PanelPrincipal implements ActionListener, 
     }
 
     private void supprimerParticulier() {
-        if (!Controleur.getRoleUserConnecte().equals("admin")) {
+        if (!this.niveauAdmin.equals("principal")) {
             JOptionPane.showMessageDialog(this,
                     "Accès refusé : Seuls les administrateurs peuvent supprimer des particuliers",
                     "Droits insuffisants", JOptionPane.WARNING_MESSAGE);

@@ -1,12 +1,13 @@
 package controleur;
 
 public class Livre {
-    private int idLivre, exemplaireLivre, idCategorie, idMaisonEdition, idPromotion;
+    private int idLivre, exemplaireLivre, idCategorie, idMaisonEdition;
+    private Integer idPromotion;
     private String nomLivre, auteurLivre, imageLivre;
     private float prixLivre;
 
     public Livre(int idLivre, String nomLivre, String auteurLivre, String imageLivre,
-                 int exemplaireLivre, float prixLivre, int idCategorie, int idMaisonEdition, int idPromotion) {
+                 int exemplaireLivre, float prixLivre, int idCategorie, int idMaisonEdition, Integer idPromotion) {
         this.idLivre = idLivre;
         this.nomLivre = nomLivre;
         this.auteurLivre = auteurLivre;
@@ -19,7 +20,7 @@ public class Livre {
     }
 
     public Livre(String nomLivre, String auteurLivre, String imageLivre,
-                 int exemplaireLivre, float prixLivre, int idCategorie, int idMaisonEdition, int idPromotion) {
+                 int exemplaireLivre, float prixLivre, int idCategorie, int idMaisonEdition, Integer idPromotion) {
         this.idLivre = 0;
         this.nomLivre = nomLivre;
         this.auteurLivre = auteurLivre;
@@ -95,11 +96,11 @@ public class Livre {
         this.idMaisonEdition = idMaisonEdition;
     }
 
-    public int getIdPromotion() {
+    public Integer getIdPromotion() {
         return idPromotion;
     }
 
-    public void setIdPromotion(int idPromotion) {
+    public void setIdPromotion(Integer idPromotion) {
         this.idPromotion = idPromotion;
     }
 }

@@ -12,6 +12,7 @@ import controleur.User;
 public class PanelProfil extends PanelPrincipal implements ActionListener {
     private JTextArea txtInfos = new JTextArea();
     private JButton btModifier = new JButton("Modifier Profil");
+    private String niveauAdmin;
 
     private JPanel panelForm = new JPanel();
     private JPanel panelLabels = new JPanel();
@@ -66,6 +67,7 @@ public class PanelProfil extends PanelPrincipal implements ActionListener {
 
     public void chargerProfil() {
         User currentUser = Controleur.getUserConnecte();
+
         if (currentUser == null) {
             viderAffichage();
             JOptionPane.showMessageDialog(this,
@@ -73,6 +75,8 @@ public class PanelProfil extends PanelPrincipal implements ActionListener {
                     "Erreur", JOptionPane.ERROR_MESSAGE);
             return;
         }
+
+        this.niveauAdmin = Controleur.selectNiveauAdminByIdUser(currentUser.getIdUser());
 
         afficherInfosUtilisateur(currentUser);
         viderChampsFormulaire();
@@ -153,7 +157,7 @@ public class PanelProfil extends PanelPrincipal implements ActionListener {
                         + " Email: " + user.getEmailUser() + "\n\n"
                         + " Mot de passe: ********\n\n"
                         + " Adresse: " + user.getAdresseUser() + "\n\n"
-                        + " Rôle: " + user.getRoleUser() + "\n\n"
+                        + " Rôle: " + this.niveauAdmin + "\n\n"
                         + "_____________________________________________"
         );
     }
@@ -172,7 +176,7 @@ public class PanelProfil extends PanelPrincipal implements ActionListener {
         if (e.getSource() == this.btModifier) {
             this.txtEmail.setText(currentUser.getEmailUser());
             this.txtAdresse.setText(currentUser.getAdresseUser());
-            this.txtRole.setText(currentUser.getRoleUser());
+            this.txtRole.setText(this.niveauAdmin);
             this.txtMdp1.setText("");
             this.txtMdp2.setText("");
             this.panelForm.setVisible(true);
@@ -217,7 +221,7 @@ public class PanelProfil extends PanelPrincipal implements ActionListener {
             return false;
         }
 
-        String[] roles = {"admin", "client", "gestionnaire"};
+        String[] roles = {"principal", "client", "gestionnaire"};
         boolean roleValide = false;
         for (String r : roles) {
             if (r.equals(role)) {
@@ -245,19 +249,40 @@ public class PanelProfil extends PanelPrincipal implements ActionListener {
     private void validerModifications(User originalUser) {
         String email = this.txtEmail.getText().trim();
         String adresse = this.txtAdresse.getText().trim();
+        this.niveauAdmin = this.txtRole.getText().trim();
         String mdp1 = new String(this.txtMdp1.getPassword());
+        String mdp2 = new String(this.txtMdp2.getPassword());
+        String verifMdp = "";
+        if (mdp1.equals(mdp2)) {
+            verifMdp = Controleur.sha1Hash(mdp1);
+        } else {
+            verifMdp = null;
+        }
+        String role = "admin";
 
         try {
             User modifiedUser = new User(
                     originalUser.getIdUser(),
                     email,
-                    mdp1.isEmpty() ? originalUser.getMdpUser() : Controleur.sha1Hash(mdp1),
+                    verifMdp,
                     adresse,
-                    originalUser.getRoleUser()
+                    role
             );
 
-            Controleur.updateUser(modifiedUser);
+            User userAvantUpdate = Controleur.getUserConnecte();
+
+            Controleur.updateAdmin(modifiedUser, this.niveauAdmin);
+
+            if (Controleur.getUserConnecte() == null) {
+                Controleur.setUserConnecte(userAvantUpdate);
+            }
+
             Controleur.actualiserUserConnecte();
+
+            if (Controleur.getUserConnecte() == null) {
+                Controleur.setUserConnecte(modifiedUser);
+            }
+
             chargerProfil();
 
             JOptionPane.showMessageDialog(this,

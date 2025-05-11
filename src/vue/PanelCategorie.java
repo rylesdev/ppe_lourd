@@ -19,6 +19,7 @@ import controleur.Tableau;
 import controleur.Livre;
 
 public class PanelCategorie extends PanelPrincipal implements ActionListener, KeyListener {
+    private String niveauAdmin;
     // Panel pour les catégories
     private JPanel panelCategorieForm = new JPanel();
     private JTextField txtNomCategorie = new JTextField();
@@ -60,6 +61,7 @@ public class PanelCategorie extends PanelPrincipal implements ActionListener, Ke
     public PanelCategorie() {
         super("Gestion des Catégories");
 
+        this.niveauAdmin = Controleur.selectNiveauAdminByIdUser(Controleur.getUserConnecte().getIdUser());
         // Initialisation des panels
         initCategorie();
         initLivreCategorie();
@@ -194,7 +196,7 @@ public class PanelCategorie extends PanelPrincipal implements ActionListener, Ke
     }
 
     private void validerCategorie() {
-        if (!Controleur.getRoleUserConnecte().equals("admin")) {
+        if (!this.niveauAdmin.equals("principal")) {
             JOptionPane.showMessageDialog(this,
                     "Accès refusé : Seuls les administrateurs peuvent ajouter des catégories",
                     "Droits insuffisants", JOptionPane.WARNING_MESSAGE);
@@ -228,7 +230,7 @@ public class PanelCategorie extends PanelPrincipal implements ActionListener, Ke
     }
 
     private void supprimerCategorie() {
-        if (!Controleur.getRoleUserConnecte().equals("admin")) {
+        if (!this.niveauAdmin.equals("principal")) {
             JOptionPane.showMessageDialog(this,
                     "Accès refusé : Seuls les administrateurs peuvent supprimer des catégories",
                     "Droits insuffisants", JOptionPane.WARNING_MESSAGE);
@@ -255,7 +257,7 @@ public class PanelCategorie extends PanelPrincipal implements ActionListener, Ke
     }
 
     private void validerLivreCategorie() {
-        if (!Controleur.getRoleUserConnecte().equals("admin")) {
+        if (!this.niveauAdmin.equals("principal")) {
             JOptionPane.showMessageDialog(this,
                     "Accès refusé : Seuls les administrateurs peuvent modifier les catégories des livres",
                     "Droits insuffisants", JOptionPane.WARNING_MESSAGE);

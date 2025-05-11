@@ -25,6 +25,7 @@ import controleur.Livre;
 import controleur.LigneCommande;
 
 public class PanelCommande extends PanelPrincipal implements ActionListener, KeyListener {
+    private String niveauAdmin;
     // Panel pour les lignes de commande
     private JPanel panelLigneForm = new JPanel();
     private ArrayList<Livre> tousLesLivres; // Garde référence à la liste complète
@@ -63,6 +64,7 @@ public class PanelCommande extends PanelPrincipal implements ActionListener, Key
     public PanelCommande(int idUser) {
         super("Gestion des Commandes");
 
+        this.niveauAdmin = Controleur.selectNiveauAdminByIdUser(idUser);
         // Initialisation des panels
         initLigneCommande();
         initCommande(idUser);
@@ -180,7 +182,7 @@ public class PanelCommande extends PanelPrincipal implements ActionListener, Key
     }
 
     private void validerLigneCommande() {
-        if (!Controleur.getRoleUserConnecte().equals("admin")) {
+        if (!this.niveauAdmin.equals("principal")) {
             JOptionPane.showMessageDialog(this,
                     "Accès refusé : Seuls les administrateurs peuvent ajouter des lignes",
                     "Droits insuffisants", JOptionPane.WARNING_MESSAGE);
@@ -223,7 +225,7 @@ public class PanelCommande extends PanelPrincipal implements ActionListener, Key
     }
 
     private void validerCommande() {
-        if (!Controleur.getRoleUserConnecte().equals("admin")) {
+        if (!this.niveauAdmin.equals("principal")) {
             JOptionPane.showMessageDialog(this,
                     "Accès refusé : Seuls les administrateurs peuvent créer des commandes",
                     "Droits insuffisants", JOptionPane.WARNING_MESSAGE);
@@ -238,8 +240,7 @@ public class PanelCommande extends PanelPrincipal implements ActionListener, Key
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Date dateCommande = sdf.parse(txtDateCommande.getText());
-            Date dateLivraison = txtDateLivraisonCommande.getText().isEmpty() ?
-                    null : sdf.parse(txtDateLivraisonCommande.getText());
+            Date dateLivraison = sdf.parse(txtDateLivraisonCommande.getText());
 
             int idUser = Integer.parseInt(txtIdUser.getText());
 
@@ -253,7 +254,7 @@ public class PanelCommande extends PanelPrincipal implements ActionListener, Key
             }
 
             // Insertion en base
-            Controleur.insertCommande(commande);
+            int resultInsertCommande = Controleur.insertCommande(commande);
 
             // Mise à jour de l'interface
             tableauCommandes.setDonnees(obtenirDonnees(""));
@@ -262,7 +263,14 @@ public class PanelCommande extends PanelPrincipal implements ActionListener, Key
             lignesTemporaires.clear();
             lbNbLignes.setText("Nombre de lignes: 0");
 
-            JOptionPane.showMessageDialog(this, "Commande créée avec succès", "Succès", JOptionPane.INFORMATION_MESSAGE);
+            if (resultInsertCommande == 2) {
+                JOptionPane.showMessageDialog(this, "Erreur: La quantite totale depasse le nombre exemplaires disponibles pour ce livre", "Erreur", JOptionPane.ERROR_MESSAGE);
+            } else if (resultInsertCommande == 3) {
+                JOptionPane.showMessageDialog(this, "Erreur: Réessayez", "Erreur", JOptionPane.ERROR_MESSAGE);
+            } else if (resultInsertCommande == 1) {
+                JOptionPane.showMessageDialog(this, "Commande créée avec succès", "Succès", JOptionPane.INFORMATION_MESSAGE);
+            }
+
 
         } catch (ParseException ex) {
             JOptionPane.showMessageDialog(this, "Format de date invalide (yyyy-mm-dd)", "Erreur", JOptionPane.ERROR_MESSAGE);
@@ -272,7 +280,7 @@ public class PanelCommande extends PanelPrincipal implements ActionListener, Key
     }
 
     private void modifierCommande() {
-        if (!Controleur.getRoleUserConnecte().equals("admin")) {
+        if (!this.niveauAdmin.equals("principal")) {
             JOptionPane.showMessageDialog(this,
                     "Accès refusé : Seuls les administrateurs peuvent modifier des commandes",
                     "Droits insuffisants", JOptionPane.WARNING_MESSAGE);
@@ -314,7 +322,7 @@ public class PanelCommande extends PanelPrincipal implements ActionListener, Key
     }
 
     private void supprimerCommande() {
-        if (!Controleur.getRoleUserConnecte().equals("admin")) {
+        if (!this.niveauAdmin.equals("principal")) {
             JOptionPane.showMessageDialog(this,
                     "Accès refusé : Seuls les administrateurs peuvent supprimer des commandes",
                     "Droits insuffisants", JOptionPane.WARNING_MESSAGE);

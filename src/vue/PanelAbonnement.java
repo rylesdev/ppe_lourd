@@ -24,6 +24,7 @@ import controleur.Controleur;
 import controleur.Tableau;
 
 public class PanelAbonnement extends PanelPrincipal implements ActionListener, KeyListener {
+    private String niveauAdmin;
     private JPanel panelForm = new JPanel();
 
     private JTextField txtIdUser = new JTextField();
@@ -47,6 +48,7 @@ public class PanelAbonnement extends PanelPrincipal implements ActionListener, K
     public PanelAbonnement(int idUser) {
         super("Gestion des Abonnements");
 
+        this.niveauAdmin = Controleur.selectNiveauAdminByIdUser(idUser);
         // Initialisation de l'interface
         Color customColor = new Color(100, 140, 180);
         this.setBackground(customColor);
@@ -171,7 +173,7 @@ public class PanelAbonnement extends PanelPrincipal implements ActionListener, K
     }
 
     private void insererAbonnement() {
-        if (!Controleur.getRoleUserConnecte().equals("admin")) {
+        if (!this.niveauAdmin.equals("principal")) {
             JOptionPane.showMessageDialog(this,
                     "Accès refusé : Seuls les administrateurs peuvent ajouter des abonnements",
                     "Droits insuffisants", JOptionPane.WARNING_MESSAGE);
@@ -232,7 +234,7 @@ public class PanelAbonnement extends PanelPrincipal implements ActionListener, K
     }
 
     private void modifierAbonnement() {
-        if (!Controleur.getRoleUserConnecte().equals("admin")) {
+        if (!this.niveauAdmin.equals("principal")) {
             JOptionPane.showMessageDialog(this,
                     "Accès refusé : Seuls les administrateurs peuvent modifier des abonnements",
                     "Droits insuffisants", JOptionPane.WARNING_MESSAGE);
@@ -288,7 +290,7 @@ public class PanelAbonnement extends PanelPrincipal implements ActionListener, K
     }
 
     private void supprimerAbonnement() {
-        if (!Controleur.getRoleUserConnecte().equals("admin")) {
+        if (!this.niveauAdmin.equals("principal")) {
             JOptionPane.showMessageDialog(this,
                     "Accès refusé : Seuls les administrateurs peuvent supprimer des abonnements",
                     "Droits insuffisants", JOptionPane.WARNING_MESSAGE);

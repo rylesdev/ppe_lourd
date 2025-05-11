@@ -1,11 +1,11 @@
 A Faire :
-- Dans toutes les pages, modifier les droits de "admin" en mettant à la place "principal".
-(- Implémenter une foncionntalité pour que le gestionnaire puisse uniquement voir les vues admin ?)
-- Dans toutes les pages, modifier les champs "client" en mettant à la place "particulier" ou "entreprise".
+- Vérifier que la date dans l'insertion d'une commande fonctionne.
 
-- Vérifier que toutes les méthodes des Panel "Catégorie ; MaisonEdition ; Promotion" fonctionnent.
+- Vérifier que tous les triggers fonctionnent :
+    - tInsertArchive : Non (ça insère par dans archiveCommande et archiveInsertCommande après avoir delete un user)
+    - tStockLivre : Oui (ça empêche l'insertCommande si le stock est >= 0 "after insert on commande")
+    - tUpdateStockCommande : Non (ça ne met pas à jour le stock du livre après une commande)
 
-- Vérifier que tous les triggers fonctionnent
 
 
 

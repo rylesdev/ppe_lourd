@@ -23,6 +23,7 @@ import controleur.Entreprise;
 import controleur.Tableau;
 
 public class PanelEntreprise extends PanelPrincipal implements ActionListener, KeyListener {
+    private String niveauAdmin;
     private JPanel panelForm = new JPanel();
 
     private JTextField txtEmail = new JTextField();
@@ -48,6 +49,7 @@ public class PanelEntreprise extends PanelPrincipal implements ActionListener, K
     public PanelEntreprise() {
         super("");
 
+        this.niveauAdmin = Controleur.selectNiveauAdminByIdUser(Controleur.getUserConnecte().getIdUser());
         Color customColor = new Color(100, 140, 180);
         this.panelForm.setBackground(customColor);
         this.panelForm.setBounds(30, 40, 300, 250);
@@ -169,7 +171,7 @@ public class PanelEntreprise extends PanelPrincipal implements ActionListener, K
     }
 
     private void insererEntreprise() {
-        if (!Controleur.getRoleUserConnecte().equals("admin")) {
+        if (!this.niveauAdmin.equals("principal")) {
             JOptionPane.showMessageDialog(this,
                     "Accès refusé : Seuls les administrateurs peuvent ajouter des entreprises",
                     "Droits insuffisants", JOptionPane.WARNING_MESSAGE);
@@ -208,7 +210,7 @@ public class PanelEntreprise extends PanelPrincipal implements ActionListener, K
         }
 
         // Vérification du rôle utilisateur
-        String[] roles = {"admin", "client", "gestionnaire"}; // Exemple de rôles possibles
+        String[] roles = {"admin", "particulier", "entreprise"};
         boolean roleValide = false;
         for (String r : roles) {
             if (r.equals(role)) {
@@ -260,7 +262,7 @@ public class PanelEntreprise extends PanelPrincipal implements ActionListener, K
     }
 
     private void modifierEntreprise() {
-        if (!Controleur.getRoleUserConnecte().equals("admin")) {
+        if (!this.niveauAdmin.equals("principal")) {
             JOptionPane.showMessageDialog(this,
                     "Accès refusé : Seuls les administrateurs peuvent modifier des entreprises",
                     "Droits insuffisants", JOptionPane.WARNING_MESSAGE);
@@ -310,7 +312,7 @@ public class PanelEntreprise extends PanelPrincipal implements ActionListener, K
     }
 
     private void supprimerEntreprise() {
-        if (!Controleur.getRoleUserConnecte().equals("admin")) {
+        if (!this.niveauAdmin.equals("principal")) {
             JOptionPane.showMessageDialog(this,
                     "Accès refusé : Seuls les administrateurs peuvent supprimer des entreprises",
                     "Droits insuffisants", JOptionPane.WARNING_MESSAGE);

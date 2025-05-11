@@ -21,6 +21,7 @@ import controleur.Controleur;
 import controleur.Tableau;
 
 public class PanelLivre extends PanelPrincipal implements ActionListener, KeyListener {
+    private String niveauAdmin;
     private JPanel panelForm = new JPanel();
     private JTextField txtNom = new JTextField();
     private JTextField txtAuteur = new JTextField();
@@ -47,7 +48,7 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, KeyLis
     public PanelLivre() {
         super("Gestion des Livres");
 
-        // Initialisation de l'interface
+        this.niveauAdmin = Controleur.selectNiveauAdminByIdUser(Controleur.getUserConnecte().getIdUser());
         Color customColor = new Color(100, 140, 180);
         this.setBackground(customColor);
 
@@ -181,8 +182,45 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, KeyLis
         btValider.setText("Valider");
     }
 
+    private boolean verifierDonneesExistantes() {
+        String categorie = this.txtCategorie.getText();
+        String maisonEdition = this.txtMaisonEdition.getText();
+        String promotion = this.txtPromotion.getText();
+
+        // Vérification si la catégorie existe
+        int idCategorie = Controleur.selectIdCategorie(categorie);
+        if (idCategorie <= 0) {
+            JOptionPane.showMessageDialog(this,
+                    "La catégorie '" + categorie + "' n'existe pas dans la base de données.",
+                    "Erreur de validation", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        // Vérification si la maison d'édition existe
+        int idMaisonEdition = Controleur.selectIdMaisonEdition(maisonEdition);
+        if (idMaisonEdition <= 0) {
+            JOptionPane.showMessageDialog(this,
+                    "La maison d'édition '" + maisonEdition + "' n'existe pas dans la base de données.",
+                    "Erreur de validation", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        // Vérification si la promotion existe (seulement si une promotion est spécifiée)
+        if (!promotion.equals("Aucune promotion") && !promotion.isEmpty()) {
+            int idPromotion = Controleur.selectIdPromotion(promotion);
+            if (idPromotion <= 0) {
+                JOptionPane.showMessageDialog(this,
+                        "La promotion '" + promotion + "' n'existe pas dans la base de données.",
+                        "Erreur de validation", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     private void insererLivre() {
-        if (!Controleur.getRoleUserConnecte().equals("admin")) {
+        if (!this.niveauAdmin.equals("principal")) {
             JOptionPane.showMessageDialog(this,
                     "Accès refusé : Seuls les administrateurs peuvent ajouter des livres",
                     "Droits insuffisants", JOptionPane.WARNING_MESSAGE);
@@ -205,11 +243,17 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, KeyLis
             return;
         }
 
+        // Vérification que les données existent dans la base
+        if (!verifierDonneesExistantes()) {
+            return;
+        }
+
         int exemplaire = Integer.parseInt(exemplaireStr);
         float prix = Float.parseFloat(prixStr);
         int idCategorie = Controleur.selectIdCategorie(categorie);
         int idMaisonEdition = Controleur.selectIdMaisonEdition(maisonEdition);
-        int idPromotion = Controleur.selectIdPromotion(promotion);
+        int idPromotion = promotion.equals("Aucune promotion") || promotion.isEmpty() ?
+                0 : Controleur.selectIdPromotion(promotion);
 
         ArrayList<String> lesChamps = new ArrayList<>();
         lesChamps.add(nom);
@@ -237,7 +281,7 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, KeyLis
     }
 
     private void modifierLivre() {
-        if (!Controleur.getRoleUserConnecte().equals("admin")) {
+        if (!this.niveauAdmin.equals("principal")) {
             JOptionPane.showMessageDialog(this,
                     "Accès refusé : Seuls les administrateurs peuvent modifier des livres",
                     "Droits insuffisants", JOptionPane.WARNING_MESSAGE);
@@ -263,11 +307,17 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, KeyLis
                 return;
             }
 
+            // Vérification que les données existent dans la base
+            if (!verifierDonneesExistantes()) {
+                return;
+            }
+
             int exemplaireLivre = Integer.parseInt(exemplaireStr);
             float prixLivre = Float.parseFloat(prixStr);
             int idCategorie = Controleur.selectIdCategorie(categorie);
             int idMaisonEdition = Controleur.selectIdMaisonEdition(maisonEdition);
-            int idPromotion = Controleur.selectIdPromotion(promotion);
+            int idPromotion = promotion.equals("Aucune promotion") || promotion.isEmpty() ?
+                    0 : Controleur.selectIdPromotion(promotion);
 
             ArrayList<String> lesChamps = new ArrayList<>();
             lesChamps.add(nomLivre);
@@ -296,7 +346,7 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, KeyLis
     }
 
     private void supprimerLivre() {
-        if (!Controleur.getRoleUserConnecte().equals("admin")) {
+        if (!this.niveauAdmin.equals("principal")) {
             JOptionPane.showMessageDialog(this,
                     "Accès refusé : Seuls les administrateurs peuvent supprimer des livres",
                     "Droits insuffisants", JOptionPane.WARNING_MESSAGE);

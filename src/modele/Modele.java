@@ -16,6 +16,73 @@ public class Modele {
 
 
 
+    /************************ GESTION DES ADMIN ************************/
+    public static String selectNiveauAdminByIdUser(int idUser) {
+        String niveauAdmin = null;
+        String requete = "SELECT niveauAdmin FROM admin WHERE idUser = " + idUser;
+
+        try {
+            uneConnexion.seConnecter();
+            Statement unStat = uneConnexion.getMaConnexion().createStatement();
+            ResultSet rs = unStat.executeQuery(requete);
+            if (rs.next()) {
+                niveauAdmin = rs.getString("niveauAdmin");
+            }
+            unStat.close();
+            uneConnexion.seDeConnecter();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return niveauAdmin;
+    }
+
+    public static void updateAdmin(User unUser, String niveauAdmin) {
+        String requeteUser = "UPDATE user SET " +
+                "emailUser = '" + unUser.getEmailUser() + "', " +
+                "mdpUser = '" + unUser.getMdpUser() + "', " +
+                "adresseUser = '" + unUser.getAdresseUser() + "', " +
+                "roleUser = '" + unUser.getRoleUser() + "' " +
+                "WHERE idUser = " + unUser.getIdUser() + ";";
+
+        String requeteAdmin = "UPDATE admin SET " +
+                "niveauAdmin = '" + niveauAdmin + "' " +
+                "WHERE idUser = " + unUser.getIdUser() + ";";
+
+        Connection conn = null;
+        try {
+            uneConnexion.seConnecter();
+            conn = uneConnexion.getMaConnexion();
+            conn.setAutoCommit(false); // Démarre la transaction
+
+            try (Statement stmt = conn.createStatement()) {
+                stmt.executeUpdate(requeteUser);
+                stmt.executeUpdate(requeteAdmin);
+                conn.commit(); // Valide la transaction
+            }
+        } catch (SQLException e) {
+            try {
+                if (conn != null) {
+                    conn.rollback(); // Annule la transaction en cas d'erreur
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            e.printStackTrace();
+        } finally {
+            try {
+                if (conn != null) {
+                    conn.close(); // Ferme la connexion
+                }
+                uneConnexion.seDeConnecter();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+
     /************************ GESTION DES USERS ************************/
     public static void insertUser(User unUser) {
         String mdpHashe = sha1Hash(unUser.getMdpUser()); // Hachage du mot de passe
@@ -524,12 +591,20 @@ public class Modele {
     }
 
     public static boolean updatePromotionLivre(Livre unLivre) {
-        String requete = String.format(
-                "UPDATE livre SET idPromotion = %d WHERE idLivre = %d",
-                unLivre.getIdPromotion(), unLivre.getIdLivre()
-        );
+        String requete;
+        if (unLivre.getIdPromotion() != null) {
+            requete = String.format(
+                    "UPDATE livre SET idPromotion = %d WHERE idLivre = %d",
+                    unLivre.getIdPromotion(), unLivre.getIdLivre()
+            );
+        } else {
+            requete = String.format(
+                    "UPDATE livre SET idPromotion = NULL WHERE idLivre = %d",
+                    unLivre.getIdLivre()
+            );
+        }
 
-        try {
+            try {
             uneConnexion.seConnecter();
             Statement stmt = uneConnexion.getMaConnexion().createStatement();
             int nbLignes = stmt.executeUpdate(requete);
@@ -1238,7 +1313,8 @@ public class Modele {
         return lesCommandes;
     }
 
-    public static void insertCommande(Commande uneCommande) {
+    public static int insertCommande(Commande uneCommande) {
+        int result = 0;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String dateCommande = dateFormat.format(uneCommande.getDateCommande());
         String dateLivraison = uneCommande.getDateLivraisonCommande() != null
@@ -1287,15 +1363,18 @@ public class Modele {
             st.close();
             uneConnexion.seDeConnecter();
 
+            result = 1;
         } catch (SQLException exp) {
             try {
                 // Rollback ajouté pour annuler les opérations
                 if (uneConnexion.getMaConnexion() != null) {
                     uneConnexion.getMaConnexion().rollback();
                     System.out.println("ROLLBACK effectué. Erreur: " + exp.getMessage());
+                    result = 2;
                 }
             } catch (SQLException e) {
                 System.out.println("Erreur lors du rollback : " + e.getMessage());
+                result = 3;
             }
         } finally {
             // Fermeture sécurisée comme dans votre méthode
@@ -1308,6 +1387,7 @@ public class Modele {
                 System.out.println("Erreur fermeture : " + e.getMessage());
             }
         }
+        return result;
     }
 
     public static void deleteCommande(int idCommande) {

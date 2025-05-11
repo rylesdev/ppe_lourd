@@ -11,6 +11,17 @@ public class Controleur {
 
 
 
+    /**************** GESTION DES ADMIN ****************/
+    public static String selectNiveauAdminByIdUser(int idUser) {
+        return Modele.selectNiveauAdminByIdUser(idUser);
+    }
+
+    public static void updateAdmin(User unUser, String niveauAdmin) {
+        Modele.updateAdmin(unUser, niveauAdmin);
+    }
+
+
+
     /************************ GESTION DES USERS ************************/
     public static boolean emailExiste(String email) {
         return Modele.emailExiste(email);
@@ -253,8 +264,8 @@ public class Controleur {
         return Modele.selectLikeCommande(filtre);
     }
 
-    public static void insertCommande(Commande uneCommande) {
-        Modele.insertCommande(uneCommande);
+    public static int insertCommande(Commande uneCommande) {
+        return Modele.insertCommande(uneCommande);
     }
 
     public static void deleteCommande(int idCommande) {
