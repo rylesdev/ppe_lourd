@@ -100,9 +100,46 @@ GROUP BY u.emailUser;
 
 
 TRIGGERS :
+DELIMITER $$
+CREATE TRIGGER tStockLivreInsert
+    BEFORE INSERT ON ligneCommande
+    FOR EACH ROW
+BEGIN
+    DECLARE t_totalQuantite INT;
+    DECLARE t_exemplaireLivre INT;
+    DECLARE t_idUser INT;
+
+    SELECT idUser
+    INTO t_idUser
+    FROM commande
+    WHERE idCommande = NEW.idCommande;
+
+    SELECT SUM(lc.quantiteLigneCommande)
+    INTO t_totalQuantite
+    FROM ligneCommande lc
+             INNER JOIN commande c ON lc.idCommande = c.idCommande
+    WHERE lc.idLivre = NEW.idLivre
+      AND c.idUser = t_idUser
+      AND c.idCommande = New.idCommande
+
+    SET t_totalQuantite = IFNULL(t_totalQuantite, 0) + NEW.quantiteLigneCommande;
+
+    SELECT exemplaireLivre
+    INTO t_exemplaireLivre
+    FROM livre
+    WHERE idLivre = NEW.idLivre;
+
+    IF t_totalQuantite > t_exemplaireLivre THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'La quantité totale dépasse le nombre d''exemplaires disponibles pour ce livre.';
+END IF;
+END$$
+DELIMITER ;
+
+
 // Trigger qui sert à vérifier si la quantité de livre d''une ligneCommande est supérieur à la quantité d''exemplaire de ce livre.
 DELIMITER $$
-CREATE TRIGGER tStockLivre
+CREATE TRIGGER tStockLivreUpdate
 BEFORE update ON ligneCommande
                     FOR EACH ROW
 BEGIN
@@ -121,7 +158,7 @@ FROM ligneCommande lc
          INNER JOIN commande c ON lc.idCommande = c.idCommande
 WHERE lc.idLivre = NEW.idLivre
   AND c.idUser = t_idUser
-  and c.statutCommande = 'en attente';
+  AND c.idCommande = New.idCommande
 
 SET t_totalQuantite = IFNULL(t_totalQuantite, 0) - OLD.quantiteLigneCommande + NEW.quantiteLigneCommande;
 
@@ -144,13 +181,13 @@ CREATE TRIGGER tUpdateStockCommande
     AFTER UPDATE ON commande
     FOR EACH ROW
 BEGIN
-    IF NEW.statutCommande = 'expédiée' THEN
+    IF OLD.statutCommande = 'en attente' AND NEW.statutCommande = 'expédiée' THEN
     UPDATE livre l
-        INNER JOIN ligneCommande lc ON l.idLivre = lc.idLivre
+        JOIN ligneCommande lc ON l.idLivre = lc.idLivre
         SET l.exemplaireLivre = l.exemplaireLivre - lc.quantiteLigneCommande
     WHERE lc.idCommande = NEW.idCommande;
 END IF;
-END //
+END//
 DELIMITER ;
 
 

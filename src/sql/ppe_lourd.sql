@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:8889
--- Généré le : dim. 11 mai 2025 à 16:16
+-- Généré le : lun. 12 mai 2025 à 14:23
 -- Version du serveur : 8.0.35
 -- Version de PHP : 8.3.9
 
@@ -578,19 +578,21 @@ INSERT INTO `commande` (`idCommande`, `dateCommande`, `statutCommande`, `dateLiv
 (30, '2025-05-09', 'en attente', '2025-05-12', 30),
 (486, '2025-12-12', 'expédiée', '2025-12-12', 1),
 (487, '2025-12-12', 'expédiée', '2025-12-12', 1),
-(490, '2025-12-12', 'expédiée', '2025-12-12', 3);
+(490, '2025-12-12', 'expédiée', '2025-12-12', 3),
+(491, '2025-12-12', 'expédiée', '2025-12-12', 1),
+(493, '2025-12-12', 'expédiée', '2025-12-12', 3);
 
 --
 -- Déclencheurs `commande`
 --
 DELIMITER $$
 CREATE TRIGGER `tUpdateStockCommande` AFTER UPDATE ON `commande` FOR EACH ROW BEGIN
-    IF NEW.statutCommande = 'expédiée' THEN
-    UPDATE livre l
-        INNER JOIN ligneCommande lc ON l.idLivre = lc.idLivre
+    IF OLD.statutCommande = 'en attente' AND NEW.statutCommande = 'expédiée' THEN
+        UPDATE livre l
+        JOIN ligneCommande lc ON l.idLivre = lc.idLivre
         SET l.exemplaireLivre = l.exemplaireLivre - lc.quantiteLigneCommande
-    WHERE lc.idCommande = NEW.idCommande;
-END IF;
+        WHERE lc.idCommande = NEW.idCommande;
+    END IF;
 END
 $$
 DELIMITER ;
@@ -686,13 +688,48 @@ INSERT INTO `ligneCommande` (`idLigneCommande`, `idCommande`, `idLivre`, `quanti
 (30, 30, 9, 3),
 (754, 486, 1, 2),
 (755, 487, 1, 99),
-(757, 490, 1, 19);
+(757, 490, 1, 19),
+(758, 491, 1, 10),
+(759, 493, 1, 89);
 
 --
 -- Déclencheurs `ligneCommande`
 --
 DELIMITER $$
-CREATE TRIGGER `tStockLivre` BEFORE UPDATE ON `ligneCommande` FOR EACH ROW BEGIN
+CREATE TRIGGER `tStockLivreInsert` BEFORE INSERT ON `ligneCommande` FOR EACH ROW BEGIN
+    DECLARE t_totalQuantite INT;
+    DECLARE t_exemplaireLivre INT;
+    DECLARE t_idUser INT;
+
+    SELECT idUser
+    INTO t_idUser
+    FROM commande
+    WHERE idCommande = NEW.idCommande;
+
+    SELECT SUM(lc.quantiteLigneCommande)
+    INTO t_totalQuantite
+    FROM ligneCommande lc
+    INNER JOIN commande c ON lc.idCommande = c.idCommande
+    WHERE lc.idLivre = NEW.idLivre
+    AND c.idUser = t_idUser
+    AND c.statutCommande = 'en attente';
+
+    SET t_totalQuantite = IFNULL(t_totalQuantite, 0) + NEW.quantiteLigneCommande;
+
+    SELECT exemplaireLivre
+    INTO t_exemplaireLivre
+    FROM livre
+    WHERE idLivre = NEW.idLivre;
+
+    IF t_totalQuantite > t_exemplaireLivre THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'La quantité totale dépasse le nombre d'exemplaires disponibles pour ce livre.';
+    END IF;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `tStockLivreUpdate` BEFORE UPDATE ON `ligneCommande` FOR EACH ROW BEGIN
     DECLARE t_totalQuantite INT;
     DECLARE t_exemplaireLivre INT;
     DECLARE t_idUser INT;
@@ -748,7 +785,7 @@ CREATE TABLE `livre` (
 --
 
 INSERT INTO `livre` (`idLivre`, `nomLivre`, `auteurLivre`, `imageLivre`, `exemplaireLivre`, `prixLivre`, `idCategorie`, `idMaisonEdition`, `idPromotion`) VALUES
-(1, 'Alcools', 'Apollinaire', 'alcools.png', 100, 12.50, 3, 1, NULL),
+(1, 'Alcools', 'Apollinaire', 'alcools.png', 1, 12.50, 3, 1, NULL),
 (2, 'Crime et Chatiment', 'Dostoïevski', 'crime_et_chatiment.png', 100, 15.00, 1, 2, NULL),
 (3, 'L`Etranger', 'Camus', 'l_etranger.png', 52, 10.00, 1, 3, NULL),
 (4, 'L`Odyssée', 'Homère', 'l_odyssee.png', 89, 13.50, 2, 4, NULL),
@@ -1365,13 +1402,13 @@ ALTER TABLE `categorie`
 -- AUTO_INCREMENT pour la table `commande`
 --
 ALTER TABLE `commande`
-  MODIFY `idCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=491;
+  MODIFY `idCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=495;
 
 --
 -- AUTO_INCREMENT pour la table `ligneCommande`
 --
 ALTER TABLE `ligneCommande`
-  MODIFY `idLigneCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=758;
+  MODIFY `idLigneCommande` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=760;
 
 --
 -- AUTO_INCREMENT pour la table `livre`

@@ -1323,9 +1323,7 @@ public class Modele {
         int result = 0;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String dateCommande = dateFormat.format(uneCommande.getDateCommande());
-        String dateLivraison = uneCommande.getDateLivraisonCommande() != null
-                ? dateFormat.format(uneCommande.getDateLivraisonCommande())
-                : "null";
+        String dateLivraison = dateFormat.format(uneCommande.getDateLivraisonCommande());
 
         try {
             uneConnexion.seConnecter();
@@ -1335,8 +1333,8 @@ public class Modele {
             String requete = "insert into commande values (null, '"
                     + dateCommande + "', '"
                     + "en attente', '"
-                    + dateLivraison + "', "
-                    + uneCommande.getIdUser() + ");";
+                    + dateLivraison + "', '"
+                    + uneCommande.getIdUser() + "');";
 
             Statement st = conn.createStatement();
             st.executeUpdate(requete, Statement.RETURN_GENERATED_KEYS);
@@ -1345,24 +1343,20 @@ public class Modele {
             int idCommande = rs.next() ? rs.getInt(1) : 0;
 
             for (LigneCommande uneLigneCommande : uneCommande.getLesLignesCommande()) {
-                String reqLigne = "insert into ligneCommande values (null, "
-                        + idCommande + ", "
-                        + uneLigneCommande.getIdLivre() + ", "
-                        + uneLigneCommande.getQuantiteLigneCommande() + ")";
+                String reqLigne = "insert into ligneCommande values (null, '"
+                        + idCommande + "', '"
+                        + uneLigneCommande.getIdLivre() + "', '"
+                        + uneLigneCommande.getQuantiteLigneCommande() + "')";
                 st.executeUpdate(reqLigne);
             }
 
+            System.out.println(uneCommande.getStatutCommande());
             // Update qui sert uniquement à activer le trigger "tUpdateStockCommande"
             if (uneCommande.getStatutCommande().equals("expédiée")) {
-                String requeteTriggerCommande = "update ligneCommande l inner join commande c " +
-                                                "on l.idCommande=c.idCommande " +
-                                                "set c.statutCommande = 'expédiée' where c.idCommande = " + idCommande + ";";
+                String requeteTriggerCommande = "update commande " +
+                                                "set statutCommande = 'expédiée' where idCommande = " + idCommande + ";";
 
-                String requeteTriggerLigneCommande =    "update ligneCommande l inner join commande c " +
-                                                        "on l.idCommande=c.idCommande " +
-                                                        "set l.idLivre = l.idLivre where c.idCommande = " + idCommande + ";";
                 st.executeUpdate(requeteTriggerCommande);
-                st.executeUpdate(requeteTriggerLigneCommande);
             }
 
             conn.commit();

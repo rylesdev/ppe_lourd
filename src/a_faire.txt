@@ -1,10 +1,13 @@
 A Faire :
-- Corriger le problème du trigger tUpdateStockCommande.
+- Implémenter une fonctionnalitée pour mettre à jour les exemplaireLivre dans le tableau du PanelLivre automatiquement.
+
+- (Optionnel : Modifier les exemplaires de ligneCommande dans le PanelLivre et tester le tStockLivreUpdate)
+
 
 - Vérifier que tous les triggers fonctionnent :
     - tInsertArchive : Oui
     - tStockLivre : Oui
-    - tUpdateStockCommande : Non (ça ne met pas à jour le stock du livre après une commande)
+    - tUpdateStockCommande : Oui
 
 
 
