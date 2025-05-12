@@ -33,13 +33,11 @@ public class PanelProfil extends PanelPrincipal implements ActionListener {
     public PanelProfil() {
         super("Gestion du Profil");
 
-        // Configuration initiale
         configurerPanelForm();
         configurerTxtInfos();
         configurerLogo();
         ajouterBoutonsEtEcouteurs();
 
-        // Ne pas charger de profil au démarrage
         viderAffichage();
         this.setVisible(true);
     }
@@ -48,7 +46,7 @@ public class PanelProfil extends PanelPrincipal implements ActionListener {
     private void configurerLogo() {
         ImageIcon icon = new ImageIcon(getClass().getResource("/images/livre.png"));
         int largeurEcran = Toolkit.getDefaultToolkit().getScreenSize().width;
-        int tailleLogo = largeurEcran / 8; // Réduction de la taille du logo
+        int tailleLogo = largeurEcran / 8;
 
         Image image = icon.getImage();
         Image newImg = image.getScaledInstance(tailleLogo, tailleLogo, Image.SCALE_SMOOTH);
@@ -89,7 +87,6 @@ public class PanelProfil extends PanelPrincipal implements ActionListener {
         this.panelForm.setBounds(370, 100, 300, 250);
         this.panelForm.setLayout(new BorderLayout());
 
-        // Panel pour les labels et champs
         JPanel panelLabelsFields = new JPanel();
         panelLabelsFields.setLayout(new GridLayout(5, 2));
         panelLabelsFields.setBackground(customColor);
@@ -107,7 +104,6 @@ public class PanelProfil extends PanelPrincipal implements ActionListener {
 
         this.panelForm.add(panelLabelsFields, BorderLayout.CENTER);
 
-        // Panel pour les boutons
         this.panelBoutons.setBackground(customColor);
         this.panelBoutons.setLayout(new GridLayout(1, 2));
         this.panelBoutons.add(this.btAnnuler);

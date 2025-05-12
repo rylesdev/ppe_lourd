@@ -204,7 +204,6 @@ public class PanelParticulier extends PanelPrincipal implements ActionListener, 
         String dateNaissance = this.txtDateNaissance.getText().trim();
         String sexe = this.txtSexe.getText();
 
-        // Vérification du format de l'email
         if (!email.matches("^[^@]+@[^@]+\\.[^@]+$")) {
             JOptionPane.showMessageDialog(this,
                     "L'email doit contenir un '@' et un '.' (ex: exemple@domaine.com)",
@@ -212,7 +211,6 @@ public class PanelParticulier extends PanelPrincipal implements ActionListener, 
             return;
         }
 
-        // Vérification du format de la date
         if (!dateNaissance.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
             JOptionPane.showMessageDialog(this,
                     "La date doit être au format YYYY-MM-DD (ex: 1990-12-31)",
@@ -220,7 +218,6 @@ public class PanelParticulier extends PanelPrincipal implements ActionListener, 
             return;
         }
 
-        // Vérification de l'existence de l'email
         if (Controleur.emailExiste(email)) {
             JOptionPane.showMessageDialog(this,
                     "Cet email est déjà utilisé par un autre utilisateur.",
@@ -228,7 +225,6 @@ public class PanelParticulier extends PanelPrincipal implements ActionListener, 
             return;
         }
 
-        // Vérification du rôle utilisateur
         String[] roles = {"admin", "particulier", "entreprise"};
         boolean roleValide = false;
         for (String r : roles) {
@@ -260,7 +256,7 @@ public class PanelParticulier extends PanelPrincipal implements ActionListener, 
                         new Particulier(0, email, "", adresse, role, nom, prenom, dateNaissanceDate, sexe));
 
                 if (resultat.startsWith("OK:")) {
-                    String mdpGenere = resultat.substring(3); // Extrait le mot de passe temporaire
+                    String mdpGenere = resultat.substring(3);
                     this.tableauParticulier.setDonnees(this.obtenirDonnees(""));
                     JOptionPane.showMessageDialog(this,
                             "Particulier ajouté avec succès !\nMot de passe temporaire: " + mdpGenere,
@@ -299,7 +295,6 @@ public class PanelParticulier extends PanelPrincipal implements ActionListener, 
             String dateNaissance = this.txtDateNaissance.getText();
             String sexe = this.txtSexe.getText();
 
-            // Vérification du format de l'email
             if (!email.matches("^[^@]+@[^@]+\\.[^@]+$")) {
                 JOptionPane.showMessageDialog(this,
                         "L'email doit contenir un '@' et un '.' (ex: exemple@domaine.com)",
@@ -307,7 +302,6 @@ public class PanelParticulier extends PanelPrincipal implements ActionListener, 
                 return;
             }
 
-            // Vérification du format de la date
             if (!dateNaissance.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
                 JOptionPane.showMessageDialog(this,
                         "La date doit être au format YYYY-MM-DD (ex: 1990-12-31)",

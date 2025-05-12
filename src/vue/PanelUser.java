@@ -19,33 +19,29 @@ public class PanelUser extends PanelPrincipal implements ActionListener {
     private JPanel contentPanel = new JPanel(new CardLayout());
     private PanelParticulier panelParticulier = new PanelParticulier();
     private PanelEntreprise panelEntreprise = new PanelEntreprise();
-    private JLabel titreLabel; // Déclaré comme variable de classe pour pouvoir le modifier
+    private JLabel titreLabel;
 
     public PanelUser() {
         super("");
 
-        // Configuration du layout principal
         this.setLayout(new BorderLayout());
         Color customColor = new Color(100, 140, 180);
         this.setBackground(customColor);
 
-        // Création du panel titre avec police taille 30
         JPanel panelTitre = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        panelTitre.setBackground(customColor); // Appliquer la couleur de fond au panelTitre
+        panelTitre.setBackground(customColor);
         titreLabel = new JLabel("Gestion des Utilisateurs");
         titreLabel.setFont(new Font("Arial", Font.BOLD, 25));
-        titreLabel.setForeground(Color.BLACK); // Définir la couleur du texte en noir
-        titreLabel.setBackground(customColor); // Définir le fond du JLabel avec la couleur personnalisée
-        titreLabel.setOpaque(true); // Rendre le JLabel opaque pour que le fond soit visible
+        titreLabel.setForeground(Color.BLACK);
+        titreLabel.setBackground(customColor);
+        titreLabel.setOpaque(true);
         panelTitre.add(titreLabel);
         this.add(panelTitre, BorderLayout.NORTH);
 
-        // Configuration des sous-panels
         contentPanel.add(panelParticulier, "Particulier");
         contentPanel.add(panelEntreprise, "Entreprise");
         this.add(contentPanel, BorderLayout.CENTER);
 
-        // Panel boutons
         JPanel panelBoutons = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
         panelBoutons.setBackground(customColor);
 
@@ -56,7 +52,6 @@ public class PanelUser extends PanelPrincipal implements ActionListener {
         panelBoutons.add(btEntreprise);
         this.add(panelBoutons, BorderLayout.SOUTH);
 
-        // Gestion des événements
         btParticulier.addActionListener(this);
         btEntreprise.addActionListener(this);
 
@@ -70,12 +65,12 @@ public class PanelUser extends PanelPrincipal implements ActionListener {
         if(e.getSource() == btParticulier) {
             cl.show(contentPanel, "Particulier");
             titreLabel.setText("Gestion des Particuliers");
-            titreLabel.setForeground(Color.BLACK); // Définir la couleur du texte en noir
+            titreLabel.setForeground(Color.BLACK);
         }
         else if(e.getSource() == btEntreprise) {
             cl.show(contentPanel, "Entreprise");
             titreLabel.setText("Gestion des Entreprises");
-            titreLabel.setForeground(Color.BLACK); // Définir la couleur du texte en noir
+            titreLabel.setForeground(Color.BLACK);
         }
     }
 }

@@ -22,18 +22,15 @@ public class Commande {
         this.lesLignesCommande = new ArrayList<>();
     }
 
-    // Constructeur simplifié (pour création nouvelle commande)
     public Commande(Date dateCommande, String statutCommande, int idUser) {
         this(0, dateCommande, statutCommande, null, idUser);
     }
 
-    // Méthodes de gestion des lignes
     public void ajouterLigneCommande(LigneCommande ligneCommande) {
         ligneCommande.setIdCommande(this.idCommande);
         this.lesLignesCommande.add(ligneCommande);
     }
 
-    // Getters
     public int getIdCommande() { return idCommande; }
     public Date getDateCommande() { return dateCommande; }
     public String getStatutCommande() { return statutCommande; }
@@ -41,7 +38,6 @@ public class Commande {
     public int getIdUser() { return idUser; }
     public List<LigneCommande> getLesLignesCommande() { return lesLignesCommande; }
 
-    // Setters
     public void setIdCommande(int idCommande) { this.idCommande = idCommande; }
     public void setDateLivraisonCommande(Date dateLivraisonCommande) {
         this.dateLivraisonCommande = dateLivraisonCommande;

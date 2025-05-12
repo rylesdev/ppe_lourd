@@ -32,7 +32,6 @@ public class PanelStats extends PanelPrincipal {
         Color customColor = new Color(100, 140, 180);
         this.setBackground(customColor);
 
-        // Panel pour les statistiques
         panelCount.setBounds(50, 20, 800, 100);
         panelCount.setLayout(new GridLayout(1, 4));
         panelCount.setBackground(customColor);
@@ -44,7 +43,6 @@ public class PanelStats extends PanelPrincipal {
 
         this.add(panelCount);
 
-        // Créer un graphique à barres
         CategoryChart chart = new CategoryChartBuilder()
                 .width(400)
                 .height(300)
@@ -53,10 +51,8 @@ public class PanelStats extends PanelPrincipal {
                 .yAxisTitle("Nombre")
                 .build();
 
-        // Personnaliser le graphique
         chart.getStyler().setLegendPosition(Styler.LegendPosition.InsideNE);
 
-        // Préparer les données
         ArrayList<String> categories = new ArrayList<>();
         categories.add("Livre");
         categories.add("Commande");
@@ -69,15 +65,12 @@ public class PanelStats extends PanelPrincipal {
         values.add(Controleur.count("abonnement"));
         values.add(Controleur.count("particulier"));
 
-        // Ajouter les données au graphique
         chart.addSeries("Statistiques", categories, values);
 
-        // Afficher le graphique (45% de largeur)
         JPanel chartPanel = new XChartPanel<>(chart);
         chartPanel.setBounds(50, 130, 450, 300);
         this.add(chartPanel);
 
-        // Tableau des statistiques (30% de largeur)
         String entetes[] = {"Id Livre", "Nom", "Note Moyenne"};
         this.tableauStats = new Tableau(this.obtenirDonnees(), entetes);
         this.tableStats = new JTable(this.tableauStats);

@@ -23,7 +23,6 @@ import controleur.Livre;
 
 public class PanelPromotion extends PanelPrincipal implements ActionListener, KeyListener {
     private String niveauAdmin;
-    // Panel pour les promotions
     private JPanel panelPromotionForm = new JPanel();
     private JTextField txtNomPromotion = new JTextField();
     private JTextField txtDateDebutPromotion = new JTextField();
@@ -33,14 +32,12 @@ public class PanelPromotion extends PanelPrincipal implements ActionListener, Ke
     private JButton btValiderPromotion = new JButton("Valider");
     private JButton btSupprimerPromotion = new JButton("Supprimer");
 
-    // Panel pour l'association Livre-Promotion
     private JPanel panelLivrePromotionForm = new JPanel();
     private JTextField txtNomLivre = new JTextField();
     private JTextField txtNomPromotionLivre = new JTextField();
     private JButton btAnnulerLivrePromotion = new JButton("Annuler");
     private JButton btValiderLivrePromotion = new JButton("Valider");
 
-    // Tableaux et filtres
     private JTable tablePromotions;
     private Tableau tableauPromotions;
     private JLabel lbNbPromotions = new JLabel();
@@ -57,28 +54,23 @@ public class PanelPromotion extends PanelPrincipal implements ActionListener, Ke
     private JTextField txtFiltreLivres = new JTextField(7);
     private JButton btFiltrerLivres = new JButton("Filtrer");
 
-    // Données temporaires et état
     private int idPromotionModification = 0;
     private int idLivreModification = 0;
 
-    // Couleur personnalisée pour les formulaires
     private Color couleurFormulaire = new Color(100, 140, 180);
 
     public PanelPromotion() {
         super("Gestion des Promotions");
 
         this.niveauAdmin = Controleur.selectNiveauAdminByIdUser(Controleur.getUserConnecte().getIdUser());
-        // Initialisation des panels
         initPromotion();
         initLivrePromotion();
         initTableauPromotions();
         initTableauLivresPromotions();
         initFiltres();
 
-        // Gestion des listeners
         setupListeners();
 
-        // Masquer le bouton de suppression initialement
         btSupprimerPromotion.setVisible(false);
     }
 
@@ -118,7 +110,6 @@ public class PanelPromotion extends PanelPrincipal implements ActionListener, Ke
     }
 
     private void initTableauPromotions() {
-        // Tableau des promotions
         String entetesPromotions[] = {"ID Promotion", "Nom Promotion", "Date Début", "Date Fin", "Réduction (%)"};
         this.tableauPromotions = new Tableau(this.obtenirDonneesPromotions(""), entetesPromotions);
         this.tablePromotions = new JTable(this.tableauPromotions);
@@ -126,7 +117,6 @@ public class PanelPromotion extends PanelPrincipal implements ActionListener, Ke
         uneScrollPromotions.setBounds(400, 100, 260, 250);
         this.add(uneScrollPromotions);
 
-        // Gestion de la sélection dans le tableau des promotions
         this.tablePromotions.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 afficherDetailsPromotionSelectionnee();
@@ -135,7 +125,6 @@ public class PanelPromotion extends PanelPrincipal implements ActionListener, Ke
     }
 
     private void initTableauLivresPromotions() {
-        // Tableau des livres et leurs promotions
         String entetesLivresPromotions[] = {"ID Livre", "Nom Livre", "Nom Promotion"};
         this.tableauLivresPromotions = new Tableau(this.obtenirDonneesLivresPromotions(""), entetesLivresPromotions);
         this.tableLivresPromotions = new JTable(this.tableauLivresPromotions);
@@ -143,7 +132,6 @@ public class PanelPromotion extends PanelPrincipal implements ActionListener, Ke
         uneScrollLivresPromotions.setBounds(670, 100, 220, 250);
         this.add(uneScrollLivresPromotions);
 
-        // Gestion de la sélection dans le tableau des livres et promotions
         this.tableLivresPromotions.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 afficherDetailsLivrePromotionSelectionne();
@@ -152,7 +140,6 @@ public class PanelPromotion extends PanelPrincipal implements ActionListener, Ke
     }
 
     private void initFiltres() {
-        // Filtre pour le tableau des promotions
         this.panelFiltre.setBackground(couleurFormulaire);
         this.panelFiltre.setBounds(400, 60, 320, 30);
         this.panelFiltre.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -169,7 +156,6 @@ public class PanelPromotion extends PanelPrincipal implements ActionListener, Ke
         this.add(this.lbNbPromotions);
         this.lbNbPromotions.setText("Nombre de promotions : " + this.tableauPromotions.getRowCount());
 
-        // Filtre pour le tableau des livres et promotions
         this.panelFiltreLivres.setBackground(couleurFormulaire);
         this.panelFiltreLivres.setBounds(650, 60, 320, 30);
         this.panelFiltreLivres.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -188,20 +174,16 @@ public class PanelPromotion extends PanelPrincipal implements ActionListener, Ke
     }
 
     private void setupListeners() {
-        // Boutons Promotion
         this.btAnnulerPromotion.addActionListener(this);
         this.btValiderPromotion.addActionListener(this);
         this.btSupprimerPromotion.addActionListener(this);
 
-        // Boutons Livre-Promotion
         this.btAnnulerLivrePromotion.addActionListener(this);
         this.btValiderLivrePromotion.addActionListener(this);
 
-        // Filtres
         this.btFiltrer.addActionListener(this);
         this.btFiltrerLivres.addActionListener(this);
 
-        // Listeners pour validation avec Entrée
         this.txtNomPromotion.addKeyListener(this);
         this.txtDateDebutPromotion.addKeyListener(this);
         this.txtDateFinPromotion.addKeyListener(this);
@@ -229,7 +211,6 @@ public class PanelPromotion extends PanelPrincipal implements ActionListener, Ke
         }
 
         try {
-            // Conversion et validation des données
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Date dateDebut = sdf.parse(dateDebutStr);
             Date dateFin = sdf.parse(dateFinStr);
@@ -248,18 +229,15 @@ public class PanelPromotion extends PanelPrincipal implements ActionListener, Ke
             Promotion promotion = new Promotion(nomPromotion, dateDebut, dateFin, reduction);
 
             if (idPromotionModification == 0) {
-                // Insertion d'une nouvelle promotion
                 Controleur.insertPromotion(promotion);
                 JOptionPane.showMessageDialog(this, "Promotion ajoutée avec succès", "Succès", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                // Mise à jour d'une promotion existante
                 promotion.setIdPromotion(idPromotionModification);
                 Controleur.updatePromotion(promotion);
                 JOptionPane.showMessageDialog(this, "Promotion mise à jour avec succès", "Succès", JOptionPane.INFORMATION_MESSAGE);
-                idPromotionModification = 0; // Réinitialiser après la mise à jour
+                idPromotionModification = 0;
             }
 
-            // Mise à jour de l'interface
             tableauPromotions.setDonnees(obtenirDonneesPromotions(""));
             tableauLivresPromotions.setDonnees(obtenirDonneesLivresPromotions(""));
             majNbPromotions();
@@ -291,7 +269,6 @@ public class PanelPromotion extends PanelPrincipal implements ActionListener, Ke
             Controleur.deletePromotion(idPromotionModification);
             JOptionPane.showMessageDialog(this, "Promotion supprimée avec succès", "Succès", JOptionPane.INFORMATION_MESSAGE);
 
-            // Mise à jour de l'interface
             tableauPromotions.setDonnees(obtenirDonneesPromotions(""));
             tableauLivresPromotions.setDonnees(obtenirDonneesLivresPromotions(""));
             majNbPromotions();
@@ -332,7 +309,6 @@ public class PanelPromotion extends PanelPrincipal implements ActionListener, Ke
             }
             JOptionPane.showMessageDialog(this, "Promotion du livre mise à jour avec succès", "Succès", JOptionPane.INFORMATION_MESSAGE);
 
-            // Mise à jour du tableau après l'association
             tableauLivresPromotions.setDonnees(obtenirDonneesLivresPromotions(""));
             majNbLivresPromotions();
             viderChampsLivrePromotion();
@@ -344,7 +320,7 @@ public class PanelPromotion extends PanelPrincipal implements ActionListener, Ke
     private void afficherDetailsPromotionSelectionnee() {
         int row = tablePromotions.getSelectedRow();
         if (row >= 0) {
-            int idPromotion = (int) tableauPromotions.getValueAt(row, 0); // Colonne ID Promotion à l'index 0
+            int idPromotion = (int) tableauPromotions.getValueAt(row, 0);
             Promotion promotion = Controleur.selectPromotionById(idPromotion);
 
             if (promotion != null) {
@@ -353,7 +329,6 @@ public class PanelPromotion extends PanelPrincipal implements ActionListener, Ke
                 txtDateFinPromotion.setText(promotion.getDateFinPromotion().toString());
                 txtReductionPromotion.setText(String.valueOf(promotion.getReductionPromotion()));
 
-                // Préparation de la modification
                 idPromotionModification = idPromotion;
                 btValiderPromotion.setText("Modifier");
                 btSupprimerPromotion.setVisible(true);
@@ -364,11 +339,10 @@ public class PanelPromotion extends PanelPrincipal implements ActionListener, Ke
     private void afficherDetailsLivrePromotionSelectionne() {
         int row = tableLivresPromotions.getSelectedRow();
         if (row >= 0) {
-            int idLivre = (int) tableauLivresPromotions.getValueAt(row, 0); // Colonne ID Livre à l'index 0
-            String nomLivre = (String) tableauLivresPromotions.getValueAt(row, 1); // Nom du livre
-            String nomPromotion = (String) tableauLivresPromotions.getValueAt(row, 2); // Nom promotion
+            int idLivre = (int) tableauLivresPromotions.getValueAt(row, 0);
+            String nomLivre = (String) tableauLivresPromotions.getValueAt(row, 1);
+            String nomPromotion = (String) tableauLivresPromotions.getValueAt(row, 2);
 
-            // Préremplir le formulaire association livre-promotion
             txtNomLivre.setText(nomLivre);
             txtNomPromotionLivre.setText(nomPromotion);
             idLivreModification = idLivre;
@@ -392,7 +366,6 @@ public class PanelPromotion extends PanelPrincipal implements ActionListener, Ke
     }
 
     public Object[][] obtenirDonneesPromotions(String filtre) {
-        // Récupère les données pour le tableau des promotions
         ArrayList<Promotion> lesPromotions = filtre.isEmpty() ?
                 Controleur.selectPromotion() : Controleur.selectLikePromotion(filtre);
 
@@ -411,7 +384,6 @@ public class PanelPromotion extends PanelPrincipal implements ActionListener, Ke
     }
 
     public Object[][] obtenirDonneesLivresPromotions(String filtre) {
-        // Récupère les données pour le tableau des livres et promotions
         ArrayList<Livre> lesLivres = filtre.isEmpty() ?
                 Controleur.selectLivre() : Controleur.selectLikeLivre(filtre);
 

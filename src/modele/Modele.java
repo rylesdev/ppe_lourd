@@ -53,17 +53,17 @@ public class Modele {
         try {
             uneConnexion.seConnecter();
             conn = uneConnexion.getMaConnexion();
-            conn.setAutoCommit(false); // Démarre la transaction
+            conn.setAutoCommit(false);
 
             try (Statement stmt = conn.createStatement()) {
                 stmt.executeUpdate(requeteUser);
                 stmt.executeUpdate(requeteAdmin);
-                conn.commit(); // Valide la transaction
+                conn.commit();
             }
         } catch (SQLException e) {
             try {
                 if (conn != null) {
-                    conn.rollback(); // Annule la transaction en cas d'erreur
+                    conn.rollback();
                 }
             } catch (SQLException ex) {
                 ex.printStackTrace();
@@ -72,7 +72,7 @@ public class Modele {
         } finally {
             try {
                 if (conn != null) {
-                    conn.close(); // Ferme la connexion
+                    conn.close();
                 }
                 uneConnexion.seDeConnecter();
             } catch (SQLException e) {
@@ -85,7 +85,7 @@ public class Modele {
 
     /************************ GESTION DES USERS ************************/
     public static void insertUser(User unUser) {
-        String mdpHashe = sha1Hash(unUser.getMdpUser()); // Hachage du mot de passe
+        String mdpHashe = sha1Hash(unUser.getMdpUser());
         String requete = "insert into user values (null," + "'" +
                 unUser.getEmailUser() + "', '" +
                 mdpHashe + "', '" +
@@ -195,7 +195,7 @@ public class Modele {
 
         try {
             executerRequete(requete);
-            return "OK:" + mdpAleatoire; // Retourne un message de succès avec le mot de passe généré
+            return "OK:" + mdpAleatoire;
         } catch (Exception e) {
             return "Erreur lors de l'insertion : " + e.getMessage();
         }
@@ -311,7 +311,7 @@ public class Modele {
 
         try {
             executerRequete(requete);
-            return "OK:" + mdpAleatoire; // Retourne un message de succès avec le mot de passe généré
+            return "OK:" + mdpAleatoire;
         } catch (Exception e) {
             return "Erreur lors de l'insertion : " + e.getMessage();
         }
@@ -779,7 +779,6 @@ public class Modele {
                 Categorie uneCategorie = new Categorie(
                         unResultat.getInt("idCategorie"),
                         unResultat.getString("nomCategorie")
-                        // Ajoutez d'autres champs si nécessaire
                 );
                 lesCategories.add(uneCategorie);
             }
@@ -807,7 +806,6 @@ public class Modele {
                 uneCategorie = new Categorie(
                         unResultat.getInt("idCategorie"),
                         unResultat.getString("nomCategorie")
-                        // Ajoutez d'autres champs si nécessaire
                 );
             }
 
@@ -833,7 +831,6 @@ public class Modele {
                 uneCategorie = new Categorie(
                         unResultat.getInt("idCategorie"),
                         unResultat.getString("nomCategorie")
-                        // Ajoutez d'autres champs si nécessaire
                 );
             }
 
@@ -1074,10 +1071,8 @@ public class Modele {
     }
 
     public static boolean deletePromotion(int idPromotion) {
-        // Avant de supprimer, mettre à NULL les références dans la table livre
         String requeteNullRef = "UPDATE livre SET idPromotion = NULL WHERE idPromotion = " + idPromotion;
 
-        // Suppression de la promotion
         String requete = "DELETE FROM promotion WHERE idPromotion = " + idPromotion;
 
         try {
@@ -1351,7 +1346,6 @@ public class Modele {
             }
 
             System.out.println(uneCommande.getStatutCommande());
-            // Update qui sert uniquement à activer le trigger "tUpdateStockCommande"
             if (uneCommande.getStatutCommande().equals("expédiée")) {
                 String requeteTriggerCommande = "update commande " +
                                                 "set statutCommande = 'expédiée' where idCommande = " + idCommande + ";";
@@ -1379,7 +1373,7 @@ public class Modele {
         } finally {
             try {
                 if (uneConnexion.getMaConnexion() != null && !uneConnexion.getMaConnexion().isClosed()) {
-                    uneConnexion.getMaConnexion().setAutoCommit(true); // Reset auto-commit
+                    uneConnexion.getMaConnexion().setAutoCommit(true);
                     uneConnexion.seDeConnecter();
                 }
             } catch (SQLException e) {

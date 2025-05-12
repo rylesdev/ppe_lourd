@@ -11,7 +11,6 @@ public class Listing {
         this.noteMoyenne = noteMoyenne;
     }
 
-    // Getters
     public int getIdLivre() {
         return idLivre;
     }
@@ -24,7 +23,6 @@ public class Listing {
         return noteMoyenne;
     }
 
-    // Setters
     public void setIdLivre(int idLivre) {
         this.idLivre = idLivre;
     }

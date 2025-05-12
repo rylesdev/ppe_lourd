@@ -20,21 +20,18 @@ import controleur.Livre;
 
 public class PanelMaisonEdition extends PanelPrincipal implements ActionListener, KeyListener {
     private String niveauAdmin;
-    // Panel pour les maisons d'édition
     private JPanel panelMaisonEditionForm = new JPanel();
     private JTextField txtNomMaisonEdition = new JTextField();
     private JButton btAnnulerMaisonEdition = new JButton("Annuler");
     private JButton btValiderMaisonEdition = new JButton("Valider");
     private JButton btSupprimerMaisonEdition = new JButton("Supprimer");
 
-    // Panel pour l'association Livre-MaisonEdition
     private JPanel panelLivreMaisonEditionForm = new JPanel();
     private JTextField txtNomLivre = new JTextField();
     private JTextField txtNomMaisonEditionLivre = new JTextField();
     private JButton btAnnulerLivreMaisonEdition = new JButton("Annuler");
     private JButton btValiderLivreMaisonEdition = new JButton("Valider");
 
-    // Tableaux et filtres
     private JTable tableMaisonEditions;
     private Tableau tableauMaisonEditions;
     private JLabel lbNbMaisonEditions = new JLabel();
@@ -51,28 +48,23 @@ public class PanelMaisonEdition extends PanelPrincipal implements ActionListener
     private JTextField txtFiltreLivres = new JTextField(7);
     private JButton btFiltrerLivres = new JButton("Filtrer");
 
-    // Données temporaires et état
     private int idMaisonEditionModification = 0;
     private int idLivreModification = 0;
 
-    // Couleur personnalisée pour les formulaires
     private Color couleurFormulaire = new Color(100, 140, 180);
 
     public PanelMaisonEdition() {
         super("Gestion des Maisons d'Edition");
 
         this.niveauAdmin = Controleur.selectNiveauAdminByIdUser(Controleur.getUserConnecte().getIdUser());
-        // Initialisation des panels
         initMaisonEdition();
         initLivreMaisonEdition();
         initTableauMaisonEditions();
         initTableauLivresMaisonEditions();
         initFiltres();
 
-        // Gestion des listeners
         setupListeners();
 
-        // Masquer le bouton de suppression initialement
         btSupprimerMaisonEdition.setVisible(false);
     }
 
@@ -106,7 +98,6 @@ public class PanelMaisonEdition extends PanelPrincipal implements ActionListener
     }
 
     private void initTableauMaisonEditions() {
-        // Tableau des maisons d'édition
         String entetesMaisonEditions[] = {"ID Maison d'Edition", "Nom Maison d'Edition"};
         this.tableauMaisonEditions = new Tableau(this.obtenirDonneesMaisonEditions(""), entetesMaisonEditions);
         this.tableMaisonEditions = new JTable(this.tableauMaisonEditions);
@@ -114,7 +105,6 @@ public class PanelMaisonEdition extends PanelPrincipal implements ActionListener
         uneScrollMaisonEditions.setBounds(400, 100, 220, 250);
         this.add(uneScrollMaisonEditions);
 
-        // Gestion de la sélection dans le tableau des maisons d'édition
         this.tableMaisonEditions.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 afficherDetailsMaisonEditionSelectionnee();
@@ -123,7 +113,6 @@ public class PanelMaisonEdition extends PanelPrincipal implements ActionListener
     }
 
     private void initTableauLivresMaisonEditions() {
-        // Tableau des livres et leurs maisons d'édition
         String entetesLivresMaisonEd[] = {"ID Livre", "Nom Livre", "Nom Maison d'Edition"};
         this.tableauLivresMaisonEditions = new Tableau(this.obtenirDonneesLivresMaisonEditions(""), entetesLivresMaisonEd);
         this.tableLivresMaisonEditions = new JTable(this.tableauLivresMaisonEditions);
@@ -131,7 +120,6 @@ public class PanelMaisonEdition extends PanelPrincipal implements ActionListener
         uneScrollLivresMaisonEd.setBounds(630, 100, 260, 250);
         this.add(uneScrollLivresMaisonEd);
 
-        // Gestion de la sélection dans le tableau des livres et maisons d'édition
         this.tableLivresMaisonEditions.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 afficherDetailsLivreMaisonEditionSelectionne();
@@ -140,7 +128,6 @@ public class PanelMaisonEdition extends PanelPrincipal implements ActionListener
     }
 
     private void initFiltres() {
-        // Filtre pour le tableau des maisons d'édition
         this.panelFiltre.setBackground(couleurFormulaire);
         this.panelFiltre.setBounds(400, 60, 320, 30);
         this.panelFiltre.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -157,7 +144,6 @@ public class PanelMaisonEdition extends PanelPrincipal implements ActionListener
         this.add(this.lbNbMaisonEditions);
         this.lbNbMaisonEditions.setText("Nombre de maisons d'édition : " + this.tableauMaisonEditions.getRowCount());
 
-        // Filtre pour le tableau des livres et maisons d'édition
         this.panelFiltreLivres.setBackground(couleurFormulaire);
         this.panelFiltreLivres.setBounds(650, 60, 320, 30);
         this.panelFiltreLivres.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -176,20 +162,16 @@ public class PanelMaisonEdition extends PanelPrincipal implements ActionListener
     }
 
     private void setupListeners() {
-        // Boutons MaisonEdition
         this.btAnnulerMaisonEdition.addActionListener(this);
         this.btValiderMaisonEdition.addActionListener(this);
         this.btSupprimerMaisonEdition.addActionListener(this);
 
-        // Boutons Livre-MaisonEdition
         this.btAnnulerLivreMaisonEdition.addActionListener(this);
         this.btValiderLivreMaisonEdition.addActionListener(this);
 
-        // Filtres
         this.btFiltrer.addActionListener(this);
         this.btFiltrerLivres.addActionListener(this);
 
-        // Listeners pour validation avec Entrée
         this.txtNomMaisonEdition.addKeyListener(this);
         this.txtNomLivre.addKeyListener(this);
         this.txtNomMaisonEditionLivre.addKeyListener(this);
@@ -212,16 +194,13 @@ public class PanelMaisonEdition extends PanelPrincipal implements ActionListener
         MaisonEdition maisonEdition = new MaisonEdition(nomMaisonEdition);
 
         if (idMaisonEditionModification == 0) {
-            // Insertion d'une nouvelle maison d'édition
             Controleur.insertMaisonEdition(maisonEdition);
         } else {
-            // Mise à jour d'une maison d'édition existante
             maisonEdition.setIdMaisonEdition(idMaisonEditionModification);
             Controleur.updateMaisonEdition(maisonEdition);
-            idMaisonEditionModification = 0; // Réinitialiser après la mise à jour
+            idMaisonEditionModification = 0;
         }
 
-        // Mise à jour de l'interface
         tableauMaisonEditions.setDonnees(obtenirDonneesMaisonEditions(""));
         tableauLivresMaisonEditions.setDonnees(obtenirDonneesLivresMaisonEditions(""));
         majNbMaisonEditions();
@@ -247,7 +226,6 @@ public class PanelMaisonEdition extends PanelPrincipal implements ActionListener
         if (confirmation == JOptionPane.YES_OPTION) {
             Controleur.deleteMaisonEdition(idMaisonEditionModification);
 
-            // Mise à jour de l'interface
             tableauMaisonEditions.setDonnees(obtenirDonneesMaisonEditions(""));
             tableauLivresMaisonEditions.setDonnees(obtenirDonneesLivresMaisonEditions(""));
             majNbMaisonEditions();
@@ -280,7 +258,6 @@ public class PanelMaisonEdition extends PanelPrincipal implements ActionListener
             Controleur.updateMaisonEditionLivre(livre);
             JOptionPane.showMessageDialog(this, "Maison d'édition du livre mise à jour avec succès", "Succès", JOptionPane.INFORMATION_MESSAGE);
 
-            // Mise à jour du tableau après l'association
             tableauLivresMaisonEditions.setDonnees(obtenirDonneesLivresMaisonEditions(""));
             majNbLivresMaisonEditions();
             viderChampsLivreMaisonEdition();
@@ -292,13 +269,12 @@ public class PanelMaisonEdition extends PanelPrincipal implements ActionListener
     private void afficherDetailsMaisonEditionSelectionnee() {
         int row = tableMaisonEditions.getSelectedRow();
         if (row >= 0) {
-            int idMaisonEdition = (int) tableauMaisonEditions.getValueAt(row, 0); // Colonne ID MaisonEdition à l'index 0
+            int idMaisonEdition = (int) tableauMaisonEditions.getValueAt(row, 0);
             MaisonEdition maisonEdition = Controleur.selectMaisonEditionById(idMaisonEdition);
 
             if (maisonEdition != null) {
                 txtNomMaisonEdition.setText(maisonEdition.getNomMaisonEdition());
 
-                // Préparation de la modification
                 idMaisonEditionModification = idMaisonEdition;
                 btValiderMaisonEdition.setText("Modifier");
                 btSupprimerMaisonEdition.setVisible(true);
@@ -309,11 +285,10 @@ public class PanelMaisonEdition extends PanelPrincipal implements ActionListener
     private void afficherDetailsLivreMaisonEditionSelectionne() {
         int row = tableLivresMaisonEditions.getSelectedRow();
         if (row >= 0) {
-            int idLivre = (int) tableauLivresMaisonEditions.getValueAt(row, 0); // Colonne ID Livre à l'index 0
-            String nomLivre = (String) tableauLivresMaisonEditions.getValueAt(row, 1); // Nom du livre
-            String nomMaisonEdition = (String) tableauLivresMaisonEditions.getValueAt(row, 2); // Nom maison d'édition
+            int idLivre = (int) tableauLivresMaisonEditions.getValueAt(row, 0);
+            String nomLivre = (String) tableauLivresMaisonEditions.getValueAt(row, 1);
+            String nomMaisonEdition = (String) tableauLivresMaisonEditions.getValueAt(row, 2);
 
-            // Préremplir le formulaire association livre-maison d'édition
             txtNomLivre.setText(nomLivre);
             txtNomMaisonEditionLivre.setText(nomMaisonEdition);
             idLivreModification = idLivre;
@@ -334,7 +309,6 @@ public class PanelMaisonEdition extends PanelPrincipal implements ActionListener
     }
 
     public Object[][] obtenirDonneesMaisonEditions(String filtre) {
-        // Récupère les données pour le tableau des maisons d'édition
         ArrayList<MaisonEdition> lesMaisonEditions = filtre.isEmpty() ?
                 Controleur.selectMaisonEdition() : Controleur.selectLikeMaisonEdition(filtre);
 
@@ -350,7 +324,6 @@ public class PanelMaisonEdition extends PanelPrincipal implements ActionListener
     }
 
     public Object[][] obtenirDonneesLivresMaisonEditions(String filtre) {
-        // Récupère les données pour le tableau des livres et maisons d'édition
         ArrayList<Livre> lesLivres = filtre.isEmpty() ?
                 Controleur.selectLivre() : Controleur.selectLikeLivre(filtre);
 

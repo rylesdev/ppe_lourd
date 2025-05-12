@@ -185,7 +185,6 @@ public class PanelEntreprise extends PanelPrincipal implements ActionListener, K
         String raisonSociale = this.txtRaisonSociale.getText();
         String capitalSocialText = this.txtCapitalSocial.getText();
 
-        // Vérification du format de l'email
         if (!email.matches("^[^@]+@[^@]+\\.[^@]+$")) {
             JOptionPane.showMessageDialog(this,
                     "L'email doit contenir un '@' et un '.' (ex: exemple@domaine.com)",
@@ -193,7 +192,6 @@ public class PanelEntreprise extends PanelPrincipal implements ActionListener, K
             return;
         }
 
-        // Vérification du format du SIRET (14 chiffres)
         if (!siret.matches("^\\d{14}$")) {
             JOptionPane.showMessageDialog(this,
                     "Le SIRET doit contenir exactement 14 chiffres.",
@@ -201,7 +199,6 @@ public class PanelEntreprise extends PanelPrincipal implements ActionListener, K
             return;
         }
 
-        // Vérification de l'existence de l'email
         if (Controleur.emailExiste(email)) {
             JOptionPane.showMessageDialog(this,
                     "Cet email est déjà utilisé par un autre utilisateur.",
@@ -209,7 +206,6 @@ public class PanelEntreprise extends PanelPrincipal implements ActionListener, K
             return;
         }
 
-        // Vérification du rôle utilisateur
         String[] roles = {"admin", "particulier", "entreprise"};
         boolean roleValide = false;
         for (String r : roles) {
@@ -241,7 +237,7 @@ public class PanelEntreprise extends PanelPrincipal implements ActionListener, K
                 );
                 String resultat = Controleur.insertEntreprise(uneEntreprise);
                 if (resultat.startsWith("OK:")) {
-                    String mdpGenere = resultat.substring(3); // Extrait le mot de passe généré
+                    String mdpGenere = resultat.substring(3);
                     this.tableauEntreprise.setDonnees(this.obtenirDonnees(""));
                     JOptionPane.showMessageDialog(this,
                             "Entreprise créée avec succès !\nMot de passe temporaire: " + mdpGenere,

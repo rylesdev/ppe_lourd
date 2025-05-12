@@ -10,8 +10,8 @@ import controleur.Gestion;
 
 public class VueGenerale extends JFrame implements ActionListener {
     private JPanel panelMenu = new JPanel();
-    private JPanel panelMenuLigne1 = new JPanel(); // Première ligne du menu
-    private JPanel panelMenuLigne2 = new JPanel(); // Deuxième ligne du menu
+    private JPanel panelMenuLigne1 = new JPanel();
+    private JPanel panelMenuLigne2 = new JPanel();
 
     private JButton btProfil = new JButton("Profil");
     private JButton btUser = new JButton("Utilisateur");
@@ -52,36 +52,31 @@ public class VueGenerale extends JFrame implements ActionListener {
         this.setLayout(null);
         this.setBounds(50, 50, 1000, 600);
 
-        // Configuration du panel principal du menu
         this.panelMenu.setBackground(Color.darkGray);
-        this.panelMenu.setBounds(50, 10, 900, 80); // Augmenté la hauteur pour deux rangées
-        this.panelMenu.setLayout(new GridLayout(2, 1)); // 2 lignes, 1 colonne
+        this.panelMenu.setBounds(50, 10, 900, 80);
+        this.panelMenu.setLayout(new GridLayout(2, 1));
 
-        // Configuration du panel de la première ligne
         this.panelMenuLigne1.setBackground(Color.darkGray);
-        this.panelMenuLigne1.setLayout(new GridLayout(1, 5)); // 1 ligne, 5 colonnes
+        this.panelMenuLigne1.setLayout(new GridLayout(1, 5));
         this.panelMenuLigne1.add(this.btProfil);
         this.panelMenuLigne1.add(this.btUser);
         this.panelMenuLigne1.add(this.btLivre);
         this.panelMenuLigne1.add(this.btCommande);
         this.panelMenuLigne1.add(this.btAbonnement);
 
-        // Configuration du panel de la deuxième ligne
         this.panelMenuLigne2.setBackground(Color.darkGray);
-        this.panelMenuLigne2.setLayout(new GridLayout(1, 5)); // 1 ligne, 5 colonnes
+        this.panelMenuLigne2.setLayout(new GridLayout(1, 5));
         this.panelMenuLigne2.add(this.btCategorie);
         this.panelMenuLigne2.add(this.btMaisonEdition);
         this.panelMenuLigne2.add(this.btPromotion);
         this.panelMenuLigne2.add(this.btStats);
         this.panelMenuLigne2.add(this.btQuitter);
 
-        // Ajout des deux lignes au panel principal du menu
         this.panelMenu.add(this.panelMenuLigne1);
         this.panelMenu.add(this.panelMenuLigne2);
 
         this.add(this.panelMenu);
 
-        // Ajout des écouteurs d'événements aux boutons
         this.btProfil.addActionListener(this);
         this.btUser.addActionListener(this);
         this.btLivre.addActionListener(this);
@@ -93,7 +88,6 @@ public class VueGenerale extends JFrame implements ActionListener {
         this.btStats.addActionListener(this);
         this.btQuitter.addActionListener(this);
 
-        // Ajout des panels au JFrame
         this.add(unPanelProfil);
         this.add(unPanelUser);
         this.add(unPanelLivre);
@@ -126,7 +120,7 @@ public class VueGenerale extends JFrame implements ActionListener {
         switch (choix) {
             case 1:
                 unPanelProfil.setVisible(true);
-                unPanelProfil.chargerProfil(); // Rechargement à chaque affichage
+                unPanelProfil.chargerProfil();
                 break;
             case 2:
                 unPanelUser.setVisible(true);

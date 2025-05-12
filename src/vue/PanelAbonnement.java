@@ -49,13 +49,12 @@ public class PanelAbonnement extends PanelPrincipal implements ActionListener, K
         super("Gestion des Abonnements");
 
         this.niveauAdmin = Controleur.selectNiveauAdminByIdUser(idUser);
-        // Initialisation de l'interface
         Color customColor = new Color(100, 140, 180);
         this.setBackground(customColor);
 
         this.panelForm.setBounds(30, 100, 300, 250);
         this.panelForm.setLayout(new GridLayout(10, 2));
-        this.panelForm.setBackground(customColor); // Définir la couleur de fond du formulaire
+        this.panelForm.setBackground(customColor);
 
         this.panelForm.add(new JLabel("Id User :"));
         this.panelForm.add(this.txtIdUser);
@@ -71,7 +70,6 @@ public class PanelAbonnement extends PanelPrincipal implements ActionListener, K
 
         this.add(this.panelForm);
 
-        // Initialisation des listeners
         this.btAnnuler.addActionListener(this);
         this.btValider.addActionListener(this);
         this.btSupprimer.addActionListener(this);
@@ -82,15 +80,12 @@ public class PanelAbonnement extends PanelPrincipal implements ActionListener, K
         this.txtDateFinAbonnement.addKeyListener(this);
         this.txtPointAbonnement.addKeyListener(this);
 
-        // Initialisation du tableau
         String entetes[] = {"Id", "Id User", "Date Début Abonnement", "Date Fin Abonnement", "Points"};
         this.tableauAbonnements = new Tableau(this.obtenirDonnees(""), entetes);
         this.tableAbonnements = new JTable(this.tableauAbonnements);
 
-        // Définir la couleur de fond du tableau sur blanc
         this.tableAbonnements.setBackground(Color.WHITE);
 
-        // Définir la couleur de fond des cellules du tableau sur blanc
         this.tableAbonnements.setDefaultRenderer(Object.class, new javax.swing.table.DefaultTableCellRenderer() {
             @Override
             public java.awt.Component getTableCellRendererComponent(
@@ -103,10 +98,9 @@ public class PanelAbonnement extends PanelPrincipal implements ActionListener, K
 
         JScrollPane uneScroll = new JScrollPane(this.tableAbonnements);
         uneScroll.setBounds(360, 100, 480, 250);
-        uneScroll.getViewport().setBackground(customColor); // Définir la couleur de fond pour le JScrollPane
+        uneScroll.getViewport().setBackground(customColor);
         this.add(uneScroll);
 
-        // Initialisation du filtre
         this.panelFiltre.setBackground(customColor);
         this.panelFiltre.setBounds(370, 60, 450, 30);
         this.panelFiltre.setLayout(new GridLayout(1, 3));
@@ -120,7 +114,6 @@ public class PanelAbonnement extends PanelPrincipal implements ActionListener, K
         this.add(this.lbNbAbonnements);
         this.lbNbAbonnements.setText("Nombre d'abonnements : " + this.tableauAbonnements.getRowCount());
 
-        // Gestion de la sélection dans le tableau
         this.tableAbonnements.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -181,11 +174,9 @@ public class PanelAbonnement extends PanelPrincipal implements ActionListener, K
         }
 
         try {
-            // Validation des dates
             Date dateDebut = new SimpleDateFormat("yyyy-MM-dd").parse(txtDateDebutAbonnement.getText());
             Date dateFin = new SimpleDateFormat("yyyy-MM-dd").parse(txtDateFinAbonnement.getText());
 
-            // Validation que la date de fin est après la date de début
             if (dateFin.before(dateDebut)) {
                 JOptionPane.showMessageDialog(this,
                         "La date de fin doit être postérieure à la date de début",
@@ -196,7 +187,6 @@ public class PanelAbonnement extends PanelPrincipal implements ActionListener, K
             int idUser = Integer.parseInt(this.txtIdUser.getText());
             int points = Integer.parseInt(this.txtPointAbonnement.getText());
 
-            // Validation des points
             if (points < 0) {
                 JOptionPane.showMessageDialog(this,
                         "Le nombre de points doit être positif",
@@ -207,7 +197,6 @@ public class PanelAbonnement extends PanelPrincipal implements ActionListener, K
             Abonnement unAbonnement = new Abonnement(0, idUser, dateDebut, dateFin, points);
             Controleur.insertAbonnement(unAbonnement);
 
-            // Formatage des dates pour l'affichage
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             String debutStr = dateFormat.format(dateDebut);
             String finStr = dateFormat.format(dateFin);
@@ -248,7 +237,6 @@ public class PanelAbonnement extends PanelPrincipal implements ActionListener, K
                 Date dateDebut = new SimpleDateFormat("yyyy-MM-dd").parse(txtDateDebutAbonnement.getText());
                 Date dateFin = new SimpleDateFormat("yyyy-MM-dd").parse(txtDateFinAbonnement.getText());
 
-                // Validation que la date de fin est après la date de début
                 if (dateFin.before(dateDebut)) {
                     JOptionPane.showMessageDialog(this,
                             "La date de fin doit être postérieure à la date de début",
@@ -259,7 +247,6 @@ public class PanelAbonnement extends PanelPrincipal implements ActionListener, K
                 int idUser = Integer.parseInt(this.txtIdUser.getText());
                 int points = Integer.parseInt(this.txtPointAbonnement.getText());
 
-                // Validation des points
                 if (points < 0) {
                     JOptionPane.showMessageDialog(this,
                             "Le nombre de points doit être positif",

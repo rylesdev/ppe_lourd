@@ -1,13 +1,7 @@
 A Faire :
-- Implémenter une fonctionnalitée pour mettre à jour les exemplaireLivre dans le tableau du PanelLivre automatiquement.
+- Implémenter une fonctionnalitée pour mettre à jour les exemplaireLivre automatiquement dans le tableau du PanelLivre en cliquant sur un enregistrement.
 
-- (Optionnel : Modifier les exemplaires de ligneCommande dans le PanelLivre et tester le tStockLivreUpdate)
-
-
-- Vérifier que tous les triggers fonctionnent :
-    - tInsertArchive : Oui
-    - tStockLivre : Oui
-    - tUpdateStockCommande : Oui
+- (Optionnel : Modifier les exemplaires de ligneCommande dans le PanelLivre et tester le tStockLivreUpdate).
 
 
 

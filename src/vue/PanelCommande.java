@@ -26,17 +26,15 @@ import controleur.LigneCommande;
 
 public class PanelCommande extends PanelPrincipal implements ActionListener, KeyListener {
     private String niveauAdmin;
-    // Panel pour les lignes de commande
     private JPanel panelLigneForm = new JPanel();
-    private ArrayList<Livre> tousLesLivres; // Garde référence à la liste complète
-    private JComboBox<String> comboLivre; // Combo pour l'affichage
+    private ArrayList<Livre> tousLesLivres;
+    private JComboBox<String> comboLivre;
     private JTextField txtQuantiteLivre = new JTextField();
     private JButton btAnnulerLigne = new JButton("Annuler");
     private JButton btValiderLigne = new JButton("Valider");
     private JButton btSupprimerLigne = new JButton("Supprimer Dernière Ligne");
     private JLabel lbNbLignes = new JLabel("Nombre de lignes: 0");
 
-    // Panel pour la commande
     private JPanel panelCommandeForm = new JPanel();
     private JTextField txtDateCommande = new JTextField();
     private JTextField txtStatutCommande = new JTextField();
@@ -46,7 +44,6 @@ public class PanelCommande extends PanelPrincipal implements ActionListener, Key
     private JButton btValiderCommande = new JButton("Valider Commande");
     private JButton btSupprimerCommande = new JButton("Supprimer");
 
-    // Tableau et filtres
     private JTable tableCommandes;
     private Tableau tableauCommandes;
     private JPanel panelFiltre = new JPanel();
@@ -54,45 +51,37 @@ public class PanelCommande extends PanelPrincipal implements ActionListener, Key
     private JButton btFiltrer = new JButton("Filtrer");
     private JLabel lbNbCommandes = new JLabel();
 
-    // Données temporaires et état
     private ArrayList<LigneCommande> lignesTemporaires = new ArrayList<>();
     private int idCommandeModification = 0;
 
-    // Couleur personnalisée pour les formulaires (100, 140, 180)
     private Color couleurFormulaire = new Color(100, 140, 180);
 
     public PanelCommande(int idUser) {
         super("Gestion des Commandes");
 
         this.niveauAdmin = Controleur.selectNiveauAdminByIdUser(idUser);
-        // Initialisation des panels
         initLigneCommande();
         initCommande(idUser);
         initTableau();
         initFiltres();
 
-        // Gestion des listeners
         setupListeners();
 
-        // Masquer le bouton de suppression initialement
         btSupprimerCommande.setVisible(false);
     }
 
     private void initLigneCommande() {
         this.panelLigneForm.setBackground(couleurFormulaire);
-        this.panelLigneForm.setBounds(30, 100, 350, 150); // Ajustement de la hauteur
+        this.panelLigneForm.setBounds(30, 100, 350, 150);
         this.panelLigneForm.setLayout(new GridLayout(6, 2));
 
-        // Charger tous les livres
         tousLesLivres = Controleur.selectLivre();
 
-        // Créer un tableau des noms seulement
         String[] nomsLivres = new String[tousLesLivres.size()];
         for (int i = 0; i < tousLesLivres.size(); i++) {
             nomsLivres[i] = tousLesLivres.get(i).getNomLivre();
         }
 
-        // Initialiser la combo avec les noms
         comboLivre = new JComboBox<>(nomsLivres);
 
         this.panelLigneForm.add(new JLabel("Livre:"));
@@ -109,7 +98,7 @@ public class PanelCommande extends PanelPrincipal implements ActionListener, Key
 
     private void initCommande(int idUser) {
         this.panelCommandeForm.setBackground(couleurFormulaire);
-        this.panelCommandeForm.setBounds(30, 260, 350, 200); // Ajustement de la hauteur
+        this.panelCommandeForm.setBounds(30, 260, 350, 200);
         this.panelCommandeForm.setLayout(new GridLayout(7, 2));
 
         this.txtIdUser.setText(String.valueOf(idUser));
@@ -138,7 +127,6 @@ public class PanelCommande extends PanelPrincipal implements ActionListener, Key
         uneScroll.setBounds(400, 100, 480, 250);
         this.add(uneScroll);
 
-        // Gestion de la sélection dans le tableau
         this.tableCommandes.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 afficherDetailsCommandeSelectionnee();
@@ -161,20 +149,16 @@ public class PanelCommande extends PanelPrincipal implements ActionListener, Key
     }
 
     private void setupListeners() {
-        // Boutons LigneCommande
         this.btAnnulerLigne.addActionListener(this);
         this.btValiderLigne.addActionListener(this);
         this.btSupprimerLigne.addActionListener(this);
 
-        // Boutons Commande
         this.btAnnulerCommande.addActionListener(this);
         this.btValiderCommande.addActionListener(this);
         this.btSupprimerCommande.addActionListener(this);
 
-        // Filtre
         this.btFiltrer.addActionListener(this);
 
-        // Listeners pour validation avec Entrée
         this.txtQuantiteLivre.addKeyListener(this);
         this.txtDateCommande.addKeyListener(this);
         this.txtStatutCommande.addKeyListener(this);
@@ -244,19 +228,15 @@ public class PanelCommande extends PanelPrincipal implements ActionListener, Key
 
             int idUser = Integer.parseInt(txtIdUser.getText());
 
-            // Création de la commande
             Commande commande = new Commande(dateCommande, txtStatutCommande.getText(), idUser);
             commande.setDateLivraisonCommande(dateLivraison);
 
-            // Ajout des lignes temporaires
             for (LigneCommande ligne : lignesTemporaires) {
                 commande.ajouterLigneCommande(ligne);
             }
 
-            // Insertion en base
             int resultInsertCommande = Controleur.insertCommande(commande);
 
-            // Mise à jour de l'interface
             tableauCommandes.setDonnees(obtenirDonnees(""));
             majNbCommandes();
             viderChampsCommande();
@@ -264,7 +244,6 @@ public class PanelCommande extends PanelPrincipal implements ActionListener, Key
             lbNbLignes.setText("Nombre de lignes: 0");
 
             if (resultInsertCommande == 2) {
-                // Ce message s'affiche dans un mauvais cas
                 JOptionPane.showMessageDialog(this, "Erreur: La quantite totale depasse le nombre exemplaires disponibles pour ce livre", "Erreur", JOptionPane.ERROR_MESSAGE);
             } else if (resultInsertCommande == 3) {
                 JOptionPane.showMessageDialog(this, "Erreur: Réessayez", "Erreur", JOptionPane.ERROR_MESSAGE);
@@ -296,7 +275,6 @@ public class PanelCommande extends PanelPrincipal implements ActionListener, Key
 
             int idUser = Integer.parseInt(txtIdUser.getText());
 
-            // Création de la commande mise à jour
             Commande commande = new Commande(
                     idCommandeModification,
                     dateCommande,
@@ -305,10 +283,8 @@ public class PanelCommande extends PanelPrincipal implements ActionListener, Key
                     idUser
             );
 
-            // Mise à jour en base
             Controleur.updateCommande(commande);
 
-            // Mise à jour de l'interface
             tableauCommandes.setDonnees(obtenirDonnees(""));
             majNbCommandes();
             viderChampsCommande();
@@ -340,7 +316,6 @@ public class PanelCommande extends PanelPrincipal implements ActionListener, Key
         if (confirmation == JOptionPane.YES_OPTION) {
             Controleur.deleteCommande(idCommandeModification);
 
-            // Mise à jour de l'interface
             tableauCommandes.setDonnees(obtenirDonnees(""));
             majNbCommandes();
             viderChampsCommande();
@@ -363,7 +338,6 @@ public class PanelCommande extends PanelPrincipal implements ActionListener, Key
                         sdf.format(commande.getDateLivraisonCommande()) : "");
                 txtIdUser.setText(String.valueOf(commande.getIdUser()));
 
-                // Préparation de la modification
                 idCommandeModification = idCommande;
                 btValiderCommande.setText("Modifier");
                 btSupprimerCommande.setVisible(true);
@@ -387,7 +361,6 @@ public class PanelCommande extends PanelPrincipal implements ActionListener, Key
         ArrayList<Commande> lesCommandes = filtre.isEmpty() ?
                 Controleur.selectCommande() : Controleur.selectLikeCommande(filtre);
 
-        // Compter le nombre total de lignes (commandes + lignes de commande)
         int totalLignes = 0;
         for (Commande uneCommande : lesCommandes) {
             totalLignes += uneCommande.getLesLignesCommande().size();

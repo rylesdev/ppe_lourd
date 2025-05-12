@@ -55,7 +55,6 @@ public class VueConnexion extends JFrame implements ActionListener, KeyListener 
 
         this.add(this.panelForm);
 
-        // Ajout des boutons plus bas
         this.btAnnuler.setBounds(300, 220, 130, 30);
         this.btSeConnecter.setBounds(450, 220, 130, 30);
         this.add(this.btAnnuler);

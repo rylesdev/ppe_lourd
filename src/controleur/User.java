@@ -20,7 +20,6 @@ public class User {
         this.roleUser = roleUser;
     }
 
-    // Getters et setters pour les champs communs
     public int getIdUser() {
         return idUser;
     }

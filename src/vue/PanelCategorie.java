@@ -20,21 +20,18 @@ import controleur.Livre;
 
 public class PanelCategorie extends PanelPrincipal implements ActionListener, KeyListener {
     private String niveauAdmin;
-    // Panel pour les catégories
     private JPanel panelCategorieForm = new JPanel();
     private JTextField txtNomCategorie = new JTextField();
     private JButton btAnnulerCategorie = new JButton("Annuler");
     private JButton btValiderCategorie = new JButton("Valider");
     private JButton btSupprimerCategorie = new JButton("Supprimer");
 
-    // Panel pour l'association Livre-Catégorie
     private JPanel panelLivreCategorieForm = new JPanel();
     private JTextField txtNomLivre = new JTextField();
     private JTextField txtNomCategorieLivre = new JTextField();
     private JButton btAnnulerLivreCategorie = new JButton("Annuler");
     private JButton btValiderLivreCategorie = new JButton("Valider");
 
-    // Tableaux et filtres
     private JTable tableCategories;
     private Tableau tableauCategories;
     private JLabel lbNbCategories = new JLabel();
@@ -44,35 +41,30 @@ public class PanelCategorie extends PanelPrincipal implements ActionListener, Ke
     private JLabel lbNbLivresCategories = new JLabel();
 
     private JPanel panelFiltre = new JPanel();
-    private JTextField txtFiltre = new JTextField(7); // Réduction à la moitié
+    private JTextField txtFiltre = new JTextField(7);
     private JButton btFiltrer = new JButton("Filtrer");
 
     private JPanel panelFiltreLivres = new JPanel();
-    private JTextField txtFiltreLivres = new JTextField(7); // Réduction à la moitié
+    private JTextField txtFiltreLivres = new JTextField(7);
     private JButton btFiltrerLivres = new JButton("Filtrer");
 
-    // Données temporaires et état
     private int idCategorieModification = 0;
     private int idLivreModification = 0;
 
-    // Couleur personnalisée pour les formulaires
     private Color couleurFormulaire = new Color(100, 140, 180);
 
     public PanelCategorie() {
         super("Gestion des Catégories");
 
         this.niveauAdmin = Controleur.selectNiveauAdminByIdUser(Controleur.getUserConnecte().getIdUser());
-        // Initialisation des panels
         initCategorie();
         initLivreCategorie();
         initTableauCategories();
         initTableauLivresCategories();
         initFiltres();
 
-        // Gestion des listeners
         setupListeners();
 
-        // Masquer le bouton de suppression initialement
         btSupprimerCategorie.setVisible(false);
     }
 
@@ -106,7 +98,6 @@ public class PanelCategorie extends PanelPrincipal implements ActionListener, Ke
     }
 
     private void initTableauCategories() {
-        // Tableau des catégories
         String entetesCategories[] = {"ID Categorie", "Nom Categorie"};
         this.tableauCategories = new Tableau(this.obtenirDonneesCategories(""), entetesCategories);
         this.tableCategories = new JTable(this.tableauCategories);
@@ -114,7 +105,6 @@ public class PanelCategorie extends PanelPrincipal implements ActionListener, Ke
         uneScrollCategories.setBounds(400, 100, 220, 250);
         this.add(uneScrollCategories);
 
-        // Gestion de la sélection dans le tableau des catégories
         this.tableCategories.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 afficherDetailsCategorieSelectionnee();
@@ -123,7 +113,6 @@ public class PanelCategorie extends PanelPrincipal implements ActionListener, Ke
     }
 
     private void initTableauLivresCategories() {
-        // Tableau des livres et leurs catégories
         String entetesLivresCat[] = {"ID Livre", "Nom Livre", "Nom Catégorie"};
         this.tableauLivresCategories = new Tableau(this.obtenirDonneesLivresCategories(""), entetesLivresCat);
         this.tableLivresCategories = new JTable(this.tableauLivresCategories);
@@ -131,7 +120,6 @@ public class PanelCategorie extends PanelPrincipal implements ActionListener, Ke
         uneScrollLivresCat.setBounds(630, 100, 260, 250);
         this.add(uneScrollLivresCat);
 
-        // Gestion de la sélection dans le tableau des livres et catégories
         this.tableLivresCategories.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 afficherDetailsLivreCategorieSelectionne();
@@ -140,15 +128,14 @@ public class PanelCategorie extends PanelPrincipal implements ActionListener, Ke
     }
 
     private void initFiltres() {
-        // Filtre pour le tableau des catégories
         this.panelFiltre.setBackground(couleurFormulaire);
-        this.panelFiltre.setBounds(400, 60, 320, 30); // Augmenté la largeur
+        this.panelFiltre.setBounds(400, 60, 320, 30);
         this.panelFiltre.setLayout(new FlowLayout(FlowLayout.LEFT));
 
         JLabel labelFiltre = new JLabel("Filtrer :");
         labelFiltre.setPreferredSize(new Dimension(50, 20));
         this.panelFiltre.add(labelFiltre);
-        this.txtFiltre.setPreferredSize(new Dimension(75, 20)); // Taille réduite de moitié
+        this.txtFiltre.setPreferredSize(new Dimension(75, 20));
         this.panelFiltre.add(this.txtFiltre);
         this.panelFiltre.add(this.btFiltrer);
         this.add(this.panelFiltre);
@@ -157,15 +144,14 @@ public class PanelCategorie extends PanelPrincipal implements ActionListener, Ke
         this.add(this.lbNbCategories);
         this.lbNbCategories.setText("Nombre de catégories : " + this.tableauCategories.getRowCount());
 
-        // Filtre pour le tableau des livres et catégories
         this.panelFiltreLivres.setBackground(couleurFormulaire);
-        this.panelFiltreLivres.setBounds(650, 60, 320, 30); // Augmenté la largeur
+        this.panelFiltreLivres.setBounds(650, 60, 320, 30);
         this.panelFiltreLivres.setLayout(new FlowLayout(FlowLayout.LEFT));
 
         JLabel labelFiltreLivres = new JLabel("Filtrer :");
         labelFiltreLivres.setPreferredSize(new Dimension(50, 20));
         this.panelFiltreLivres.add(labelFiltreLivres);
-        this.txtFiltreLivres.setPreferredSize(new Dimension(75, 20)); // Taille réduite de moitié
+        this.txtFiltreLivres.setPreferredSize(new Dimension(75, 20));
         this.panelFiltreLivres.add(this.txtFiltreLivres);
         this.panelFiltreLivres.add(this.btFiltrerLivres);
         this.add(this.panelFiltreLivres);
@@ -176,20 +162,16 @@ public class PanelCategorie extends PanelPrincipal implements ActionListener, Ke
     }
 
     private void setupListeners() {
-        // Boutons Catégorie
         this.btAnnulerCategorie.addActionListener(this);
         this.btValiderCategorie.addActionListener(this);
         this.btSupprimerCategorie.addActionListener(this);
 
-        // Boutons Livre-Catégorie
         this.btAnnulerLivreCategorie.addActionListener(this);
         this.btValiderLivreCategorie.addActionListener(this);
 
-        // Filtres
         this.btFiltrer.addActionListener(this);
         this.btFiltrerLivres.addActionListener(this);
 
-        // Listeners pour validation avec Entrée
         this.txtNomCategorie.addKeyListener(this);
         this.txtNomLivre.addKeyListener(this);
         this.txtNomCategorieLivre.addKeyListener(this);
@@ -212,16 +194,13 @@ public class PanelCategorie extends PanelPrincipal implements ActionListener, Ke
         Categorie categorie = new Categorie(nomCategorie);
 
         if (idCategorieModification == 0) {
-            // Insertion d'une nouvelle catégorie
             Controleur.insertCategorie(categorie);
         } else {
-            // Mise à jour d'une catégorie existante
             categorie.setIdCategorie(idCategorieModification);
             Controleur.updateCategorie(categorie);
-            idCategorieModification = 0; // Réinitialiser après la mise à jour
+            idCategorieModification = 0;
         }
 
-        // Mise à jour de l'interface
         tableauCategories.setDonnees(obtenirDonneesCategories(""));
         tableauLivresCategories.setDonnees(obtenirDonneesLivresCategories(""));
         majNbCategories();
@@ -247,7 +226,6 @@ public class PanelCategorie extends PanelPrincipal implements ActionListener, Ke
         if (confirmation == JOptionPane.YES_OPTION) {
             Controleur.deleteCategorie(idCategorieModification);
 
-            // Mise à jour de l'interface
             tableauCategories.setDonnees(obtenirDonneesCategories(""));
             tableauLivresCategories.setDonnees(obtenirDonneesLivresCategories(""));
             majNbCategories();
@@ -280,7 +258,6 @@ public class PanelCategorie extends PanelPrincipal implements ActionListener, Ke
             Controleur.updateCategorieLivre(livre);
             JOptionPane.showMessageDialog(this, "Catégorie du livre mise à jour avec succès", "Succès", JOptionPane.INFORMATION_MESSAGE);
 
-            // Mise à jour du tableau après l'association
             tableauLivresCategories.setDonnees(obtenirDonneesLivresCategories(""));
             majNbLivresCategories();
             viderChampsLivreCategorie();
@@ -292,13 +269,12 @@ public class PanelCategorie extends PanelPrincipal implements ActionListener, Ke
     private void afficherDetailsCategorieSelectionnee() {
         int row = tableCategories.getSelectedRow();
         if (row >= 0) {
-            int idCategorie = (int) tableauCategories.getValueAt(row, 0); // Colonne ID Catégorie à l'index 0
+            int idCategorie = (int) tableauCategories.getValueAt(row, 0);
             Categorie categorie = Controleur.selectCategorieById(idCategorie);
 
             if (categorie != null) {
                 txtNomCategorie.setText(categorie.getNomCategorie());
 
-                // Préparation de la modification
                 idCategorieModification = idCategorie;
                 btValiderCategorie.setText("Modifier");
                 btSupprimerCategorie.setVisible(true);
@@ -309,11 +285,10 @@ public class PanelCategorie extends PanelPrincipal implements ActionListener, Ke
     private void afficherDetailsLivreCategorieSelectionne() {
         int row = tableLivresCategories.getSelectedRow();
         if (row >= 0) {
-            int idLivre = (int) tableauLivresCategories.getValueAt(row, 0); // Colonne ID Livre à l'index 0
-            String nomLivre = (String) tableauLivresCategories.getValueAt(row, 1); // Nom du livre
-            String nomCategorie = (String) tableauLivresCategories.getValueAt(row, 2); // Nom catégorie
+            int idLivre = (int) tableauLivresCategories.getValueAt(row, 0);
+            String nomLivre = (String) tableauLivresCategories.getValueAt(row, 1);
+            String nomCategorie = (String) tableauLivresCategories.getValueAt(row, 2);
 
-            // Préremplir le formulaire association livre-catégorie
             txtNomLivre.setText(nomLivre);
             txtNomCategorieLivre.setText(nomCategorie);
             idLivreModification = idLivre;
@@ -334,7 +309,6 @@ public class PanelCategorie extends PanelPrincipal implements ActionListener, Ke
     }
 
     public Object[][] obtenirDonneesCategories(String filtre) {
-        // Récupère les données pour le tableau des catégories
         ArrayList<Categorie> lesCategories = filtre.isEmpty() ?
                 Controleur.selectCategorie() : Controleur.selectLikeCategorie(filtre);
 
@@ -350,7 +324,6 @@ public class PanelCategorie extends PanelPrincipal implements ActionListener, Ke
     }
 
     public Object[][] obtenirDonneesLivresCategories(String filtre) {
-        // Récupère les données pour le tableau des livres et catégories
         ArrayList<Livre> lesLivres = filtre.isEmpty() ?
                 Controleur.selectLivre() : Controleur.selectLikeLivre(filtre);
 

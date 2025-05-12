@@ -54,7 +54,7 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, KeyLis
 
         this.panelForm.setBounds(30, 100, 300, 300);
         this.panelForm.setLayout(new GridLayout(11, 2));
-        this.panelForm.setBackground(customColor); // Définir la couleur de fond pour le panelForm
+        this.panelForm.setBackground(customColor);
 
         this.panelForm.add(new JLabel("Nom :"));
         this.panelForm.add(this.txtNom);
@@ -78,7 +78,6 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, KeyLis
 
         this.add(this.panelForm);
 
-        // Initialisation des listeners
         this.btAnnuler.addActionListener(this);
         this.btValider.addActionListener(this);
         this.btSupprimer.addActionListener(this);
@@ -93,16 +92,14 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, KeyLis
         this.txtMaisonEdition.addKeyListener(this);
         this.txtPromotion.addKeyListener(this);
 
-        // Initialisation du tableau
         String entetes[] = {"Id", "Nom", "Auteur", "Image", "Exemplaire", "Prix", "Catégorie", "Maison d'Édition", "Promotion"};
         this.tableauLivres = new Tableau(this.obtenirDonnees(""), entetes);
         this.tableLivres = new JTable(this.tableauLivres);
         JScrollPane uneScroll = new JScrollPane(this.tableLivres);
         uneScroll.setBounds(360, 100, 480, 250);
-        uneScroll.getViewport().setBackground(customColor); // Définir la couleur de fond pour le JScrollPane
+        uneScroll.getViewport().setBackground(customColor);
         this.add(uneScroll);
 
-        // Initialisation du filtre
         this.panelFiltre.setBackground(customColor);
         this.panelFiltre.setBounds(370, 60, 450, 30);
         this.panelFiltre.setLayout(new GridLayout(1, 3));
@@ -116,7 +113,6 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, KeyLis
         this.add(this.lbNbLivres);
         this.lbNbLivres.setText("Nombre de livres : " + this.tableauLivres.getRowCount());
 
-        // Gestion de la sélection dans le tableau
         this.tableLivres.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -187,7 +183,6 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, KeyLis
         String maisonEdition = this.txtMaisonEdition.getText();
         String promotion = this.txtPromotion.getText();
 
-        // Vérification si la catégorie existe
         int idCategorie = Controleur.selectIdCategorie(categorie);
         if (idCategorie <= 0) {
             JOptionPane.showMessageDialog(this,
@@ -196,7 +191,6 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, KeyLis
             return false;
         }
 
-        // Vérification si la maison d'édition existe
         int idMaisonEdition = Controleur.selectIdMaisonEdition(maisonEdition);
         if (idMaisonEdition <= 0) {
             JOptionPane.showMessageDialog(this,
@@ -205,7 +199,6 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, KeyLis
             return false;
         }
 
-        // Vérification si la promotion existe (seulement si une promotion est spécifiée)
         if (!promotion.equals("Non définie") && !promotion.isEmpty()) {
             int idPromotion = Controleur.selectIdPromotion(promotion);
             if (idPromotion <= 0) {
@@ -243,7 +236,6 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, KeyLis
             return;
         }
 
-        // Vérification que les données existent dans la base
         if (!verifierDonneesExistantes()) {
             return;
         }
@@ -307,7 +299,6 @@ public class PanelLivre extends PanelPrincipal implements ActionListener, KeyLis
                 return;
             }
 
-            // Vérification que les données existent dans la base
             if (!verifierDonneesExistantes()) {
                 return;
             }
