@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import controleur.*;
 
 public class Modele {
-    private static Connexion uneConnexion = new Connexion("localhost:8889", "ppe_lourd", "root", "root");
+    private static Connexion uneConnexion = new Connexion("localhost", "ppe_lourd", "root", "");
 
 
 
