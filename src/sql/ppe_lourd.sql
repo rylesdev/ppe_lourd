@@ -756,7 +756,7 @@ CREATE TRIGGER `tStockLivreUpdate` BEFORE UPDATE ON `ligneCommande` FOR EACH ROW
 
     IF t_totalQuantite > t_exemplaireLivre THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'La quantité totale dépasse le nombre d'exemplaires disponibles pour ce livre.';
+        SET MESSAGE_TEXT = 'La quantité totale dépasse le nombre dexemplaires disponibles pour ce livre.';
     END IF;
 END
 $$
