@@ -42,8 +42,8 @@ public class VueGenerale extends JFrame implements ActionListener {
         this.unPanelProfil = new PanelProfil();
         this.unPanelProfil.chargerProfil();
 
-        unPanelCommande = new PanelCommande(this.idUser);
-        unPanelAbonnement = new PanelAbonnement(this.idUser);
+       unPanelCommande = new PanelCommande(this.idUser);
+       unPanelAbonnement = new PanelAbonnement(this.idUser);
 
         this.setTitle("PPE Client Lourd Ryles");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -125,25 +125,25 @@ public class VueGenerale extends JFrame implements ActionListener {
             case 2:
                 unPanelUser.setVisible(true);
                 break;
-            case 3:
+                case 3:
                 unPanelLivre.setVisible(true);
                 break;
-            case 4:
+                 case 4:
                 unPanelCommande.setVisible(true);
                 break;
-            case 5:
+                case 5:
                 unPanelAbonnement.setVisible(true);
                 break;
-            case 6:
+                case 6:
                 unPanelCategorie.setVisible(true);
                 break;
-            case 7:
+                case 7:
                 unPanelMaisonEdition.setVisible(true);
                 break;
-            case 8:
+                case 8:
                 unPanelPromotion.setVisible(true);
                 break;
-            case 9:
+                case 9:
                 unPanelStats.setVisible(true);
                 PanelStats.actualiser();
                 break;
